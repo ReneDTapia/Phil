@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52DB54172ACE9F670019B448 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 52DB54162ACE9F670019B448 /* Alamofire */; };
+		52DB54192ACE9F860019B448 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB54182ACE9F860019B448 /* AuthService.swift */; };
 		52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5A772ACD236B004611A7 /* PhilApp.swift */; };
 		52DB5A7A2ACD236B004611A7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5A792ACD236B004611A7 /* ContentView.swift */; };
 		52DB5A7C2ACD2372004611A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5A7B2ACD2372004611A7 /* Assets.xcassets */; };
@@ -14,6 +16,26 @@
 		52DB5A892ACD2372004611A7 /* PhilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5A882ACD2372004611A7 /* PhilTests.swift */; };
 		52DB5A932ACD2372004611A7 /* PhilUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5A922ACD2372004611A7 /* PhilUITests.swift */; };
 		52DB5A952ACD2372004611A7 /* PhilUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5A942ACD2372004611A7 /* PhilUITestsLaunchTests.swift */; };
+		52DB5AA82ACD36C7004611A7 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA42ACD3493004611A7 /* Montserrat-ExtraBold.ttf */; };
+		52DB5AA92ACD36CC004611A7 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA52ACD34F1004611A7 /* Montserrat-Bold.ttf */; };
+		52DB5AAA2ACD36CE004611A7 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA52ACD34F1004611A7 /* Montserrat-Bold.ttf */; };
+		52DB5AAB2ACD36CF004611A7 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA52ACD34F1004611A7 /* Montserrat-Bold.ttf */; };
+		52DB5AAC2ACD36D2004611A7 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA42ACD3493004611A7 /* Montserrat-ExtraBold.ttf */; };
+		52DB5AAD2ACD36D2004611A7 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA42ACD3493004611A7 /* Montserrat-ExtraBold.ttf */; };
+		52DB5AAE2ACD36D4004611A7 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA62ACD350B004611A7 /* Roboto-Light.ttf */; };
+		52DB5AAF2ACD36D5004611A7 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA62ACD350B004611A7 /* Roboto-Light.ttf */; };
+		52DB5AB02ACD36D6004611A7 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA62ACD350B004611A7 /* Roboto-Light.ttf */; };
+		52DB5AB12ACD36D9004611A7 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA32ACD3480004611A7 /* Montserrat-Regular.ttf */; };
+		52DB5AB22ACD36D9004611A7 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA32ACD3480004611A7 /* Montserrat-Regular.ttf */; };
+		52DB5AB32ACD36DA004611A7 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52DB5AA32ACD3480004611A7 /* Montserrat-Regular.ttf */; };
+		52DB5AB52ACD67B9004611A7 /* UsernameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AB42ACD67B9004611A7 /* UsernameView.swift */; };
+		52DB5AB72ACD6889004611A7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AB62ACD6889004611A7 /* User.swift */; };
+		52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AB82ACD68A2004611A7 /* LoginViewModel.swift */; };
+		52DB5ABB2ACD6A9E004611A7 /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5ABA2ACD6A9E004611A7 /* PasswordView.swift */; };
+		52DB5ABF2ACE22A9004611A7 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5ABE2ACE22A9004611A7 /* SignUpViewModel.swift */; };
+		52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC02ACE22C3004611A7 /* SignUpView.swift */; };
+		52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC22ACE2C95004611A7 /* ViewState.swift */; };
+		52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		52DB54182ACE9F860019B448 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		52DB5A742ACD236B004611A7 /* Phil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phil.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52DB5A772ACD236B004611A7 /* PhilApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhilApp.swift; sourceTree = "<group>"; };
 		52DB5A792ACD236B004611A7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +67,19 @@
 		52DB5A8E2ACD2372004611A7 /* PhilUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhilUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52DB5A922ACD2372004611A7 /* PhilUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhilUITests.swift; sourceTree = "<group>"; };
 		52DB5A942ACD2372004611A7 /* PhilUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhilUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		52DB5AA32ACD3480004611A7 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		52DB5AA42ACD3493004611A7 /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
+		52DB5AA52ACD34F1004611A7 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		52DB5AA62ACD350B004611A7 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
+		52DB5AA72ACD35FB004611A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		52DB5AB42ACD67B9004611A7 /* UsernameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameView.swift; sourceTree = "<group>"; };
+		52DB5AB62ACD6889004611A7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		52DB5AB82ACD68A2004611A7 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		52DB5ABA2ACD6A9E004611A7 /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
+		52DB5ABE2ACE22A9004611A7 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		52DB5AC02ACE22C3004611A7 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		52DB5AC22ACE2C95004611A7 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
+		52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteringUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52DB54172ACE9F670019B448 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +111,11 @@
 		52DB5A6B2ACD236B004611A7 = {
 			isa = PBXGroup;
 			children = (
+				52DB5AC92ACE3968004611A7 /* Helpers */,
+				52DB5AC82ACE3918004611A7 /* Views */,
+				52DB5AC72ACE38FF004611A7 /* ViewModels */,
+				52DB5AC62ACE38E6004611A7 /* Models */,
+				52DB5AA22ACD3470004611A7 /* Fonts */,
 				52DB5A762ACD236B004611A7 /* Phil */,
 				52DB5A872ACD2372004611A7 /* PhilTests */,
 				52DB5A912ACD2372004611A7 /* PhilUITests */,
@@ -94,8 +136,10 @@
 		52DB5A762ACD236B004611A7 /* Phil */ = {
 			isa = PBXGroup;
 			children = (
+				52DB5AA72ACD35FB004611A7 /* Info.plist */,
 				52DB5A772ACD236B004611A7 /* PhilApp.swift */,
 				52DB5A792ACD236B004611A7 /* ContentView.swift */,
+				52DB54182ACE9F860019B448 /* AuthService.swift */,
 				52DB5A7B2ACD2372004611A7 /* Assets.xcassets */,
 				52DB5A7D2ACD2372004611A7 /* Preview Content */,
 			);
@@ -127,6 +171,53 @@
 			path = PhilUITests;
 			sourceTree = "<group>";
 		};
+		52DB5AA22ACD3470004611A7 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				52DB5AA32ACD3480004611A7 /* Montserrat-Regular.ttf */,
+				52DB5AA52ACD34F1004611A7 /* Montserrat-Bold.ttf */,
+				52DB5AA42ACD3493004611A7 /* Montserrat-ExtraBold.ttf */,
+				52DB5AA62ACD350B004611A7 /* Roboto-Light.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		52DB5AC62ACE38E6004611A7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */,
+				52DB5AB62ACD6889004611A7 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		52DB5AC72ACE38FF004611A7 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				52DB5ABE2ACE22A9004611A7 /* SignUpViewModel.swift */,
+				52DB5AB82ACD68A2004611A7 /* LoginViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		52DB5AC82ACE3918004611A7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				52DB5AB42ACD67B9004611A7 /* UsernameView.swift */,
+				52DB5ABA2ACD6A9E004611A7 /* PasswordView.swift */,
+				52DB5AC02ACE22C3004611A7 /* SignUpView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		52DB5AC92ACE3968004611A7 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				52DB5AC22ACE2C95004611A7 /* ViewState.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +234,9 @@
 			dependencies = (
 			);
 			name = Phil;
+			packageProductDependencies = (
+				52DB54162ACE9F670019B448 /* Alamofire */,
+			);
 			productName = Phil;
 			productReference = 52DB5A742ACD236B004611A7 /* Phil.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +309,9 @@
 				Base,
 			);
 			mainGroup = 52DB5A6B2ACD236B004611A7;
+			packageReferences = (
+				52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 52DB5A752ACD236B004611A7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,7 +328,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52DB5AB12ACD36D9004611A7 /* Montserrat-Regular.ttf in Resources */,
+				52DB5AA92ACD36CC004611A7 /* Montserrat-Bold.ttf in Resources */,
 				52DB5A7F2ACD2372004611A7 /* Preview Assets.xcassets in Resources */,
+				52DB5AAE2ACD36D4004611A7 /* Roboto-Light.ttf in Resources */,
+				52DB5AA82ACD36C7004611A7 /* Montserrat-ExtraBold.ttf in Resources */,
 				52DB5A7C2ACD2372004611A7 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -240,6 +341,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52DB5AB22ACD36D9004611A7 /* Montserrat-Regular.ttf in Resources */,
+				52DB5AAA2ACD36CE004611A7 /* Montserrat-Bold.ttf in Resources */,
+				52DB5AAC2ACD36D2004611A7 /* Montserrat-ExtraBold.ttf in Resources */,
+				52DB5AAF2ACD36D5004611A7 /* Roboto-Light.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +352,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52DB5AB32ACD36DA004611A7 /* Montserrat-Regular.ttf in Resources */,
+				52DB5AAB2ACD36CF004611A7 /* Montserrat-Bold.ttf in Resources */,
+				52DB5AAD2ACD36D2004611A7 /* Montserrat-ExtraBold.ttf in Resources */,
+				52DB5AB02ACD36D6004611A7 /* Roboto-Light.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,8 +366,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52DB5AB72ACD6889004611A7 /* User.swift in Sources */,
+				52DB5ABB2ACD6A9E004611A7 /* PasswordView.swift in Sources */,
+				52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */,
+				52DB5AB52ACD67B9004611A7 /* UsernameView.swift in Sources */,
+				52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */,
+				52DB54192ACE9F860019B448 /* AuthService.swift in Sources */,
 				52DB5A7A2ACD236B004611A7 /* ContentView.swift in Sources */,
+				52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */,
+				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
+				52DB5ABF2ACE22A9004611A7 /* SignUpViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,11 +538,13 @@
 				DEVELOPMENT_TEAM = 5HD445NBV6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Phil/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -449,11 +569,13 @@
 				DEVELOPMENT_TEAM = 5HD445NBV6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Phil/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -583,6 +705,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		52DB54162ACE9F670019B448 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 52DB5A6C2ACD236B004611A7 /* Project object */;
 }

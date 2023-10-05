@@ -1,0 +1,16 @@
+version: "Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)"
+options: "8223738df44de74667c75c927aed05d33765d70fe6bb1e3c4e484ff2f21bb9b1"
+build_start_time: [1696492654, 364142000]
+build_end_time: [1696492654, 415416000]
+inputs:
+  "/Users/macbookpro/Desktop/Phil/Helpers/ViewState.swift": !private [1696462108, 423179524]
+  "/Users/macbookpro/Desktop/Phil/Models/RegisteringUser.swift": !private [1696464133, 478730478]
+  "/Users/macbookpro/Desktop/Phil/Models/User.swift": !private [1696464101, 688683430]
+  "/Users/macbookpro/Desktop/Phil/Phil/AuthService.swift": !private [1696491709, 614023667]
+  "/Users/macbookpro/Desktop/Phil/Phil/ContentView.swift": !private [1696474388, 936147969]
+  "/Users/macbookpro/Desktop/Phil/Phil/PhilApp.swift": !private [1696474560, 712646526]
+  "/Users/macbookpro/Desktop/Phil/ViewModels/LoginViewModel.swift": !private [1696491859, 318484438]
+  "/Users/macbookpro/Desktop/Phil/ViewModels/SignUpViewModel.swift": !private [1696491925, 815850193]
+  "/Users/macbookpro/Desktop/Phil/Views/PasswordView.swift": !private [1696491909, 216364102]
+  "/Users/macbookpro/Desktop/Phil/Views/SignUpView.swift": !private [1696492248, 167285897]
+  "/Users/macbookpro/Desktop/Phil/Views/UsernameView.swift": !private [1696481192, 418788324]

@@ -8,10 +8,11 @@
 import SwiftUI
 
 @main
-struct PhilApp: App {
+struct Phil: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
     }
 }
+
