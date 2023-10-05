@@ -1,6 +1,0 @@
-Target dependency graph (3 targets)
-Phil in Phil, no dependencies
-PhilTests in Phil, depends on:
-Phil in Phil (explicit)
-PhilUITests in Phil, depends on:
-Phil in Phil (explicit)
