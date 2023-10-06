@@ -130,10 +130,18 @@ struct PasswordView: View {
 
                             Spacer()
                         }
-                        .padding(.horizontal, 20)
-    
-        .background(backgroundColor)
-    }
+        
+        .alert(isPresented: $viewModel.showAlert) {
+                   Alert(title: Text("Error"),
+                         message: Text(viewModel.alertMessage),
+                         dismissButton: .default(Text("OK")) {
+                             viewModel.showAlert = false
+                         }
+                   )
+               }
+               .background(backgroundColor)
+               .padding(.horizontal, 20)
+           }
             
        
    

@@ -47,9 +47,27 @@ class AuthService {
             case .success(let data):
                 completion(.success(data.token))
             case .failure(let error):
-                completion(.failure(error))
+                if let statusCode = response.response?.statusCode {
+                    switch statusCode {
+                    case 401:
+                        // Token no autorizado o token expirado
+                        completion(.failure(CustomError.unauthorized))
+                    case 403:
+                        // Acceso prohibido
+                        completion(.failure(CustomError.forbidden))
+                    default:
+                        completion(.failure(error))
+                    }
+                } else {
+                    completion(.failure(error))
+                }
             }
         }
     }
+    
+}
 
+enum CustomError: Error {
+    case unauthorized
+    case forbidden
 }

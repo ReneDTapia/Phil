@@ -6,16 +6,25 @@
 //
 
 import SwiftUI
-
+import KeychainSwift
 
 struct ContentView: View {
     @ObservedObject var loginViewModel = LoginViewModel()
-    @ObservedObject var signUpViewModel = SignUpViewModel()  // Creamos una instancia de SignUpViewModel aquí
+    @ObservedObject var signUpViewModel = SignUpViewModel()
+
+    
     
     init() {
         signUpViewModel.loginViewModel = loginViewModel
+
+        let keychain = KeychainSwift()
+        if let token = keychain.get("userToken"), !TokenHelper.isTokenExpired(token: token) {
+            self.loginViewModel.viewState = .home
+        }
     }
-    
+
+
+
     var body: some View {
         switch loginViewModel.viewState {
         case .username:
@@ -23,10 +32,13 @@ struct ContentView: View {
         case .password:
             PasswordView(viewModel: loginViewModel)
         case .signUp:
-            SignUpView(viewModel: signUpViewModel) // Usamos la instancia creada anteriormente
+            SignUpView(viewModel: signUpViewModel)
+        case .home:
+            HomeView()
         }
     }
 }
+
 
 
 

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52CC1B982ACF461900AD0029 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 52CC1B972ACF461900AD0029 /* KeychainSwift */; };
+		52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CC1B992ACF47F300AD0029 /* TokenHelper.swift */; };
+		52CC1B9D2ACF485E00AD0029 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 52CC1B9C2ACF485E00AD0029 /* JWTDecode */; };
+		52CC1BA02ACF4B3000AD0029 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CC1B9F2ACF4B3000AD0029 /* HomeView.swift */; };
 		52DB54172ACE9F670019B448 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 52DB54162ACE9F670019B448 /* Alamofire */; };
 		52DB54192ACE9F860019B448 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB54182ACE9F860019B448 /* AuthService.swift */; };
 		52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5A772ACD236B004611A7 /* PhilApp.swift */; };
@@ -56,6 +60,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		52CC1B992ACF47F300AD0029 /* TokenHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenHelper.swift; sourceTree = "<group>"; };
+		52CC1B9F2ACF4B3000AD0029 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		52DB54182ACE9F860019B448 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		52DB5A742ACD236B004611A7 /* Phil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phil.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52DB5A772ACD236B004611A7 /* PhilApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhilApp.swift; sourceTree = "<group>"; };
@@ -87,7 +93,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52CC1B982ACF461900AD0029 /* KeychainSwift in Frameworks */,
 				52DB54172ACE9F670019B448 /* Alamofire in Frameworks */,
+				52CC1B9D2ACF485E00AD0029 /* JWTDecode in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,9 +116,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		52CC1B9E2ACF488700AD0029 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				52DB54182ACE9F860019B448 /* AuthService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		52DB5A6B2ACD236B004611A7 = {
 			isa = PBXGroup;
 			children = (
+				52CC1B9E2ACF488700AD0029 /* Services */,
 				52DB5AC92ACE3968004611A7 /* Helpers */,
 				52DB5AC82ACE3918004611A7 /* Views */,
 				52DB5AC72ACE38FF004611A7 /* ViewModels */,
@@ -139,7 +156,6 @@
 				52DB5AA72ACD35FB004611A7 /* Info.plist */,
 				52DB5A772ACD236B004611A7 /* PhilApp.swift */,
 				52DB5A792ACD236B004611A7 /* ContentView.swift */,
-				52DB54182ACE9F860019B448 /* AuthService.swift */,
 				52DB5A7B2ACD2372004611A7 /* Assets.xcassets */,
 				52DB5A7D2ACD2372004611A7 /* Preview Content */,
 			);
@@ -206,6 +222,7 @@
 				52DB5AB42ACD67B9004611A7 /* UsernameView.swift */,
 				52DB5ABA2ACD6A9E004611A7 /* PasswordView.swift */,
 				52DB5AC02ACE22C3004611A7 /* SignUpView.swift */,
+				52CC1B9F2ACF4B3000AD0029 /* HomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -214,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				52DB5AC22ACE2C95004611A7 /* ViewState.swift */,
+				52CC1B992ACF47F300AD0029 /* TokenHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -236,6 +254,8 @@
 			name = Phil;
 			packageProductDependencies = (
 				52DB54162ACE9F670019B448 /* Alamofire */,
+				52CC1B972ACF461900AD0029 /* KeychainSwift */,
+				52CC1B9C2ACF485E00AD0029 /* JWTDecode */,
 			);
 			productName = Phil;
 			productReference = 52DB5A742ACD236B004611A7 /* Phil.app */;
@@ -311,6 +331,8 @@
 			mainGroup = 52DB5A6B2ACD236B004611A7;
 			packageReferences = (
 				52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				52CC1B962ACF461900AD0029 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				52CC1B9B2ACF485E00AD0029 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */,
 			);
 			productRefGroup = 52DB5A752ACD236B004611A7 /* Products */;
 			projectDirPath = "";
@@ -368,6 +390,7 @@
 			files = (
 				52DB5AB72ACD6889004611A7 /* User.swift in Sources */,
 				52DB5ABB2ACD6A9E004611A7 /* PasswordView.swift in Sources */,
+				52CC1BA02ACF4B3000AD0029 /* HomeView.swift in Sources */,
 				52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */,
 				52DB5AB52ACD67B9004611A7 /* UsernameView.swift in Sources */,
 				52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */,
@@ -375,6 +398,7 @@
 				52DB5A7A2ACD236B004611A7 /* ContentView.swift in Sources */,
 				52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */,
 				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
+				52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */,
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
 				52DB5ABF2ACE22A9004611A7 /* SignUpViewModel.swift in Sources */,
 			);
@@ -707,6 +731,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		52CC1B962ACF461900AD0029 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 20.0.0;
+			};
+		};
+		52CC1B9B2ACF485E00AD0029 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/JWTDecode.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 		52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -718,6 +758,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		52CC1B972ACF461900AD0029 /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52CC1B962ACF461900AD0029 /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+		52CC1B9C2ACF485E00AD0029 /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52CC1B9B2ACF485E00AD0029 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */;
+			productName = JWTDecode;
+		};
 		52DB54162ACE9F670019B448 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */;

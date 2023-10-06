@@ -12,6 +12,9 @@ import SwiftUI
 class SignUpViewModel: ObservableObject {
     @Published var user = RegisteringUser(email: "", username: "", password: "", confirmPassword: "")
     @Published var isDeaf: Bool = false
+    @Published var showAlert = false
+    @Published var alertMessage = ""
+    
     var loginViewModel: LoginViewModel?
     @Published var viewState: ViewState = .username
     
@@ -20,16 +23,16 @@ class SignUpViewModel: ObservableObject {
             switch result {
             case .success:
                 print("Successfully registered!")
-                // Aquí puedes manejar el registro exitoso, por ejemplo, llevando al usuario a la pantalla de inicio de sesión o directamente al contenido principal.
+                self.loginViewModel?.viewState = .home
             case .failure(let error):
                 print("Error registering: \(error)")
-                // Maneja el error, muestra una alerta al usuario, etc.
+                // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje de error al usuario.
+                self.alertMessage = "Failed to register. Please try again."
+                self.showAlert = true
             }
         }
     }
 
-
-
-    }
+}
 
 
