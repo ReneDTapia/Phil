@@ -93,6 +93,11 @@ struct SignUpView: View {
         }
         .padding(.horizontal, 20)
         .background(backgroundColor)
+        .alert(isPresented: $viewModel.showAlert) { // Añade esto aquí
+                Alert(title: Text("Error"),
+                      message: Text(viewModel.alertMessage),
+                      dismissButton: .default(Text("OK")))
+            }
     }
 
     func inputField(title: String, text: Binding<String>, isSecure: Bool = false) -> some View {

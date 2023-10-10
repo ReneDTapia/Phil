@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52711E692AD4DE390049DEE1 /* UserInputValidator.swift */; };
+		52711E6B2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52711E692AD4DE390049DEE1 /* UserInputValidator.swift */; };
+		52711E6D2AD4E0850049DEE1 /* UserInputValidatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52711E6C2AD4E0850049DEE1 /* UserInputValidatorTests.swift */; };
 		52CC1B982ACF461900AD0029 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 52CC1B972ACF461900AD0029 /* KeychainSwift */; };
 		52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CC1B992ACF47F300AD0029 /* TokenHelper.swift */; };
 		52CC1B9D2ACF485E00AD0029 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 52CC1B9C2ACF485E00AD0029 /* JWTDecode */; };
@@ -60,6 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		52711E692AD4DE390049DEE1 /* UserInputValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputValidator.swift; sourceTree = "<group>"; };
+		52711E6C2AD4E0850049DEE1 /* UserInputValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputValidatorTests.swift; sourceTree = "<group>"; };
 		52CC1B992ACF47F300AD0029 /* TokenHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenHelper.swift; sourceTree = "<group>"; };
 		52CC1B9F2ACF4B3000AD0029 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		52DB54182ACE9F860019B448 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -174,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				52DB5A882ACD2372004611A7 /* PhilTests.swift */,
+				52711E6C2AD4E0850049DEE1 /* UserInputValidatorTests.swift */,
 			);
 			path = PhilTests;
 			sourceTree = "<group>";
@@ -232,6 +238,7 @@
 			children = (
 				52DB5AC22ACE2C95004611A7 /* ViewState.swift */,
 				52CC1B992ACF47F300AD0029 /* TokenHelper.swift */,
+				52711E692AD4DE390049DEE1 /* UserInputValidator.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -398,6 +405,7 @@
 				52DB5A7A2ACD236B004611A7 /* ContentView.swift in Sources */,
 				52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */,
 				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
+				52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
 				52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */,
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
 				52DB5ABF2ACE22A9004611A7 /* SignUpViewModel.swift in Sources */,
@@ -408,7 +416,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52711E6D2AD4E0850049DEE1 /* UserInputValidatorTests.swift in Sources */,
 				52DB5A892ACD2372004611A7 /* PhilTests.swift in Sources */,
+				52711E6B2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
