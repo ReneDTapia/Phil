@@ -7,8 +7,25 @@
 
 import Foundation
 import JWTDecode
+import KeychainSwift
 
 class TokenHelper {
+    
+    private static let keychain = KeychainSwift()
+       private static let tokenKey = "userToken"
+       
+       static func save(token: String) {
+           keychain.set(token, forKey: tokenKey)
+       }
+
+       static func getToken() -> String? {
+           return keychain.get(tokenKey)
+       }
+
+       static func deleteToken() {
+           keychain.delete(tokenKey)
+       }
+    
     static func isTokenExpired(token: String) -> Bool {
         do {
             let jwt = try decode(jwt: token)

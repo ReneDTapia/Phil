@@ -10,36 +10,41 @@ import SwiftUI
 import KeychainSwift
 
 
+
 class LoginViewModel: ObservableObject {
     @Published var user = User(username: "", password: "")
     @Published var viewState: ViewState = .username
     @Published var showAlert = false
     @Published var alertMessage = ""
     
-    
     func login() {
-        let keychain = KeychainSwift()
-        AuthService.shared.login(username: self.user.username, password: self.user.password) { result in
+        AuthService.shared.login(username: user.username, password: user.password) { result in
             switch result {
             case .success(let token):
-                keychain.set(token, forKey: "userToken")
-                
+                TokenHelper.save(token: token)
                 if !TokenHelper.isTokenExpired(token: token) {
-                    self.viewState = .home  // Cambiar el estado de la vista para mostrar la pantalla principal
+ 
+                    self.viewState = .home
                 } else {
-                    self.alertMessage = "Your session has expired. Please log in again."
+                    self.alertMessage = "Login session has expired. Please log in again."
                     self.showAlert = true
                 }
-            
             case .failure(let error):
                 print("Error logging in: \(error)")
-                // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje de error al usuario.
-                self.alertMessage = "Failed to log in. Please try again."
+                if let customError = error as? CustomError {
+                    switch customError {
+                    case .unauthorized:
+                        self.alertMessage = "Incorrect username or password. Please try again."
+                    case .forbidden:
+                        self.alertMessage = "You do not have permission to perform this action."
+                    }
+                } else {
+                    self.alertMessage = "Failed to log in. Please try again."
+                }
                 self.showAlert = true
             }
         }
     }
-
 }
 
 
