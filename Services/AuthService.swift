@@ -82,6 +82,11 @@ class AuthService {
         }
     }
     
+    func logout() {
+        TokenHelper.deleteToken()
+    }
+
+    
 }
 
 enum CustomError: Error {
