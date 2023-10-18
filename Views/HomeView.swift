@@ -9,9 +9,24 @@ import Foundation
 import SwiftUI
 
 struct HomeView: View {
+
     var body: some View {
-        Text("Welcome to Home!")
-            .font(.largeTitle)
-            .padding()
+        VStack {
+            Text("Welcome to Home!")
+                .font(.largeTitle)
+                .padding()
+
+            Button(action: {
+                AuthService.shared.logout()
+            }) {
+                Text("Logout")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .frame(width: 200, height: 60)
+                    .background(Color.blue)
+                    .cornerRadius(15)
+            
+            }
+        }
     }
 }
