@@ -43,6 +43,10 @@
 		52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC02ACE22C3004611A7 /* SignUpView.swift */; };
 		52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC22ACE2C95004611A7 /* ViewState.swift */; };
 		52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */; };
+		CB8D79802ADDEF9600EBAC44 /* InitialFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8D797F2ADDEF9600EBAC44 /* InitialFormView.swift */; };
+		CB8D79822ADDF28600EBAC44 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8D79812ADDF28600EBAC44 /* Color.swift */; };
+		CBC0F9462AE05F660014D621 /* InitialFormModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC0F9452AE05F660014D621 /* InitialFormModel.swift */; };
+		CBCA41172ADF5FC9004BCDD2 /* InitialFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA41162ADF5FC9004BCDD2 /* InitialFormViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +95,10 @@
 		52DB5AC02ACE22C3004611A7 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		52DB5AC22ACE2C95004611A7 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteringUser.swift; sourceTree = "<group>"; };
+		CB8D797F2ADDEF9600EBAC44 /* InitialFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialFormView.swift; sourceTree = "<group>"; };
+		CB8D79812ADDF28600EBAC44 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		CBC0F9452AE05F660014D621 /* InitialFormModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialFormModel.swift; sourceTree = "<group>"; };
+		CBCA41162ADF5FC9004BCDD2 /* InitialFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialFormViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +217,7 @@
 			children = (
 				52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */,
 				52DB5AB62ACD6889004611A7 /* User.swift */,
+				CBC0F9452AE05F660014D621 /* InitialFormModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -218,6 +227,7 @@
 			children = (
 				52DB5ABE2ACE22A9004611A7 /* SignUpViewModel.swift */,
 				52DB5AB82ACD68A2004611A7 /* LoginViewModel.swift */,
+				CBCA41162ADF5FC9004BCDD2 /* InitialFormViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -229,6 +239,7 @@
 				52DB5ABA2ACD6A9E004611A7 /* PasswordView.swift */,
 				52DB5AC02ACE22C3004611A7 /* SignUpView.swift */,
 				52CC1B9F2ACF4B3000AD0029 /* HomeView.swift */,
+				CB8D797F2ADDEF9600EBAC44 /* InitialFormView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -239,6 +250,7 @@
 				52DB5AC22ACE2C95004611A7 /* ViewState.swift */,
 				52CC1B992ACF47F300AD0029 /* TokenHelper.swift */,
 				52711E692AD4DE390049DEE1 /* UserInputValidator.swift */,
+				CB8D79812ADDF28600EBAC44 /* Color.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -312,7 +324,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					52DB5A732ACD236B004611A7 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -395,19 +407,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB8D79802ADDEF9600EBAC44 /* InitialFormView.swift in Sources */,
 				52DB5AB72ACD6889004611A7 /* User.swift in Sources */,
 				52DB5ABB2ACD6A9E004611A7 /* PasswordView.swift in Sources */,
 				52CC1BA02ACF4B3000AD0029 /* HomeView.swift in Sources */,
 				52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */,
+				CB8D79822ADDF28600EBAC44 /* Color.swift in Sources */,
 				52DB5AB52ACD67B9004611A7 /* UsernameView.swift in Sources */,
 				52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */,
 				52DB54192ACE9F860019B448 /* AuthService.swift in Sources */,
 				52DB5A7A2ACD236B004611A7 /* ContentView.swift in Sources */,
+				CBC0F9462AE05F660014D621 /* InitialFormModel.swift in Sources */,
 				52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */,
 				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
 				52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
 				52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */,
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
+				CBCA41172ADF5FC9004BCDD2 /* InitialFormViewModel.swift in Sources */,
 				52DB5ABF2ACE22A9004611A7 /* SignUpViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -483,6 +499,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -543,6 +560,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
