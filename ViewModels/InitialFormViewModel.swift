@@ -11,7 +11,7 @@ import SwiftUI
 
 class InitialFormViewModel: ObservableObject {
     @Published var formGroups: [[InitialFormModel]] = []
-    @Published var selectedButtons: [Int?] = Array(repeating: nil, count: 4)
+    @Published var selectedButtons: [[Int]] = Array(repeating: [], count: 4)
     @Published var selectedCount = 0
     
     
@@ -37,19 +37,18 @@ class InitialFormViewModel: ObservableObject {
             }
         }.resume()
     }
-    /*
-     func postAnswers() {
+    func postAnswers() {
         // Crear la URL para la solicitud
-        guard let url = URL(string: "https://tu-servidor.com/api/respuestas") else {
+        guard let url = URL(string: "http://localhost:5005/api/auth/postForm") else {
             print("URL inválida")
             return
         }
 
         // Recoger las respuestas seleccionadas
-        let selectedAnswers = viewModel.selectedButtons.compactMap { $0 }
+        let selectedAnswers = selectedButtons.compactMap { $0 }
 
         // Crear el cuerpo de la solicitud
-        let body: [String: Any] = ["respuestas": selectedAnswers]
+        let body: [String: Any] = ["Users_id": 1, "Cuestionario_id": 1, "checked": selectedAnswers]
         let finalBody = try? JSONSerialization.data(withJSONObject: body)
 
         // Crear la solicitud
@@ -68,8 +67,6 @@ class InitialFormViewModel: ObservableObject {
             }
         }.resume()
     }
-     */
-
 }
 
 
