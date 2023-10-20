@@ -16,7 +16,7 @@ class InitialFormViewModel: ObservableObject {
     
     
     func getForm() {
-        guard let url = URL(string: "http://localhost:5005/api/auth/getForm") else {
+        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getForm") else {
             return
         }
         
@@ -39,7 +39,7 @@ class InitialFormViewModel: ObservableObject {
     }
     func postAnswers() {
         // Crear la URL para la solicitud
-        guard let url = URL(string: "http://localhost:5005/api/auth/postForm") else {
+        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/postForm") else {
             print("URL inválida")
             return
         }
