@@ -43,6 +43,26 @@
 		52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC02ACE22C3004611A7 /* SignUpView.swift */; };
 		52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC22ACE2C95004611A7 /* ViewState.swift */; };
 		52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */; };
+		BE1A98482AE0855200A01B1B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1A98472AE0855200A01B1B /* ChatView.swift */; };
+		BE8B015C2ADFB480003909BB /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8B015B2ADFB480003909BB /* ChatViewModel.swift */; };
+		BEA1B3DA2AE21D5900095A55 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = BEA1B3D92AE21D5900095A55 /* SwiftOpenAI */; };
+		BEA1B3DC2AE2218000095A55 /* GPTViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA1B3DB2AE2218000095A55 /* GPTViewModel.swift */; };
+		BEA1B3DF2AE227A700095A55 /* GPTView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA1B3DE2AE227A700095A55 /* GPTView.swift */; };
+		BEA1B3E12AE228A500095A55 /* TextMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA1B3E02AE228A500095A55 /* TextMessageView.swift */; };
+		BEA1B3E52AE2557000095A55 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA1B3E42AE2557000095A55 /* ConversationView.swift */; };
+		BEC0FF6A2AE26AB10005EDBF /* ContentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF692AE26AB10005EDBF /* ContentsView.swift */; };
+		BEC0FF6C2AE26AD10005EDBF /* ContentsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF6B2AE26AD10005EDBF /* ContentsModel.swift */; };
+		BEC0FF6E2AE26AE60005EDBF /* ContentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF6D2AE26AE60005EDBF /* ContentsViewModel.swift */; };
+		BEC0FF702AE26B410005EDBF /* TopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF6F2AE26B410005EDBF /* TopicsView.swift */; };
+		BEC0FF722AE26BB50005EDBF /* TopicsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF712AE26BB50005EDBF /* TopicsModel.swift */; };
+		BEC0FF742AE26BC70005EDBF /* TopicsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF732AE26BC70005EDBF /* TopicsViewModel.swift */; };
+		BEFC1D462AE09864006F5644 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D452AE09864006F5644 /* Message.swift */; };
+		BEFC1D4A2AE0A6EA006F5644 /* SentMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D492AE0A6EA006F5644 /* SentMessageView.swift */; };
+		BEFC1D4C2AE0A797006F5644 /* ReceivedMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D4B2AE0A797006F5644 /* ReceivedMessageView.swift */; };
+		BEFC1D4E2AE0B26F006F5644 /* MyChatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D4D2AE0B26F006F5644 /* MyChatsView.swift */; };
+		BEFC1D522AE0EB3A006F5644 /* PicturesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D512AE0EB3A006F5644 /* PicturesViewModel.swift */; };
+		BEFC1D542AE0EB51006F5644 /* Picture.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D532AE0EB51006F5644 /* Picture.swift */; };
+		BEFC1D562AE0EC0B006F5644 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D552AE0EC0B006F5644 /* PictureView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +111,25 @@
 		52DB5AC02ACE22C3004611A7 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		52DB5AC22ACE2C95004611A7 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteringUser.swift; sourceTree = "<group>"; };
+		BE1A98472AE0855200A01B1B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		BE8B015B2ADFB480003909BB /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		BEA1B3DB2AE2218000095A55 /* GPTViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTViewModel.swift; sourceTree = "<group>"; };
+		BEA1B3DE2AE227A700095A55 /* GPTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTView.swift; sourceTree = "<group>"; };
+		BEA1B3E02AE228A500095A55 /* TextMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageView.swift; sourceTree = "<group>"; };
+		BEA1B3E42AE2557000095A55 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
+		BEC0FF692AE26AB10005EDBF /* ContentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsView.swift; sourceTree = "<group>"; };
+		BEC0FF6B2AE26AD10005EDBF /* ContentsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsModel.swift; sourceTree = "<group>"; };
+		BEC0FF6D2AE26AE60005EDBF /* ContentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentsViewModel.swift; sourceTree = "<group>"; };
+		BEC0FF6F2AE26B410005EDBF /* TopicsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsView.swift; sourceTree = "<group>"; };
+		BEC0FF712AE26BB50005EDBF /* TopicsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsModel.swift; sourceTree = "<group>"; };
+		BEC0FF732AE26BC70005EDBF /* TopicsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsViewModel.swift; sourceTree = "<group>"; };
+		BEFC1D452AE09864006F5644 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		BEFC1D492AE0A6EA006F5644 /* SentMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentMessageView.swift; sourceTree = "<group>"; };
+		BEFC1D4B2AE0A797006F5644 /* ReceivedMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedMessageView.swift; sourceTree = "<group>"; };
+		BEFC1D4D2AE0B26F006F5644 /* MyChatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatsView.swift; sourceTree = "<group>"; };
+		BEFC1D512AE0EB3A006F5644 /* PicturesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewModel.swift; sourceTree = "<group>"; };
+		BEFC1D532AE0EB51006F5644 /* Picture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
+		BEFC1D552AE0EC0B006F5644 /* PictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BEA1B3DA2AE21D5900095A55 /* SwiftOpenAI in Frameworks */,
 				52CC1B982ACF461900AD0029 /* KeychainSwift in Frameworks */,
 				52DB54172ACE9F670019B448 /* Alamofire in Frameworks */,
 				52CC1B9D2ACF485E00AD0029 /* JWTDecode in Frameworks */,
@@ -209,6 +249,10 @@
 			children = (
 				52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */,
 				52DB5AB62ACD6889004611A7 /* User.swift */,
+				BEFC1D452AE09864006F5644 /* Message.swift */,
+				BEFC1D532AE0EB51006F5644 /* Picture.swift */,
+				BEC0FF6B2AE26AD10005EDBF /* ContentsModel.swift */,
+				BEC0FF712AE26BB50005EDBF /* TopicsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -218,6 +262,11 @@
 			children = (
 				52DB5ABE2ACE22A9004611A7 /* SignUpViewModel.swift */,
 				52DB5AB82ACD68A2004611A7 /* LoginViewModel.swift */,
+				BE8B015B2ADFB480003909BB /* ChatViewModel.swift */,
+				BEFC1D512AE0EB3A006F5644 /* PicturesViewModel.swift */,
+				BEA1B3DB2AE2218000095A55 /* GPTViewModel.swift */,
+				BEC0FF6D2AE26AE60005EDBF /* ContentsViewModel.swift */,
+				BEC0FF732AE26BC70005EDBF /* TopicsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -225,10 +274,17 @@
 		52DB5AC82ACE3918004611A7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BEA1B3DD2AE2279900095A55 /* GPT */,
 				52DB5AB42ACD67B9004611A7 /* UsernameView.swift */,
 				52DB5ABA2ACD6A9E004611A7 /* PasswordView.swift */,
 				52DB5AC02ACE22C3004611A7 /* SignUpView.swift */,
 				52CC1B9F2ACF4B3000AD0029 /* HomeView.swift */,
+				BE1A98472AE0855200A01B1B /* ChatView.swift */,
+				BEFC1D4D2AE0B26F006F5644 /* MyChatsView.swift */,
+				BEFC1D482AE0A67A006F5644 /* Messages */,
+				BEFC1D552AE0EC0B006F5644 /* PictureView.swift */,
+				BEC0FF692AE26AB10005EDBF /* ContentsView.swift */,
+				BEC0FF6F2AE26B410005EDBF /* TopicsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -241,6 +297,25 @@
 				52711E692AD4DE390049DEE1 /* UserInputValidator.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		BEA1B3DD2AE2279900095A55 /* GPT */ = {
+			isa = PBXGroup;
+			children = (
+				BEA1B3DE2AE227A700095A55 /* GPTView.swift */,
+				BEA1B3E02AE228A500095A55 /* TextMessageView.swift */,
+				BEA1B3E42AE2557000095A55 /* ConversationView.swift */,
+			);
+			path = GPT;
+			sourceTree = "<group>";
+		};
+		BEFC1D482AE0A67A006F5644 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				BEFC1D492AE0A6EA006F5644 /* SentMessageView.swift */,
+				BEFC1D4B2AE0A797006F5644 /* ReceivedMessageView.swift */,
+			);
+			path = Messages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -263,6 +338,7 @@
 				52DB54162ACE9F670019B448 /* Alamofire */,
 				52CC1B972ACF461900AD0029 /* KeychainSwift */,
 				52CC1B9C2ACF485E00AD0029 /* JWTDecode */,
+				BEA1B3D92AE21D5900095A55 /* SwiftOpenAI */,
 			);
 			productName = Phil;
 			productReference = 52DB5A742ACD236B004611A7 /* Phil.app */;
@@ -340,6 +416,7 @@
 				52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				52CC1B962ACF461900AD0029 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				52CC1B9B2ACF485E00AD0029 /* XCRemoteSwiftPackageReference "JWTDecode.swift" */,
+				BEA1B3D82AE21D5900095A55 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */,
 			);
 			productRefGroup = 52DB5A752ACD236B004611A7 /* Products */;
 			projectDirPath = "";
@@ -396,18 +473,37 @@
 			buildActionMask = 2147483647;
 			files = (
 				52DB5AB72ACD6889004611A7 /* User.swift in Sources */,
+				BEA1B3E12AE228A500095A55 /* TextMessageView.swift in Sources */,
+				BEC0FF6E2AE26AE60005EDBF /* ContentsViewModel.swift in Sources */,
 				52DB5ABB2ACD6A9E004611A7 /* PasswordView.swift in Sources */,
 				52CC1BA02ACF4B3000AD0029 /* HomeView.swift in Sources */,
+				BEC0FF742AE26BC70005EDBF /* TopicsViewModel.swift in Sources */,
+				BEFC1D462AE09864006F5644 /* Message.swift in Sources */,
 				52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */,
+				BE1A98482AE0855200A01B1B /* ChatView.swift in Sources */,
+				BEC0FF6C2AE26AD10005EDBF /* ContentsModel.swift in Sources */,
+				BEFC1D4A2AE0A6EA006F5644 /* SentMessageView.swift in Sources */,
 				52DB5AB52ACD67B9004611A7 /* UsernameView.swift in Sources */,
+				BEFC1D4E2AE0B26F006F5644 /* MyChatsView.swift in Sources */,
+				BEFC1D4C2AE0A797006F5644 /* ReceivedMessageView.swift in Sources */,
+				BEA1B3DF2AE227A700095A55 /* GPTView.swift in Sources */,
+				BEFC1D562AE0EC0B006F5644 /* PictureView.swift in Sources */,
+				BEC0FF722AE26BB50005EDBF /* TopicsModel.swift in Sources */,
 				52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */,
+				BEC0FF6A2AE26AB10005EDBF /* ContentsView.swift in Sources */,
+				BEA1B3DC2AE2218000095A55 /* GPTViewModel.swift in Sources */,
 				52DB54192ACE9F860019B448 /* AuthService.swift in Sources */,
 				52DB5A7A2ACD236B004611A7 /* ContentView.swift in Sources */,
+				BEA1B3E52AE2557000095A55 /* ConversationView.swift in Sources */,
+				BEFC1D522AE0EB3A006F5644 /* PicturesViewModel.swift in Sources */,
+				BEFC1D542AE0EB51006F5644 /* Picture.swift in Sources */,
 				52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */,
 				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
 				52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
 				52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */,
+				BEC0FF702AE26B410005EDBF /* TopicsView.swift in Sources */,
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
+				BE8B015C2ADFB480003909BB /* ChatViewModel.swift in Sources */,
 				52DB5ABF2ACE22A9004611A7 /* SignUpViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -765,6 +861,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		BEA1B3D82AE21D5900095A55 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftBeta/SwiftOpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -782,6 +886,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 52DB54152ACE9F670019B448 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		BEA1B3D92AE21D5900095A55 /* SwiftOpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BEA1B3D82AE21D5900095A55 /* XCRemoteSwiftPackageReference "SwiftOpenAI" */;
+			productName = SwiftOpenAI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
