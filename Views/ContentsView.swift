@@ -42,11 +42,14 @@ struct ContentsView: View {
                                 .listRowBackground(Color.black)
                                 .frame(maxWidth:.infinity, alignment:.center)
                                 .listRowSeparator(.hidden)
-                                  
+                                .navigationBarHidden(false)
+                                .navigationBarBackButtonHidden(false)
                         }
                         .listRowBackground(Color.black)
                         .frame(maxWidth:.infinity, alignment:.center)
                         .listRowSeparator(.hidden)
+                        .navigationBarHidden(false)
+                        .navigationBarBackButtonHidden(false)
                     }
                     .background(.black)
                     .onAppear{
@@ -233,8 +236,32 @@ struct Menu: View {
                                 
                                 NavigationLink(destination : GPTView()){
                                     HStack{
-                                        Image(systemName: "star.fill")
+                                        Image(systemName: "message.fill")
                                         Text("Phil")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.black)
+                                    .padding()
+                                }.navigationBarHidden(true)
+                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
+                                    .navigationBarBackButtonHidden(true)
+                                
+                                NavigationLink(destination : InitialFormView()){
+                                    HStack{
+                                        Image(systemName: "star.fill")
+                                        Text("Tu")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.black)
+                                    .padding()
+                                }.navigationBarHidden(true)
+                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
+                                    .navigationBarBackButtonHidden(true)
+                                
+                                NavigationLink(destination : PictureView()){
+                                    HStack{
+                                        Image(systemName: "photo.fill")
+                                        Text("Tus fotos")
                                         Spacer()
                                     }
                                     .foregroundColor(.black)

@@ -72,7 +72,7 @@ struct PictureView: View {
     @StateObject var pictureVM = PicturesViewModel()
     @State private var selectedUserId: Int = 2
     @State private var selectedDate: Date = Date()
-
+    private var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
     var body: some View {
         ZStack {
             Color(red: 0.1176, green: 0.1176, blue: 0.1176)
@@ -102,16 +102,25 @@ struct PictureView: View {
                     }
 
                 ScrollView {
-                    ForEach(pictureVM.pictures) { picture in
-                        if let url = URL(string: picture.url) {
-                            AsyncImage(url: url) { image in
-                                image.resizable().frame(height: 200)
-                            } placeholder: {
-                                ProgressView()
-                            }
-                        }
-                    }
-                }.padding(.top, 16)
+                                    LazyVGrid(columns: columns, spacing: 16) {
+                                        ForEach(pictureVM.pictures) { picture in
+                                            if let url = URL(string: picture.url) {
+                                                AsyncImage(url: url) { image in
+                                                    image.resizable()
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .frame(minWidth: 0, maxWidth: .infinity)
+                                                        .frame(height: 200)
+                                                        .cornerRadius(10)  // Esquinas redondeadas
+                                                        .clipped()  // Asegura que la imagen se recorte a las esquinas redondeadas
+                                                } placeholder: {
+                                                    ProgressView()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .padding()  // Espacio entre la cuadrícula y la orilla
+                                }
+                                .padding(.top, 16)
                 
                 Spacer()
             }
@@ -148,4 +157,3 @@ struct PictureView_Previews: PreviewProvider {
         PictureView()
     }
 }
-

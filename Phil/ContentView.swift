@@ -19,7 +19,7 @@ struct ContentView: View {
 
         let keychain = KeychainSwift()
         if let token = keychain.get("userToken"), !TokenHelper.isTokenExpired(token: token) {
-            self.loginViewModel.viewState = .home
+            self.loginViewModel.viewState = .ContentsView
         }
     }
 
@@ -33,8 +33,9 @@ struct ContentView: View {
             PasswordView(viewModel: loginViewModel)
         case .signUp:
             SignUpView(viewModel: signUpViewModel)
-        case .home:
-            HomeView()
+        case .ContentsView:
+            ContentsView()
+        
         }
     }
 }

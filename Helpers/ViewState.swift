@@ -11,6 +11,6 @@ enum ViewState {
     case username
     case password
     case signUp
-    case home
+    case ContentsView
 }
 

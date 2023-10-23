@@ -12,7 +12,7 @@ final class GPTViewModel : ObservableObject {
     
     
     @Published var messages : [MessageChatGPT] = [
-        .init(text: "Hola! soy Phil y te puedo ayudar a sentirte mejor :V", role: .system)
+        .init(text: "Hola! soy Phil y te puedo ayudar a sentirte mejor en tu salud mental y tus emociones:V", role: .system)
     ]
     
     @Published var currentMessage : MessageChatGPT = .init(text: "", role: .assistant)
@@ -25,13 +25,14 @@ final class GPTViewModel : ObservableObject {
         
         
         await MainActor.run{
-            
             let myMessage = MessageChatGPT(text: message, role: .user)
+            
             self.messages.append(myMessage)
             
             self.currentMessage = MessageChatGPT(text: "", role: .assistant)
             self.messages.append(self.currentMessage)
         }
+
         
         do {
             let stream = try await openAI.createChatCompletionsStream(

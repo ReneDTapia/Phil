@@ -10,7 +10,7 @@ import SwiftUI
 
 struct GPTView: View {
     var viewModel = GPTViewModel()
-    @State var prompt : String = "Explicame 10 emoeciones comunes"
+    @State var prompt : String = "Explicame 10 emociones comunes"
     
     @State private var showMenu = false
     

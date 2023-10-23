@@ -30,7 +30,7 @@ struct TopicsView: View {
                                 .fill(Color.white)
                                 .frame(width: 50, height: 50)
                         }
-                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                        .padding(EdgeInsets(top: 50, leading: 20, bottom: 0, trailing: 20))
                         Text("Temas del contenido")
                             .font(.largeTitle)
                             .bold()
@@ -79,12 +79,11 @@ struct TopicsView: View {
                         }
                     }
                     
-                    HStack{
                         Menu(showMenu: $showMenu)
                             .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                            .frame(width: 300)
+                            .frame(width: 300, height: geometry.size.height+120)
                          
-                    }
+                    
                     
                     
                     
