@@ -17,11 +17,16 @@ struct ContentView: View {
     init() {
         signUpViewModel.loginViewModel = loginViewModel
 
-        let keychain = KeychainSwift()
-        if let token = keychain.get("userToken"), !TokenHelper.isTokenExpired(token: token) {
+        if let token = TokenHelper.getToken(), !TokenHelper.isTokenExpired(token: token) {
+           
             self.loginViewModel.viewState = .home
+        } else {
+            
+         
+            self.loginViewModel.viewState = .username
         }
     }
+
 
 
 
