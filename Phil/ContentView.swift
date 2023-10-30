@@ -21,7 +21,9 @@ struct ContentView: View {
         if let token = keychain.get("userToken"), !TokenHelper.isTokenExpired(token: token) {
             self.loginViewModel.viewState = .ContentsView
         }
+    
     }
+
 
 
 
