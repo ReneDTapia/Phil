@@ -1,6 +1,9 @@
 import SwiftUI
 import SwiftOpenAI
 
+
+//esta vista ya no se usa pues se integró todo en GPT VIEW.
+
 struct ChatView: View {
     @StateObject var viewModel: ChatViewModel = ChatViewModel()
     @State private var newMessage: String = ""
@@ -12,37 +15,11 @@ struct ChatView: View {
             ScrollView {
                 VStack(spacing: 15) {
                     ForEach(viewModel.messages) { message in
-                        if message.sentByUser {
-                            SentMessageView(message: message)
-                        } else {
-                            ReceivedMessageView(message: message)
-                        }
-                    }
+                                            TextMessageView2(message: message)}
                 }.padding()
             }
             
-            HStack {
-                TextField("Chatea con Phil...", text: $newMessage)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .cornerRadius(10)
-                    .frame(maxHeight: 20)
-                    .background(
-                        RoundedRectangle(cornerRadius: 50)
-                        .stroke(Color.black, lineWidth: 1)
-                                )
-                
-                Button(action: {
-                    //viewModel.sendMessage(newMessage)
-                    //newMessage = ""
-                }) {
-                    Image(systemName: "paperplane.fill")
-                        .frame(width: 40, height: 40)
-                        .background(Color.purple)
-                        .foregroundColor(.white)
-                        .clipShape(Circle())
-                }
-            }
-            .padding()
+          
         }
         .onAppear {
             viewModel.fetchMessages(conversationId: conversationId) 

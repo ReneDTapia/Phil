@@ -8,18 +8,23 @@
 import SwiftUI
 
 struct ConversationView: View {
-    
-    @EnvironmentObject var viewModel : GPTViewModel
+    @EnvironmentObject var gptViewModel: GPTViewModel
+    @ObservedObject var chatViewModel: ChatViewModel
     
     var body: some View {
-        ScrollView{
-            ForEach(viewModel.messages) {message in TextMessageView(message: message)}
+        ScrollView {
+            VStack(spacing: 15) {
+                // Mostrar mensajes antiguos
+                ForEach(chatViewModel.messages) { message in
+                    TextMessageView2(message: message)
+                }
+                
+                // Mostrar TODOS LOS mensajes de esa conversación
+                ForEach(gptViewModel.messages) {message in  if !message.hidden {
+                    TextMessageView(message: message)
+                }
+                }
+            }
         }
-    }
-}
-
-struct ConversationView_Previews: PreviewProvider {
-    static var previews: some View {
-        ConversationView().environmentObject(GPTViewModel())
     }
 }

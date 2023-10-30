@@ -12,6 +12,7 @@ import KeychainSwift
 
 
 class LoginViewModel: ObservableObject {
+    
     @Published var user = User(username: "", password: "")
     @Published var viewState: ViewState = .username
     @Published var showAlert = false
