@@ -80,14 +80,32 @@ struct SignUpView: View {
             .padding(.top, 20)
 
             // Sign Up Button
-            Button(action: {self.viewModel.register()}) {
+            Button(action: {
+                // Acciones al presionar el botón
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    self.viewModel.isButtonPressed = true
+                }
+
+                // Aquí es donde se maneja la lógica de registro
+                self.viewModel.register()
+
+                // Después de que la tarea se haya completado o después de un ligero retraso
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        self.viewModel.isButtonPressed = false
+                    }
+                }
+            }) {
                 Text("Sign Up")
                     .font(Font.custom("Montserrat-Bold", size: 15).weight(.bold))
                     .foregroundColor(.white)
                     .frame(width: 284, height: 47)
-                    .background(buttonColor)
+                    .background(viewModel.isButtonPressed ? buttonColor.opacity(0.7) : buttonColor) // Cambia el color de fondo cuando se presiona
                     .cornerRadius(10)
+                    .scaleEffect(viewModel.isButtonPressed ? 0.9 : 1) // Hace que el botón se "contraiga" un poco cuando se presiona
             }
+            .animation(.spring(response: 0.4, dampingFraction: 0.3), value: viewModel.isButtonPressed) // Aplica la animación basada en el cambio en `isButtonPressed`
+
             
             Spacer()
         }
