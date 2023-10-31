@@ -233,18 +233,7 @@ struct Menu: View {
                                     .navigationBarBackButtonHidden(true)
                                 
                                 
-                                
-                                NavigationLink(destination : GPTView()){
-                                    HStack{
-                                        Image(systemName: "message.fill")
-                                        Text("Phil")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.black)
-                                    .padding()
-                                }.navigationBarHidden(true)
-                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
-                                    .navigationBarBackButtonHidden(true)
+        
                                 
                                 NavigationLink(destination : InitialFormView()){
                                     HStack{

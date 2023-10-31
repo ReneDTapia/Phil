@@ -316,6 +316,7 @@
 		BEA1B3DD2AE2279900095A55 /* GPT */ = {
 			isa = PBXGroup;
 			children = (
+				BEFC1D4D2AE0B26F006F5644 /* MyChatsView.swift */,
 				BEA1B3DE2AE227A700095A55 /* GPTView.swift */,
 				BEA1B3E02AE228A500095A55 /* TextMessageView.swift */,
 				BEA1B3E42AE2557000095A55 /* ConversationView.swift */,
@@ -336,7 +337,6 @@
 			isa = PBXGroup;
 			children = (
 				BE1A98472AE0855200A01B1B /* ChatView.swift */,
-				BEFC1D4D2AE0B26F006F5644 /* MyChatsView.swift */,
 				BEFC1D492AE0A6EA006F5644 /* SentMessageView.swift */,
 				BEFC1D4B2AE0A797006F5644 /* ReceivedMessageView.swift */,
 				BE426E2D2AEE64BD00C67198 /* TextMessageView2.swift */,

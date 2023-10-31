@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MyChatsView: View {
     @StateObject var viewModel: ChatViewModel
+    @StateObject var GPTviewModel = GPTViewModel()
+    
     var userId: Int
 
     @State private var showMenu = false
@@ -56,7 +58,7 @@ struct MyChatsView: View {
                         }
                         
                         List(viewModel.conversations) { conversation in
-                            NavigationLink(destination: ChatView(viewModel: viewModel, conversationId: conversation.id)) {
+                            NavigationLink(destination: GPTView(conversationId: conversation.id, viewModel: GPTviewModel)) {
                                 VStack(alignment: .leading) {
                                     Text("Conversación \(conversation.id)")
                                         .foregroundColor(Color.white)
