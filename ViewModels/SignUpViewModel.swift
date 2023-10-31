@@ -33,7 +33,7 @@ class SignUpViewModel: ObservableObject {
                     // Guardar el token
                     TokenHelper.save(token: token)
                     
-                    self.loginViewModel?.viewState = .home
+                    self.loginViewModel?.viewState = .ContentsView
 
                     
                 case .failure(let error):

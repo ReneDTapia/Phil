@@ -12,6 +12,7 @@ import KeychainSwift
 
 
 class LoginViewModel: ObservableObject {
+    
     @Published var user = User(username: "", password: "")
     @Published var viewState: ViewState = .username
     @Published var showAlert = false
@@ -24,7 +25,7 @@ class LoginViewModel: ObservableObject {
                 TokenHelper.save(token: token)
                 if !TokenHelper.isTokenExpired(token: token) {
  
-                    self.viewState = .home
+                    self.viewState = .ContentsView
                 } else {
                     self.alertMessage = "Login session has expired. Please log in again."
                     self.showAlert = true
