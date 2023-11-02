@@ -20,7 +20,7 @@ final class GPTViewModel : ObservableObject {
     
     @Published var currentMessage : MessageChatGPT = .init(text: "", role: .assistant)
     
-    var openAI = SwiftOpenAI(apiKey: "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")
+    var openAI = SwiftOpenAI(apiKey: "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")
     
     
     
@@ -39,7 +39,7 @@ final class GPTViewModel : ObservableObject {
             self.messages.append(self.currentMessage)
         }
         // Registra el mensaje del usuario en la base de datos
-            registerMessageWithAlamofire(message: message, sentByUser: true, userId: 1, conversationId: 2)
+            registerMessageWithAlamofire(message: message, sentByUser: true, userId: 1, conversationId: 3)
         
         do {
             let stream = try await openAI.createChatCompletionsStream(
@@ -66,7 +66,7 @@ final class GPTViewModel : ObservableObject {
             
             guard lastMessage.finishReason == nil else{
                 print("finished sendin el message pa lol")
-                registerMessageWithAlamofire(message: currentMessage.text, sentByUser: false, userId: 1, conversationId: 2)
+                registerMessageWithAlamofire(message: currentMessage.text, sentByUser: false, userId: 1, conversationId: 3)
                 return
             }
             
