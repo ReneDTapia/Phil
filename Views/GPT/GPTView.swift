@@ -113,8 +113,9 @@ struct GPTView: View {
                 
                 HStack{
                     Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                        .frame(width: 300)
+                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                        .frame(width: 300, height:.infinity)
+                        .ignoresSafeArea(.all)
                     
                 }
                 

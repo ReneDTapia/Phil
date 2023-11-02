@@ -25,7 +25,7 @@ struct TopicsView: View {
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }) {
-                                Image(systemName: "arrow.left.circle")
+                                Image(systemName: "arrow.left")
                                     .font(.title)
                                     .foregroundColor(.white)
                             }
