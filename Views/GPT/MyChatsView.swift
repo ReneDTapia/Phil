@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MyChatsView: View {
-    @StateObject var viewModel: ChatViewModel
+    @StateObject var viewModel = ChatViewModel()
     @StateObject var GPTviewModel = GPTViewModel()
     
     var userId: Int
@@ -120,8 +120,7 @@ struct MyChatsView: View {
 
 struct MyChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = ChatViewModel()
-        return MyChatsView(viewModel: viewModel, userId: 1)
+        return MyChatsView(userId: 1)
     }
 }
 

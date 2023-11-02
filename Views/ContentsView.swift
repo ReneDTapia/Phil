@@ -234,6 +234,20 @@ struct Menu: View {
                             List{
                         
                                 //////
+                                ///
+                                ///
+                                NavigationLink(destination : InitialFormView()){
+                                    HStack{
+                                        Image(systemName: "person.fill")
+                                        Text("Tu")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.black)
+                                    .padding()
+                                }.navigationBarHidden(true)
+                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
+                                    .navigationBarBackButtonHidden(true)
+                                
                                 NavigationLink(destination : ContentsView()){
                                     HStack{
                                         Image(systemName: "star.fill")
@@ -247,20 +261,6 @@ struct Menu: View {
                                     .navigationBarBackButtonHidden(true)
                                 
                                 
-        
-                                
-                                NavigationLink(destination : InitialFormView()){
-                                    HStack{
-                                        Image(systemName: "star.fill")
-                                        Text("Tu")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.black)
-                                    .padding()
-                                }.navigationBarHidden(true)
-                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
-                                    .navigationBarBackButtonHidden(true)
-                                
                                 NavigationLink(destination : PictureView()){
                                     HStack{
                                         Image(systemName: "photo.fill")
@@ -272,6 +272,19 @@ struct Menu: View {
                                 }.navigationBarHidden(true)
                                     .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
                                     .navigationBarBackButtonHidden(true)
+                                
+                                NavigationLink(destination : MyChatsView(userId: 1)){
+                                    HStack{
+                                        Image(systemName: "message")
+                                        Text("Chatea con Phil")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.black)
+                                    .padding()
+                                }.navigationBarHidden(true)
+                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
+                                    .navigationBarBackButtonHidden(true)
+
                                 
                                 
                                 

@@ -13,12 +13,12 @@ struct GPTView: View {
     
     var conversationId: Int
     
-    var viewModel = GPTViewModel()
+    @StateObject var viewModel = GPTViewModel()
     @State var prompt : String = "Que onda, cómo te llamas puedes ayudarme a identificar mis emociones?"
     
     @State private var showMenu = false
     
-    @StateObject var chatViewModel: ChatViewModel = ChatViewModel()
+    @StateObject var chatViewModel = ChatViewModel()
 
     
     
