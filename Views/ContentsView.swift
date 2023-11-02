@@ -6,6 +6,7 @@ struct ContentsView: View {
     @State private var showMenu = false
     @StateObject var ContentVM = ContentsViewModel()
     @State private var isLoading = true
+    @State private var messageLoad = "Cargando..."
     
     var body: some View {
     GeometryReader { geometry in
@@ -37,10 +38,11 @@ struct ContentsView: View {
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
                         .foregroundColor(.white)
                     if isLoading{
-                        ProgressView("Cargando...")
-                            .progressViewStyle(CircularProgressViewStyle())
+                        ProgressView(messageLoad)
                             .foregroundColor(Color.white)
                             .frame(width: geometry.size.width, height: geometry.size.height-100)
+                        
+                        .scaleEffect(1.5)
                     }
                     List(ContentVM.resultContents){content in
                         NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title)){
@@ -62,7 +64,11 @@ struct ContentsView: View {
                         Task{
                             do{
                                 try await ContentVM.getContents()
-                                isLoading = false
+                                if ContentVM.resultContents.isEmpty {
+                                    messageLoad = "No hay datos"
+                                    
+                                }
+                                isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
                             }
                             catch{
                                 print("error")
@@ -91,8 +97,9 @@ struct ContentsView: View {
                 
                 HStack{
                     Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                        .frame(width: 300)
+                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                        .frame(width: 300, height:.infinity)
+                        .ignoresSafeArea(.all)
                     
                 }
                 
@@ -284,7 +291,7 @@ struct Menu: View {
                     
                 
                 .padding(16)
-                .edgesIgnoringSafeArea(.bottom)
+                .edgesIgnoringSafeArea(.all)
                 
             }
             .frame(width: 250)
