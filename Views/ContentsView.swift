@@ -229,7 +229,7 @@ struct Menu: View {
                     
                     VStack(alignment:.leading){
                 
-                        NavigationView{
+                        NavigationStack{
                             
                             List{
                         
@@ -272,6 +272,8 @@ struct Menu: View {
                                 }.navigationBarHidden(true)
                                     .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
                                     .navigationBarBackButtonHidden(true)
+                                
+                                
                                 
                                 
                                 
