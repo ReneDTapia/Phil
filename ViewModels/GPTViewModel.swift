@@ -88,7 +88,7 @@ final class GPTViewModel : ObservableObject {
     //FUNCION PARA OBTENER CONTEXTO DEL USUARIO:V
     func fetchUserForm(Users_id: Int)  {
         guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getUserForm/\(Users_id)") else {
-           // print("Invalida tu pinki URL")
+            print("Invalida tu pinki URL")
             return
         }
         
@@ -102,11 +102,11 @@ final class GPTViewModel : ObservableObject {
                 do {
                     let messages = try JSONDecoder().decode([UserForm].self, from: data)
                     
-                  //print("aqui estan las respuestas del usuario pibe", messages, "aquitermina las respuestas del usuario pibe")
+                  print("aqui estan las respuestas del usuario pibe", messages, "aquitermina las respuestas del usuario pibe")
                     
                     DispatchQueue.main.async {
                         self.userForm = messages
-                        //print("UserForm: \(messages)")  //lol
+                        print("UserForm: \(messages)")  //lol
                     }
                 } catch {
                     print("Decoding error: \(error)")

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MyChatsView: View {
-    @StateObject var viewModel: ChatViewModel
+    @StateObject var viewModel = ChatViewModel()
     @StateObject var GPTviewModel = GPTViewModel()
     
     var userId: Int
