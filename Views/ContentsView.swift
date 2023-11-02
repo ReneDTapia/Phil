@@ -5,6 +5,7 @@ struct ContentsView: View {
     @State private var progress: Float = 1
     @State private var showMenu = false
     @StateObject var ContentVM = ContentsViewModel()
+    @State private var isLoading = true
     
     var body: some View {
     GeometryReader { geometry in
@@ -35,7 +36,12 @@ struct ContentsView: View {
                         .bold()
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
                         .foregroundColor(.white)
-                    
+                    if isLoading{
+                        ProgressView("Cargando...")
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .foregroundColor(Color.white)
+                            .frame(width: geometry.size.width, height: geometry.size.height-100)
+                    }
                     List(ContentVM.resultContents){content in
                         NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title)){
                             Contents(progress: $progress, title: content.title, description: content.description)
@@ -56,6 +62,7 @@ struct ContentsView: View {
                         Task{
                             do{
                                 try await ContentVM.getContents()
+                                isLoading = false
                             }
                             catch{
                                 print("error")
