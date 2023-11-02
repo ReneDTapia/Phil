@@ -120,8 +120,7 @@ struct MyChatsView: View {
 
 struct MyChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = ChatViewModel()
-        return MyChatsView(viewModel: viewModel, userId: 1)
+        return MyChatsView(userId: 1)
     }
 }
 
