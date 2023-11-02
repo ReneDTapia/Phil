@@ -287,6 +287,17 @@ struct Menu: View {
 
                                 
                                 
+                                NavigationLink(destination : MyChatsView(userId: 1)){
+                                    HStack{
+                                        Image(systemName: "photo.fill")
+                                        Text("Tus fotos")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.black)
+                                    .padding()
+                                }.navigationBarHidden(true)
+                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
+                                    .navigationBarBackButtonHidden(true)
                                 
                                 
                                 

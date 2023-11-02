@@ -8,7 +8,7 @@
 import SwiftUI
 import KeychainSwift
 
-struct ContentView: View {
+struct MainView: View {
     @ObservedObject var loginViewModel = LoginViewModel()
     @ObservedObject var signUpViewModel = SignUpViewModel()
 
@@ -55,9 +55,9 @@ extension View {
 }
 
 
-struct ContentView_Previews: PreviewProvider {
+struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        MainView()
     }
 }
 
