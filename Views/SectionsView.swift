@@ -9,6 +9,7 @@ struct SectionsView: View {
     @StateObject var SectionsVM = SectionsViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoading = true
+    @State private var messageLoad = "Cargando..."
     
     var body: some View {
         GeometryReader { geometry in
@@ -55,10 +56,10 @@ struct SectionsView: View {
                             .foregroundColor(.white)
                         
                         if isLoading{
-                            ProgressView("Cargando...")
-                                .progressViewStyle(CircularProgressViewStyle())
+                            ProgressView(messageLoad)
                                 .foregroundColor(Color.white)
-                                .frame(width: geometry.size.width, height: geometry.size.height-100)
+                                .frame(width: geometry.size.width, height: geometry.size.height-120)
+                                .scaleEffect(1.5)
                         }
                         List(SectionsVM.resultSections){content in
                             Sections(text: content.text ?? "", video: content.video ?? "", image: content.image ?? "")
@@ -71,7 +72,11 @@ struct SectionsView: View {
                             Task{
                                 do{
                                     try await SectionsVM.getSections(topicIDVM: topicID)
-                                    isLoading = false
+                                    if SectionsVM.resultSections.isEmpty {
+                                        messageLoad = "No hay datos"
+                                        
+                                    }
+                                    isLoading = SectionsVM.resultSections.isEmpty // Verifica si la lista está vacía
                                 }
                                 catch{
                                     print("error")
@@ -81,6 +86,7 @@ struct SectionsView: View {
                         .frame(height: geometry.size.height-170)
                         .listStyle(PlainListStyle())
                           
+                        
                         Spacer()
                         
                     }
@@ -99,8 +105,9 @@ struct SectionsView: View {
                     }
                     
                         Menu(showMenu: $showMenu)
-                            .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                            .frame(width: 300, height: geometry.size.height+120)
+                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                        .frame(width: 300, height:.infinity)
+                        .ignoresSafeArea(.all)
                 }
                 
             }
@@ -119,81 +126,81 @@ struct Sections: View{
     let image: String
     
     var body: some View{
-        
-        ZStack(alignment: .center) {
-            VStack{
-                
-                if text != ""{
-                    Spacer()
-                    Text(text)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.leading)
-                }
-                
-                
-                if image != ""{
-                    Spacer()
-                    AsyncImage(url: URL(string: image)) { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                        } else if phase.error != nil {
-                            Text("Error loading image")
-                        } else {
-                            ProgressView()
-                        }
+            ZStack(alignment: .center) {
+                Color.black
+                VStack{
+                    
+                    if text != ""{
+                        Spacer()
+                        Text(text)
+                            .foregroundColor(.white)
+                            .multilineTextAlignment(.leading)
                     }
-                    .frame(width: 350, height: 190 )
-                    .cornerRadius(12)
-                    .padding(.horizontal, 24)
-                }
-                
-                if video != ""{
-                    Spacer()
-                    Video(url: video)
+                    
+                    
+                    if image != ""{
+                        Spacer()
+                        AsyncImage(url: URL(string: image)) { phase in
+                            if let image = phase.image {
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            } else if phase.error != nil {
+                                Text("Error loading image")
+                            } else {
+                                ProgressView()
+                            }
+                        }
                         .frame(width: 350, height: 190 )
                         .cornerRadius(12)
                         .padding(.horizontal, 24)
-                    Spacer()
+                    }
+                    
+                    if video != ""{
+                        Spacer()
+                        Video(url: video)
+                            .frame(width: 350, height: 190 )
+                            .cornerRadius(12)
+                            .padding(.horizontal, 24)
+                        Spacer()
+                    }
+                    
+                    Rectangle()
+                        .foregroundColor(Color.white)
+                        .frame(width: 350,height: 3)
+                    
+                    
                 }
-                
-                Rectangle()
-                    .foregroundColor(Color.white)
-                    .frame(width: 350,height: 3)
                 
                 
             }
-            
-            
+            .padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 20))
+            .background(Color.black)
+            .frame(maxWidth: 500)
         }
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 20))
-        
-        .frame(maxWidth: 500)
-    }
-}
-
-struct Video: UIViewRepresentable {
-    let url: String
-    let id: String
-        
-    init(url: String) {
-        self.url = url
-        self.id = extractYouTubeVideoID(from: url) ?? ""
-    }
-        
-     
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        return webView
-    }
     
-    func updateUIView(_ uiView: UIViewType, context: Context) {
-        guard let YouTubeURL = URL(string: "https://www.youtube.com/embed/\(id)") else
-        {return}
+    struct Video: UIViewRepresentable {
+        let url: String
+        let id: String
         
-        uiView.scrollView.isScrollEnabled = false
-        uiView.load(URLRequest(url: YouTubeURL))
+        init(url: String) {
+            self.url = url
+            self.id = extractYouTubeVideoID(from: url) ?? ""
+        }
+        
+        
+        func makeUIView(context: Context) -> WKWebView {
+            let webView = WKWebView()
+            return webView
+        }
+        
+        func updateUIView(_ uiView: UIViewType, context: Context) {
+            guard let YouTubeURL = URL(string: "https://www.youtube.com/embed/\(id)") else
+            {return}
+            
+            uiView.scrollView.isScrollEnabled = false
+            uiView.load(URLRequest(url: YouTubeURL))
+        }
     }
 }
 

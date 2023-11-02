@@ -8,6 +8,7 @@ struct TopicsView: View {
     @StateObject var TopicsVM = TopicsViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoading = true
+    @State private var messageLoad = "Cargando..."
     
     
     var body: some View {
@@ -60,10 +61,11 @@ struct TopicsView: View {
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
                             .foregroundColor(.white)
                         if isLoading{
-                            ProgressView("Cargando...")
-                                .progressViewStyle(CircularProgressViewStyle())
+                            ProgressView(messageLoad)
                                 .foregroundColor(Color.white)
-                                .frame(width: geometry.size.width, height: geometry.size.height-100)
+                                .frame(width: geometry.size.width, height: geometry.size.height-160)
+                            
+                            .scaleEffect(1.5)
                         }
                         List(TopicsVM.resultTopics){content in
                             
@@ -82,7 +84,11 @@ struct TopicsView: View {
                             Task{
                                 do{
                                     try await TopicsVM.getTopics(contentIDVM: contentID)
-                                    isLoading = false
+                                    if TopicsVM.resultTopics.isEmpty {
+                                        messageLoad = "No hay datos"
+                                        
+                                    }
+                                    isLoading = TopicsVM.resultTopics.isEmpty // Verifica si la lista está vacía
                                 }
                                 catch{
                                     print("error")
@@ -110,8 +116,9 @@ struct TopicsView: View {
                     }
                     
                         Menu(showMenu: $showMenu)
-                            .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                            .frame(width: 300, height: geometry.size.height+120)
+                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                        .frame(width: 300, height:.infinity)
+                        .ignoresSafeArea(.all)
                          
                     
                     
