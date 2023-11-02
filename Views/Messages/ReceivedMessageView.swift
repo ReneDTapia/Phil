@@ -1,5 +1,5 @@
 import SwiftUI
-
+//componente sin uso
 struct ReceivedMessageView: View {
     let message: Message
     @Environment(\.colorScheme) var colorScheme

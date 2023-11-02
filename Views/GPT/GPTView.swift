@@ -10,12 +10,15 @@ import SwiftOpenAI
 
 
 struct GPTView: View {
-    var viewModel = GPTViewModel()
+    
+    var conversationId: Int
+    
+    @StateObject var viewModel = GPTViewModel()
     @State var prompt : String = "Que onda, cómo te llamas puedes ayudarme a identificar mis emociones?"
     
     @State private var showMenu = false
     
-    @StateObject var chatViewModel: ChatViewModel = ChatViewModel()
+    @StateObject var chatViewModel = ChatViewModel()
 
     
     
@@ -72,7 +75,7 @@ struct GPTView: View {
                                 .lineLimit(6)
                             Button {
                                 Task {
-                                
+                                    
                                     await sendMessageWithUserContext()
                                     prompt = ""
                                  
@@ -110,14 +113,16 @@ struct GPTView: View {
                 
                 HStack{
                     Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                        .frame(width: 300)
+                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                        .frame(width: 300, height:.infinity)
+                        .ignoresSafeArea(.all)
                     
                 }
                 
             }.onAppear {
                 viewModel.fetchUserForm(Users_id: 1)
-                chatViewModel.fetchMessages(conversationId: 2) //
+                print("datos del usuario")
+                chatViewModel.fetchMessages(conversationId: conversationId) //
             }
 
         }
@@ -126,7 +131,7 @@ struct GPTView: View {
     
     
     private func sendMessageWithUserContext() async {
-        let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Texto: \($0.texto), Checked: \($0.checked)" }.joined(separator: "\n")
+        let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Texto: \($0.texto), Percentage: \($0.Percentage)" }.joined(separator: "\n")
            await viewModel.send(message: prompt, userContext: userContextMessage)
        }
 }
@@ -135,7 +140,13 @@ struct GPTView: View {
 
 struct GPTView_Previews: PreviewProvider {
     static var previews: some View {
-        GPTView()
+        // Creas una instancia de GPTViewModel
+        let gptViewModel = GPTViewModel()
+        // Creas una instancia de ChatViewModel si es necesario
+        let chatViewModel = ChatViewModel()
+        
+        // Pasas las instancias al inicializador de GPTView
+        GPTView(conversationId:3, viewModel: gptViewModel, chatViewModel: chatViewModel)
+            .environmentObject(gptViewModel) // Si GPTView depende de un EnvironmentObject
     }
 }
-

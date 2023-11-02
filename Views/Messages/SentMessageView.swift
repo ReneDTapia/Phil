@@ -1,5 +1,5 @@
 import SwiftUI
-
+//componente sin uso 
 struct SentMessageView: View {
     let message: Message
 
