@@ -6,6 +6,10 @@ struct TopicsView: View {
     @State private var progress: Float = 0.6
     @State private var showMenu = false
     @StateObject var TopicsVM = TopicsViewModel()
+    @Environment(\.presentationMode) var presentationMode
+    @State private var isLoading = true
+    @State private var messageLoad = "Cargando..."
+    
     
     var body: some View {
         GeometryReader { geometry in
@@ -14,6 +18,21 @@ struct TopicsView: View {
                     Color.black
                         .ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
+                        
+                        HStack{
+                            Button(action: {
+                                withAnimation {
+                                    presentationMode.wrappedValue.dismiss()
+                                }
+                            }) {
+                                Image(systemName: "arrow.left")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                            }
+                            .padding(EdgeInsets(top: -10, leading: 20, bottom: 0, trailing: 20))
+                            
+                            Spacer()
+                        }
                         HStack {
                             // Botón del menú
                             Button(action: {
@@ -30,7 +49,7 @@ struct TopicsView: View {
                                 .fill(Color.white)
                                 .frame(width: 50, height: 50)
                         }
-                        .padding(EdgeInsets(top: 50, leading: 20, bottom: 0, trailing: 20))
+                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
                         Text("Temas del contenido")
                             .font(.largeTitle)
                             .bold()
@@ -41,18 +60,35 @@ struct TopicsView: View {
                             .bold()
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
                             .foregroundColor(.white)
-                        
+                        if isLoading{
+                            ProgressView(messageLoad)
+                                .foregroundColor(Color.white)
+                                .frame(width: geometry.size.width, height: geometry.size.height-160)
+                            
+                            .scaleEffect(1.5)
+                        }
                         List(TopicsVM.resultTopics){content in
-                            Topics(title: content.title, description: content.description)
-                                .listRowBackground(Color.black)
-                                .frame(maxWidth:.infinity, alignment:.center)
-                                .listRowSeparator(.hidden)
+                            
+                            NavigationLink(destination: SectionsView(topicID: content.id, topicTitle: content.title)){
+                                Topics(title: content.title, description: content.description)
+                                    .listRowBackground(Color.black)
+                                    .frame(maxWidth:.infinity, alignment:.center)
+                                .listRowSeparator(.hidden)}
+                            .listRowBackground(Color.black)
+                            .frame(maxWidth:.infinity, alignment:.center)
+                        .listRowSeparator(.hidden)
+                            
                         }
                         .background(.black)
                         .onAppear{
                             Task{
                                 do{
                                     try await TopicsVM.getTopics(contentIDVM: contentID)
+                                    if TopicsVM.resultTopics.isEmpty {
+                                        messageLoad = "No hay datos"
+                                        
+                                    }
+                                    isLoading = TopicsVM.resultTopics.isEmpty // Verifica si la lista está vacía
                                 }
                                 catch{
                                     print("error")
@@ -80,8 +116,9 @@ struct TopicsView: View {
                     }
                     
                         Menu(showMenu: $showMenu)
-                            .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                            .frame(width: 300, height: geometry.size.height+120)
+                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                        .frame(width: 300, height:.infinity)
+                        .ignoresSafeArea(.all)
                          
                     
                     
@@ -91,6 +128,7 @@ struct TopicsView: View {
                 }
                 
             }
+            
         }
     }
     

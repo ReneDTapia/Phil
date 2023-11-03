@@ -12,11 +12,12 @@ import Foundation
 struct UserForm: Identifiable, Decodable {
     let id: Int
     let texto: String
-    let checked: Bool
+    let Percentage : Int
+    
     
     enum CodingKeys: String, CodingKey {
         case texto
-        case checked
         case id = "Users_Cuestionario_id"
+        case Percentage 
     }
 }

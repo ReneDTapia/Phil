@@ -5,6 +5,8 @@ struct ContentsView: View {
     @State private var progress: Float = 1
     @State private var showMenu = false
     @StateObject var ContentVM = ContentsViewModel()
+    @State private var isLoading = true
+    @State private var messageLoad = "Cargando..."
     
     var body: some View {
     GeometryReader { geometry in
@@ -35,7 +37,13 @@ struct ContentsView: View {
                         .bold()
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
                         .foregroundColor(.white)
-                    
+                    if isLoading{
+                        ProgressView(messageLoad)
+                            .foregroundColor(Color.white)
+                            .frame(width: geometry.size.width, height: geometry.size.height-100)
+                        
+                        .scaleEffect(1.5)
+                    }
                     List(ContentVM.resultContents){content in
                         NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title)){
                             Contents(progress: $progress, title: content.title, description: content.description)
@@ -56,6 +64,11 @@ struct ContentsView: View {
                         Task{
                             do{
                                 try await ContentVM.getContents()
+                                if ContentVM.resultContents.isEmpty {
+                                    messageLoad = "No hay datos"
+                                    
+                                }
+                                isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
                             }
                             catch{
                                 print("error")
@@ -84,8 +97,9 @@ struct ContentsView: View {
                 
                 HStack{
                     Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
-                        .frame(width: 300)
+                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                        .frame(width: 300, height:.infinity)
+                        .ignoresSafeArea(.all)
                     
                 }
                 
@@ -215,11 +229,25 @@ struct Menu: View {
                     
                     VStack(alignment:.leading){
                 
-                        NavigationView{
+                        NavigationStack{
                             
                             List{
                         
                                 //////
+                                ///
+                                ///
+                                NavigationLink(destination : InitialFormView()){
+                                    HStack{
+                                        Image(systemName: "person.fill")
+                                        Text("Tu")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.black)
+                                    .padding()
+                                }.navigationBarHidden(true)
+                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
+                                    .navigationBarBackButtonHidden(true)
+                                
                                 NavigationLink(destination : ContentsView()){
                                     HStack{
                                         Image(systemName: "star.fill")
@@ -233,12 +261,10 @@ struct Menu: View {
                                     .navigationBarBackButtonHidden(true)
                                 
                                 
-        
-                                
-                                NavigationLink(destination : InitialFormView()){
+                                NavigationLink(destination : PictureView()){
                                     HStack{
-                                        Image(systemName: "star.fill")
-                                        Text("Tu")
+                                        Image(systemName: "photo.fill")
+                                        Text("Tus fotos")
                                         Spacer()
                                     }
                                     .foregroundColor(.black)
@@ -247,7 +273,21 @@ struct Menu: View {
                                     .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
                                     .navigationBarBackButtonHidden(true)
                                 
-                                NavigationLink(destination : PictureView()){
+                                NavigationLink(destination : MyChatsView(userId: 1)){
+                                    HStack{
+                                        Image(systemName: "message")
+                                        Text("Chatea con Phil")
+                                        Spacer()
+                                    }
+                                    .foregroundColor(.black)
+                                    .padding()
+                                }.navigationBarHidden(true)
+                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
+                                    .navigationBarBackButtonHidden(true)
+
+                                
+                                
+                                NavigationLink(destination : MyChatsView(userId: 1)){
                                     HStack{
                                         Image(systemName: "photo.fill")
                                         Text("Tus fotos")
@@ -277,7 +317,7 @@ struct Menu: View {
                     
                 
                 .padding(16)
-                .edgesIgnoringSafeArea(.bottom)
+                .edgesIgnoringSafeArea(.all)
                 
             }
             .frame(width: 250)

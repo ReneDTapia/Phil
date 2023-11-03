@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MyChatsView: View {
-    @StateObject var viewModel: ChatViewModel
+    @StateObject var viewModel = ChatViewModel()
     @StateObject var GPTviewModel = GPTViewModel()
     
     var userId: Int
@@ -10,7 +10,7 @@ struct MyChatsView: View {
     
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             
             GeometryReader{
                 
@@ -96,7 +96,9 @@ struct MyChatsView: View {
                     
                     HStack{
                         Menu(showMenu: $showMenu)
-                            .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1)
+                            .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
+                            .frame(width: 300, height:.infinity)
+                            .ignoresSafeArea(.all)
                         
                     }
                     
@@ -118,8 +120,7 @@ struct MyChatsView: View {
 
 struct MyChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = ChatViewModel()
-        return MyChatsView(viewModel: viewModel, userId: 1)
+        return MyChatsView(userId: 1)
     }
 }
 
