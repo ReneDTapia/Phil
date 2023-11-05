@@ -30,7 +30,7 @@ struct InitialFormView: View {
                         Text("Hablanos de ti")
                             .font(Font.custom("Montserrat-Regular", size: 30)).multilineTextAlignment(.center)
                             .padding(.bottom, -1)
-                        Text("¿Del 1 al 10 cómo te identificas?")
+                        Text("¿Del 0 al 10 cómo te identificas?")
                             .font(Font.custom("Monsterrat-Regular", size: 14))
                             .multilineTextAlignment(.center)
                             .padding(.bottom, 10)
