@@ -40,7 +40,6 @@ struct InitialFormView: View {
                         
                         Spacer(minLength: 50)
                         
-                        //                        Text("Later").font(.custom("Montserrat Bold", size: 15)).underline()
                     }
                     .background(GeometryReader {
                         Color.clear.preference(key: ViewOffsetKey.self,
