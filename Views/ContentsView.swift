@@ -45,7 +45,7 @@ struct ContentsView: View {
                         .scaleEffect(1.5)
                     }
                     List(ContentVM.resultContents){content in
-                        NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title)){
+                        NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: 1)){
                             Contents(progress: $progress, title: content.title, description: content.description)
                                 .listRowBackground(Color.black)
                                 .frame(maxWidth:.infinity, alignment:.center)
