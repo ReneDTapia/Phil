@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct InitialFormView: View {
+    
     @State private var scrollOffset: CGFloat = 0
     @State private var contentHeight: CGFloat = 0
     @ObservedObject var viewModel = InitialFormViewModel()
@@ -29,13 +30,16 @@ struct InitialFormView: View {
                         Text("Hablanos de ti")
                             .font(Font.custom("Montserrat-Regular", size: 30)).multilineTextAlignment(.center)
                             .padding(.bottom, -1)
-
+                        Text("¿Del 0 al 10 cómo te identificas?")
+                            .font(Font.custom("Monsterrat-Regular", size: 14))
+                            .multilineTextAlignment(.center)
+                            .padding(.bottom, 10)
+                        
                         QuestionBox(viewModel: viewModel)
                             .padding(-4)
                         
                         Spacer(minLength: 50)
                         
-                        Text("Later").font(.custom("Montserrat Bold", size: 15)).underline()
                     }
                     .background(GeometryReader {
                         Color.clear.preference(key: ViewOffsetKey.self,
@@ -53,13 +57,20 @@ struct InitialFormView: View {
                 
                 Spacer()
                 
-                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*10.6)
+                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*5.18)
                     .frame(height: 10)
                     .padding()
                 
                 Button(action: {
                     print("Botón presionado")
-                    viewModel.postAnswers()
+                    Task {
+                        do {
+                            try await viewModel.deleteAnswers(user_id: 1)
+                            viewModel.postAnswers()
+                        } catch {
+                            print("Error al eliminar las respuestas: \(error)")
+                        }
+                    }
                 }) {
                     Text("Done 👋")
                         .font(.custom("Montserrat-Bold", size: 15))
@@ -95,8 +106,6 @@ struct ViewHeightKey: PreferenceKey {
     }
 }
 
-
-
 struct QuestionBox: View {
     @ObservedObject var viewModel = InitialFormViewModel()
     let boxColors: [Color] = [
@@ -108,66 +117,57 @@ struct QuestionBox: View {
     var body: some View {
         VStack{
             ForEach(viewModel.formGroups.indices, id: \.self) { index in
-                let forms = viewModel.formGroups[index]
-                QuestionBoxRow(forms: forms, selectedButtons: $viewModel.selectedButtons[index], boxColors: boxColors, viewModel: viewModel)
+                ForEach(viewModel.formGroups[index], id: \.self) { form in
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 18)
+                            .fill(Color(hex: "FFFFFF"))
+                            .frame(width: 345, height: 120)
+                            .shadow(color: Color(hex:"000000").opacity(0.1), radius:4, x:0, y:0)
+                        VStack(alignment: .center){
+                            SliderRow(form: form, boxColor: boxColors[form.id % boxColors.count], viewModel: viewModel)
+                        }
+                        
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(30)
+                        .padding(.bottom, -8)
+                    }
+                }
             }
         }.onAppear(perform: viewModel.getForm)
     }
 }
 
-struct QuestionBoxRow: View {
-    var forms: [InitialFormModel]
-    @Binding var selectedButtons: [Int]
-    let boxColors: [Color]
-    @ObservedObject var viewModel: InitialFormViewModel
-    
-    var body: some View {
-        ZStack{
-            RoundedRectangle(cornerRadius: 18)
-                .fill(Color(hex: "FFFFFF"))
-                .frame(width: 345, height: 155)
-                .shadow(color: Color(hex:"000000").opacity(0.1), radius:4, x:0, y:0)
-                .padding(8)
-            VStack(alignment: .leading){
-                ForEach(0..<forms.count, id: \.self) { index in
-                    ButtonRow(form: forms[index], selectedButtons: $selectedButtons, boxColor: boxColors[index % boxColors.count], viewModel: viewModel)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(30)
-        }
-    }
-}
-
-
-struct ButtonRow: View {
+struct SliderRow: View {
     var form: InitialFormModel
-    @Binding var selectedButtons: [Int]
     let boxColor: Color
     @ObservedObject var viewModel: InitialFormViewModel
+    @State private var sliderValue = 5.0
     
     var body: some View {
-        HStack{
-            Button(action :{
-                if selectedButtons.contains(form.id) {
-                    selectedButtons.removeAll(where: { $0 == form.id })
-                    viewModel.selectedCount -= 1
-                } else {
-                    selectedButtons.append(form.id)
-                    viewModel.selectedCount += 1
-                }
-            })
-            {
-                RoundedRectangle(cornerRadius: 2)
-                    .strokeBorder(boxColor, lineWidth: 2)
-                    .background(selectedButtons.contains(form.id) ? boxColor : Color.white)
-                    .frame(width: 20, height: 20)
-            }
+        VStack(alignment:.center){
+            Image(systemName: "video")
+                .padding(.bottom, 10)
+                
             Text(form.texto)
-                .font(.custom("Inter Regular", size: 15)).tracking(-0.41).multilineTextAlignment(.leading)
+                .font(.custom("Monsterrat-Regular", size: 15)).tracking(-0.41).multilineTextAlignment(.center)
+            HStack {
+                Image(systemName: "minus")
+                Text("0")
+                    .font(.custom("Monsterrat-Regular", size: 16))
+                Slider(value:$sliderValue, in:0...10, step:1)
+                    .accentColor(boxColor)
+                    .onChange(of: sliderValue) { newValue in
+                        viewModel.updateAnswer(for: form.id, with: newValue)
+                    }
+                Image(systemName: "plus")
+                Text("10")
+                    .font(.custom("Monsterrat-Regular", size: 16))
+            }
         }
     }
 }
+
+
 
 
 
@@ -193,22 +193,8 @@ struct ProgressBarView : View {
 }
 
 
-
-
 struct InitialFormView_Previews: PreviewProvider {
     static var previews: some View {
         InitialFormView()
     }
 }
-
-
-
-
-//struct ViewOffsetKey: PreferenceKey {
-//    typealias Value = CGFloat
-//    static var defaultValue = CGFloat.zero
-//    static func reduce(value: inout Value, nextValue: () -> Value) {
-//        value += nextValue()
-//    }
-// Preguntar si puedo mejor sacar la progress bar de la scroll view para que siempre se vea. Ej: Arriba de Done
-//}
