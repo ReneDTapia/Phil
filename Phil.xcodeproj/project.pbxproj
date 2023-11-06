@@ -179,6 +179,47 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		523827952AF975EF00937238 /* Pictures */ = {
+			isa = PBXGroup;
+			children = (
+				BEFC1D552AE0EC0B006F5644 /* PictureView.swift */,
+				BEFC1D512AE0EB3A006F5644 /* PicturesViewModel.swift */,
+				BEFC1D532AE0EB51006F5644 /* Picture.swift */,
+			);
+			path = Pictures;
+			sourceTree = "<group>";
+		};
+		523827962AF9760D00937238 /* Topics */ = {
+			isa = PBXGroup;
+			children = (
+				523827982AF9767100937238 /* Sections */,
+				BEC0FF6F2AE26B410005EDBF /* TopicsView.swift */,
+				BEC0FF732AE26BC70005EDBF /* TopicsViewModel.swift */,
+				BEC0FF712AE26BB50005EDBF /* TopicsModel.swift */,
+			);
+			path = Topics;
+			sourceTree = "<group>";
+		};
+		523827972AF9763700937238 /* InitialForm */ = {
+			isa = PBXGroup;
+			children = (
+				BEA333B82AE2F17400001355 /* InitialFormView.swift */,
+				BEA333BA2AE2F1CC00001355 /* InitialfFormViewModel.swift */,
+				BEA333BC2AE2F1EC00001355 /* InitialFormModel.swift */,
+			);
+			path = InitialForm;
+			sourceTree = "<group>";
+		};
+		523827982AF9767100937238 /* Sections */ = {
+			isa = PBXGroup;
+			children = (
+				FB90C36B2AF1B0FB006BF87B /* SectionsView.swift */,
+				FB90C36F2AF1B1F8006BF87B /* SectionsViewModel.swift */,
+				FB90C36D2AF1B197006BF87B /* SectionsModel.swift */,
+			);
+			path = Sections;
+			sourceTree = "<group>";
+		};
 		52CC1B9E2ACF488700AD0029 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +231,9 @@
 		52DB5A6B2ACD236B004611A7 = {
 			isa = PBXGroup;
 			children = (
+				523827972AF9763700937238 /* InitialForm */,
+				523827962AF9760D00937238 /* Topics */,
+				523827952AF975EF00937238 /* Pictures */,
 				BEA1B3DD2AE2279900095A55 /* GPT */,
 				52F2B96D2AF4A7AC002792AA /* Contents */,
 				BEA333C52AE2FCB800001355 /* Login */,
@@ -197,8 +241,6 @@
 				52CC1B9E2ACF488700AD0029 /* Services */,
 				52DB5AC92ACE3968004611A7 /* Helpers */,
 				52DB5AC82ACE3918004611A7 /* Views */,
-				52DB5AC72ACE38FF004611A7 /* ViewModels */,
-				52DB5AC62ACE38E6004611A7 /* Models */,
 				52DB5AA22ACD3470004611A7 /* Fonts */,
 				52DB5A762ACD236B004611A7 /* Phil */,
 				52DB5A872ACD2372004611A7 /* PhilTests */,
@@ -266,37 +308,10 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
-		52DB5AC62ACE38E6004611A7 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				BEFC1D532AE0EB51006F5644 /* Picture.swift */,
-				BEC0FF712AE26BB50005EDBF /* TopicsModel.swift */,
-				BEA333BC2AE2F1EC00001355 /* InitialFormModel.swift */,
-				BEA333C62AE73CA900001355 /* UserForm.swift */,
-				FB90C36D2AF1B197006BF87B /* SectionsModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		52DB5AC72ACE38FF004611A7 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				BEFC1D512AE0EB3A006F5644 /* PicturesViewModel.swift */,
-				BEC0FF732AE26BC70005EDBF /* TopicsViewModel.swift */,
-				BEA333BA2AE2F1CC00001355 /* InitialfFormViewModel.swift */,
-				FB90C36F2AF1B1F8006BF87B /* SectionsViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
 		52DB5AC82ACE3918004611A7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				52CC1B9F2ACF4B3000AD0029 /* HomeView.swift */,
-				BEFC1D552AE0EC0B006F5644 /* PictureView.swift */,
-				BEC0FF6F2AE26B410005EDBF /* TopicsView.swift */,
-				BEA333B82AE2F17400001355 /* InitialFormView.swift */,
-				FB90C36B2AF1B0FB006BF87B /* SectionsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -342,6 +357,7 @@
 				BEA1B3E02AE228A500095A55 /* TextMessageView.swift */,
 				BEFC1D452AE09864006F5644 /* Message.swift */,
 				BEA1B3E42AE2557000095A55 /* ConversationView.swift */,
+				BEA333C62AE73CA900001355 /* UserForm.swift */,
 				BEFC1D482AE0A67A006F5644 /* Messages */,
 			);
 			path = GPT;
