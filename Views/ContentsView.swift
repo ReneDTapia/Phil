@@ -2,7 +2,9 @@ import SwiftUI
 
 struct ContentsView: View {
     
-    @State private var progress: Float = 1
+    let user = 2
+    
+    @State private var progress: Double = 1
     @State private var showMenu = false
     @StateObject var ContentVM = ContentsViewModel()
     @State private var isLoading = true
@@ -44,9 +46,9 @@ struct ContentsView: View {
                         
                         .scaleEffect(1.5)
                     }
-                    List(ContentVM.resultContents){content in
-                        NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: 1)){
-                            Contents(progress: $progress, title: content.title, description: content.description)
+                    List(ContentVM.resultContents, id:\.id){content in
+                        NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: user)){
+                            Contents(title: content.title, description: content.description, progress: content.proporcion ?? 0)
                                 .listRowBackground(Color.black)
                                 .frame(maxWidth:.infinity, alignment:.center)
                                 .listRowSeparator(.hidden)
@@ -63,7 +65,7 @@ struct ContentsView: View {
                     .onAppear{
                         Task{
                             do{
-                                try await ContentVM.getContents()
+                                try await ContentVM.getContents(userIDVM: user)
                                 if ContentVM.resultContents.isEmpty {
                                     messageLoad = "No hay datos"
                                     
@@ -116,7 +118,7 @@ struct ContentsView: View {
 }
 
 struct ProgressBar: View {
-    @Binding var progress: Float
+    let progress: Double
     
     var body: some View {
         GeometryReader { geometry in
@@ -143,10 +145,11 @@ struct ProgressBar: View {
 
 struct Contents: View{
     
-    @Binding var progress: Float
+    //@Binding var progress: Float
     
     let title : String
     let description: String
+    let progress: Double
     
     var body: some View{
         
@@ -176,12 +179,30 @@ struct Contents: View{
                 Text(description)
                     .foregroundColor(.gray)
                     .padding(.trailing,5)
-                ProgressBar(progress: $progress)
+                ProgressBar(progress: progress)
                     .frame(height: 10)
                     .padding(.trailing, 10)
                 HStack{
-                    Text("Completed!")
-                        .foregroundColor(.gray)
+                    
+                    if progress == 1{
+                        Text("Completado!")
+                            .foregroundColor(.gray)
+                    } else if progress == 0{
+                        Text("No haz comenzado!")
+                            .foregroundColor(.gray)
+                    }else if progress == 0.5{
+                        Text("Ya estas por la mitad!")
+                            .foregroundColor(.gray)
+                    }
+                    else if progress > 0 && progress < 0.5{
+                        Text("Sigue asi!")
+                            .foregroundColor(.gray)
+                    }
+                    else if progress > 0.5 && progress < 1{
+                        Text("Ya casi llegas!")
+                            .foregroundColor(.gray)
+                    }
+                    
                     Spacer()
                     Text("\(String(format:"%.0f",progress*100))%")
                         .foregroundColor(.gray)
@@ -197,7 +218,7 @@ struct Contents: View{
 
 struct Menu: View {
     @Binding var showMenu: Bool
-    @State var progress: Float = 0.5
+    @State var progress: Double = 0.5
     var body: some View {
         
     
@@ -222,7 +243,7 @@ struct Menu: View {
                         .bold()
                         .foregroundColor(.black)
                     
-                    ProgressBar(progress: $progress)
+                    ProgressBar(progress: progress)
                         .frame(height: 10)
                     Text("Almost There")
                         .foregroundColor(.black)

@@ -4,8 +4,8 @@ import Foundation
 class ContentsViewModel: ObservableObject{
     @Published var resultContents: [ContentsModel] = []
     
-    func getContents() async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getContent") else{
+    func getContents(userIDVM: Int) async throws{
+        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getContent/\(userIDVM)") else{
             print("invalid url")
             return
         }
