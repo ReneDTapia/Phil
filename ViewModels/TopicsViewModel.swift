@@ -5,8 +5,10 @@ import Alamofire
 class TopicsViewModel: ObservableObject{
     @Published var resultTopics: [TopicsModel] = []
      
+
     func getTopics(contentIDVM : Int, userIDVM : Int) async throws{
         guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getTopics/\(userIDVM)/\(contentIDVM)") else{
+
             print("invalid url")
             return
         }
