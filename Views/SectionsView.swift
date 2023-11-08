@@ -4,9 +4,12 @@ import WebKit
 struct SectionsView: View {
     let topicID : Int
     let topicTitle: String
+    let user: Int
+    let isChecked: Bool
     @State private var progress: Float = 0.6
     @State private var showMenu = false
     @StateObject var SectionsVM = SectionsViewModel()
+    @StateObject var TopicsVM = TopicsViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
@@ -109,11 +112,16 @@ struct SectionsView: View {
                         .frame(width: 300, height:.infinity)
                         .ignoresSafeArea(.all)
                 }
-                
+                }
+        }
+        .onAppear{
+            if isChecked == false{
+                TopicsVM.postTopic(user: user, topic: topicID)
             }
         }
     }
     
+        
     
 }
 
@@ -223,7 +231,7 @@ func extractYouTubeVideoID(from url: String) -> String? {
 
 struct Sections_Previews: PreviewProvider {
     static var previews: some View {
-        SectionsView(topicID: 2, topicTitle: "Titulo del topico")
+        SectionsView(topicID: 2, topicTitle: "Titulo del topico", user: 1, isChecked: false)
     }
 }
 

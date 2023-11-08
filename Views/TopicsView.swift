@@ -3,12 +3,13 @@ import SwiftUI
 struct TopicsView: View {
     let contentID : Int
     let contentTitle: String
-    @State private var progress: Float = 0.6
+    let user: Int
     @State private var showMenu = false
     @StateObject var TopicsVM = TopicsViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
+    @State private var check = false
     
     
     var body: some View {
@@ -67,10 +68,13 @@ struct TopicsView: View {
                             
                             .scaleEffect(1.5)
                         }
-                        List(TopicsVM.resultTopics){content in
+                        
+                        
+                        List(TopicsVM.resultTopics, id:\.topic){content in
                             
-                            NavigationLink(destination: SectionsView(topicID: content.id, topicTitle: content.title)){
-                                Topics(title: content.title, description: content.description)
+                            
+                            NavigationLink(destination: SectionsView(topicID: content.topic, topicTitle: content.title, user: user, isChecked: content.done ?? false)){
+                                Topics(title: content.title, description: content.description, isChecked: content.done ?? false, user: user, topic: content.topic)
                                     .listRowBackground(Color.black)
                                     .frame(maxWidth:.infinity, alignment:.center)
                                 .listRowSeparator(.hidden)}
@@ -83,10 +87,10 @@ struct TopicsView: View {
                         .onAppear{
                             Task{
                                 do{
-                                    try await TopicsVM.getTopics(contentIDVM: contentID)
+                                    try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
+                                    
                                     if TopicsVM.resultTopics.isEmpty {
                                         messageLoad = "No hay datos"
-                                        
                                     }
                                     isLoading = TopicsVM.resultTopics.isEmpty // Verifica si la lista está vacía
                                 }
@@ -121,12 +125,7 @@ struct TopicsView: View {
                         .ignoresSafeArea(.all)
                          
                     
-                    
-                    
-                    
-                    
                 }
-                
             }
             
         }
@@ -139,7 +138,11 @@ struct Topics: View{
     
     let title : String
     let description: String
-    let isChecked: Bool = false
+    let isChecked: Bool
+    let user: Int
+    let topic: Int
+    
+    @StateObject var TopicsVM = TopicsViewModel()
     
     var body: some View{
         
@@ -190,20 +193,22 @@ struct Topics: View{
                         .font(.title)
                         .offset(x: -20)
                         .padding(.leading, 10)
+                                                
                       
                 }
             }
             
         }
         .padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 20))
-        
         .frame(maxWidth: 500)
+
+        
     }
 }
  
 
 struct Topics_Previews: PreviewProvider {
     static var previews: some View {
-        TopicsView(contentID: 1, contentTitle: "adsad")
+        TopicsView(contentID: 1, contentTitle: "adsad", user: 1)
     }
 }
