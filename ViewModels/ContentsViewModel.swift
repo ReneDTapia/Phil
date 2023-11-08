@@ -5,7 +5,7 @@ class ContentsViewModel: ObservableObject{
     @Published var resultContents: [ContentsModel] = []
     
     func getContents() async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getContent") else{
+        guard let url = URL(string: "\(API.baseURL)getContent") else{
             print("invalid url")
             return
         }
@@ -26,3 +26,28 @@ class ContentsViewModel: ObservableObject{
         }
     }
 }
+
+
+//Utilizando el API CLIENT.
+
+//import SwiftUI
+//import Foundation
+//import Alamofire
+
+//class ContentsViewModel: ObservableObject {
+    //@Published var resultContents: [ContentsModel] = []
+    
+    //func getContents() {
+        //APIClient.get(path: "getContent") { [weak self] (result: Result<[ContentsModel], AFError>) in
+            //DispatchQueue.main.async {
+                //switch result {
+                //case .success(let contents):
+                    //self?.resultContents = contents
+                //case .failure(let error):
+                    //print("Error fetching contents: \(error.localizedDescription)")
+                //}
+            //}
+        //}
+    //}
+//}
+

@@ -31,7 +31,7 @@ final class GPTViewModel : ObservableObject {
         
         await MainActor.run {
             let userMessage = MessageChatGPT(text: message, role: .user, hidden: isHidden)
-            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: true)
+            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: false)
             self.messages.append(contextMessage)
             self.messages.append(userMessage)
             
@@ -82,65 +82,44 @@ final class GPTViewModel : ObservableObject {
         }
 
 
-
     
-    
-    //FUNCION PARA OBTENER CONTEXTO DEL USUARIO:V
-    func fetchUserForm(Users_id: Int)  {
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getUserForm/\(Users_id)") else {
-            print("Invalida tu pinki URL")
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error fetching la data mike: \(error.localizedDescription)")
-                return
-            }
-
-            if let data = data {
-                do {
-                    let messages = try JSONDecoder().decode([UserForm].self, from: data)
-                    
-                  print("aqui estan las respuestas del usuario pibe", messages, "aquitermina las respuestas del usuario pibe")
-                    
-                    DispatchQueue.main.async {
-                        self.userForm = messages
-                        print("UserForm: \(messages)")  //lol
+    // Utiliza APIClient para obtener el formulario del usuario
+        func fetchUserForm(Users_id: Int) {
+            APIClient.get(path: "getUserForm/\(Users_id)") { [weak self] (result: Result<[UserForm], AFError>) in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let forms):
+                        self?.userForm = forms
+                        print("UserForm: \(forms)")
+                    case .failure(let error):
+                        print("Error fetching user form: \(error.localizedDescription)")
                     }
-                } catch {
-                    print("Decoding error: \(error)")
                 }
             }
-        }.resume()
-    }
-    
-    
-    
-    //Función para registrar todos los mensajes en la base de datos! con alamofire papu:V
-    
-    func registerMessageWithAlamofire(message: String, sentByUser: Bool, userId: Int, conversationId: Int) {
+        }
         
-        let url = "https://philbackend.onrender.com/api/auth/addMessage"
-
-        // Define el cuerpo de la petición
-        let parameters: [String: Any] = [
-            "text": message,
-            "sentByUser": sentByUser,
-            "user": userId,
-            "conversationId": conversationId
-        ]
-
-        // ejecutamos con alamofire
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default).response { response in
-            switch response.result {
-            case .success:
-                print("Message registered successfully!")
-            case .failure(let error):
-                print("Error registering message: \(error)")
+        // Utiliza APIClient para registrar un mensaje con Alamofire
+        func registerMessageWithAlamofire(message: String, sentByUser: Bool, userId: Int, conversationId: Int) {
+            let parameters: Parameters = [
+                "text": message,
+                "sentByUser": sentByUser,
+                "user": userId,
+                "conversationId": conversationId
+            ]
+            
+            APIClient.post(path: "addMessage", parameters: parameters) { response in
+                switch response.result {
+                case .success:
+                    if let statusCode = response.response?.statusCode, statusCode == 200 {
+                        print("Message registered successfully!")
+                    } else {
+                        print("Received unexpected status code: \(response.response?.statusCode ?? 0)")
+                    }
+                case .failure(let error):
+                    print("Error registering message: \(error.localizedDescription)")
+                }
             }
         }
-    }
 
     
 }

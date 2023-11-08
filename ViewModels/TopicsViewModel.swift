@@ -5,7 +5,7 @@ class TopicsViewModel: ObservableObject{
     @Published var resultTopics: [TopicsModel] = []
      
     func getTopics(contentIDVM : Int) async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getTopics/" + String(contentIDVM)) else{
+        guard let url = URL(string: "\(API.baseURL)getTopics/" + String(contentIDVM)) else{
             print("invalid url")
             return
         }

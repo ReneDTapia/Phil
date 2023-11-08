@@ -12,7 +12,7 @@ class PicturesViewModel: ObservableObject {
     @Published var pictures: [Picture] = []
     
     func fetchPictures(user: Int, date: String) {
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/GetPictures/\(user)/\(date)") else {
+        guard let url = URL(string: "\(API.baseURL)GetPictures/\(user)/\(date)") else {
             print("Invalid URL")
             return
         }

@@ -25,7 +25,7 @@ class InitialFormViewModel: ObservableObject {
     
     
     func getForm() {
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getForm") else {
+        guard let url = URL(string: "\(API.baseURL)getForm") else {
             return
         }
         
@@ -49,7 +49,7 @@ class InitialFormViewModel: ObservableObject {
     
     func postAnswers() {
         // Crear la URL para la solicitud
-        guard let url = URL(string: "http://localhost:5005/api/auth/postUserForm") else {
+        guard let url = URL(string: "\(API.baseURL)postUserForm") else {
             print("URL inválida")
             return
         } //
@@ -78,7 +78,7 @@ class InitialFormViewModel: ObservableObject {
     
     func deleteAnswers(user_id: Int) async throws {
         // Crear la URL para la solicitud
-        guard let url = URL(string: "http://localhost:5005/api/auth/deleteUserForm/\(user_id)") else {
+        guard let url = URL(string: "\(API.baseURL)deleteUserForm/\(user_id)") else {
             throw URLError(.badURL)
         }
         
@@ -105,9 +105,6 @@ class InitialFormViewModel: ObservableObject {
 
 
 }
-
-
-
 
 /*
  struct FormData: Codable {

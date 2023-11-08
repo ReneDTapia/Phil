@@ -5,7 +5,7 @@ class SectionsViewModel: ObservableObject{
     @Published var resultSections: [SectionsModel] = []
      
     func getSections(topicIDVM : Int) async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getSections/" + String(topicIDVM)) else{
+        guard let url = URL(string: "\(API.baseURL)getSections/" + String(topicIDVM)) else{
             print("invalid url")
             return
         }

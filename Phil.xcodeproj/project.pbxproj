@@ -44,6 +44,8 @@
 		52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC22ACE2C95004611A7 /* ViewState.swift */; };
 		52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */; };
 		BE1A98482AE0855200A01B1B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1A98472AE0855200A01B1B /* ChatView.swift */; };
+		BE336E6A2AFB49D3000AD066 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE336E692AFB49D3000AD066 /* APIClient.swift */; };
+		BE336E6C2AFB5160000AD066 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE336E6B2AFB5160000AD066 /* API.swift */; };
 		BE426E2E2AEE64BD00C67198 /* TextMessageView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE426E2D2AEE64BD00C67198 /* TextMessageView2.swift */; };
 		BE8B015C2ADFB480003909BB /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8B015B2ADFB480003909BB /* ChatViewModel.swift */; };
 		BEA1B3DA2AE21D5900095A55 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = BEA1B3D92AE21D5900095A55 /* SwiftOpenAI */; };
@@ -121,6 +123,8 @@
 		52DB5AC22ACE2C95004611A7 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteringUser.swift; sourceTree = "<group>"; };
 		BE1A98472AE0855200A01B1B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		BE336E692AFB49D3000AD066 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		BE336E6B2AFB5160000AD066 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = API.swift; path = ../../../.Trash/API.swift; sourceTree = "<group>"; };
 		BE426E2D2AEE64BD00C67198 /* TextMessageView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageView2.swift; sourceTree = "<group>"; };
 		BE8B015B2ADFB480003909BB /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		BEA1B3DB2AE2218000095A55 /* GPTViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTViewModel.swift; sourceTree = "<group>"; };
@@ -183,6 +187,8 @@
 			isa = PBXGroup;
 			children = (
 				52DB54182ACE9F860019B448 /* AuthService.swift */,
+				BE336E692AFB49D3000AD066 /* APIClient.swift */,
+				BE336E6B2AFB5160000AD066 /* API.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -529,10 +535,12 @@
 				BEA333B92AE2F17400001355 /* InitialFormView.swift in Sources */,
 				BEFC1D562AE0EC0B006F5644 /* PictureView.swift in Sources */,
 				BEA333BB2AE2F1CC00001355 /* InitialfFormViewModel.swift in Sources */,
+				BE336E6C2AFB5160000AD066 /* API.swift in Sources */,
 				BEC0FF722AE26BB50005EDBF /* TopicsModel.swift in Sources */,
 				52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */,
 				BEC0FF6A2AE26AB10005EDBF /* ContentsView.swift in Sources */,
 				FB90C36E2AF1B197006BF87B /* SectionsModel.swift in Sources */,
+				BE336E6A2AFB49D3000AD066 /* APIClient.swift in Sources */,
 				BEA1B3DC2AE2218000095A55 /* GPTViewModel.swift in Sources */,
 				52DB54192ACE9F860019B448 /* AuthService.swift in Sources */,
 				FB90C3702AF1B1F8006BF87B /* SectionsViewModel.swift in Sources */,

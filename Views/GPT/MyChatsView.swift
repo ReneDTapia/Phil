@@ -75,7 +75,6 @@ struct MyChatsView: View {
                         }
                         
                         
-                        
                         //SECCION DE MIS CONVERSACIONES
                     
                     }
