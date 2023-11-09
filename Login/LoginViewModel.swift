@@ -46,6 +46,21 @@ class LoginViewModel: ObservableObject {
             }
         }
     }
+    
+    func logout() {
+            AuthService.shared.logout()
+            self.user = User(username: "", password: "")
+            self.viewState = .username 
+        }
+    
+    var isLoggedIn: Bool {
+        let keychain = KeychainSwift()
+        if let token = keychain.get("userToken"), !TokenHelper.isTokenExpired(token: token) {
+            return true
+        }
+        return false
+    }
+    
 }
 
 

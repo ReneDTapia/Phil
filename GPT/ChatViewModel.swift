@@ -1,71 +1,37 @@
 import Foundation
 import Combine
+import Alamofire
 
 class ChatViewModel: ObservableObject {
     
-    //ESTE ES PA VER TODAS LAS CONVERS QUE TIENE UN DETERMINADO USUARIO
     @Published var conversations: [Conversation] = []
-
-    //ESTE ES PA VER TODOS LOS MENSAJES DE UNA DETERMINADA CONVER
     @Published var messages: [Message] = []
     
-    //FUNCION PA VER LAS CONVERS
+    // Utiliza APIClient para obtener las conversaciones jajajaj de nada papus
     func fetchConversations(userId: Int) {
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getUserConversations/\(userId)") else {
-            print("Invalid URL")
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error fetching data: \(error.localizedDescription)")
-                return
-            }
-
-            if let data = data {
-                do {
-                    let conversations = try JSONDecoder().decode([Conversation].self, from: data)
-                    DispatchQueue.main.async {
-                        self.conversations = conversations
-                        print("Conversations: \(conversations)")
-                    }
-                } catch {
-                    print("Decoding error: \(error)")
+        APIClient.get(path: "getUserConversations/\(userId)") { [weak self] (result: Result<[Conversation], AFError>) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let conversations):
+                    self?.conversations = conversations
+                case .failure(let error):
+                    print("Error fetching conversations: \(error.localizedDescription)")
                 }
             }
-        }.resume()
+        }
     }
 
-    //FUNCION PA VER LOS MENSAJES DE LA CONVER LOL XD PAPU :V
+    // Utiliza APIClient para obtener los mensajes siuuu:v
     func fetchMessages(conversationId: Int) {
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getConversation/\(conversationId)") else {
-            print("Invalida tu pinki URL")
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error fetching la data mike: \(error.localizedDescription)")
-                return
-            }
-
-            if let data = data {
-                do {
-                    let messages = try JSONDecoder().decode([Message].self, from: data)
-                    
-                    print("aqui estan los mensajes pibe", messages, "aqui terminan los mensajes pibe")
-                    
-                    DispatchQueue.main.async {
-                        self.messages = messages
-                        print("Messages: \(messages)")  //lol
-                    }
-                } catch {
-                    print("Decoding error: \(error)")
+        APIClient.get(path: "getConversation/\(conversationId)") { [weak self] (result: Result<[Message], AFError>) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let messages):
+                    self?.messages = messages
+                case .failure(let error):
+                    print("Error fetching messages: \(error.localizedDescription)")
                 }
             }
-        }.resume()
+        }
     }
-    
-    
 }
-

@@ -75,7 +75,6 @@ struct MyChatsView: View {
                         }
                         
                         
-                        
                         //SECCION DE MIS CONVERSACIONES
                     
                     }
@@ -123,4 +122,3 @@ struct MyChatsView_Previews: PreviewProvider {
         return MyChatsView(userId: 1)
     }
 }
-

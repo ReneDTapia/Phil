@@ -55,7 +55,7 @@ class AuthService {
     func login(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
         let url = "\(baseURL)/login"
         let parameters = [
-            "username": username,
+            "loginIdentifier": username,
             "password": password
         ]
         

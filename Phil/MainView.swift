@@ -11,36 +11,43 @@ import KeychainSwift
 struct MainView: View {
     @ObservedObject var loginViewModel = LoginViewModel()
     @ObservedObject var signUpViewModel = SignUpViewModel()
-
+    
     
     
     init() {
         signUpViewModel.loginViewModel = loginViewModel
-
+        
         let keychain = KeychainSwift()
         if let token = keychain.get("userToken"), !TokenHelper.isTokenExpired(token: token) {
             self.loginViewModel.viewState = .ContentsView
         }
-    
-    }
-
-
-
-
-    var body: some View {
-        switch loginViewModel.viewState {
-        case .username:
-            UsernameView(viewModel: loginViewModel)
-        case .password:
-            PasswordView(viewModel: loginViewModel)
-        case .signUp:
-            SignUpView(viewModel: signUpViewModel)
-        case .ContentsView:
-            ContentsView()
         
-        }
     }
+    
+    
+    
+    
+    var body: some View {
+            if loginViewModel.isLoggedIn {
+                // Si el usuario está loggeado, muestra la TabBarView
+                TabBarView()
+            } else {
+                // Si no está loggeado, muestra la vista de login o registro
+                switch loginViewModel.viewState {
+                case .username:
+                    UsernameView(viewModel: loginViewModel)
+                case .password:
+                    PasswordView(viewModel: loginViewModel)
+                case .signUp:
+                    SignUpView(viewModel: signUpViewModel)
+                default:
+                    Text("Bienvenido a la app de Phil")
+                }
+            }
+        }
 }
+        
+    
 
 
 
