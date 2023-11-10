@@ -69,6 +69,7 @@
 		BEFC1D522AE0EB3A006F5644 /* PicturesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D512AE0EB3A006F5644 /* PicturesViewModel.swift */; };
 		BEFC1D542AE0EB51006F5644 /* Picture.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D532AE0EB51006F5644 /* Picture.swift */; };
 		BEFC1D562AE0EC0B006F5644 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D552AE0EC0B006F5644 /* PictureView.swift */; };
+		CB53FA3D2AFC0FC800F932EF /* Inter Semi Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CB53FA3C2AFC0FC800F932EF /* Inter Semi Bold.otf */; };
 		CB7697B02AF99F6C0070C079 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7697AF2AF99F6C0070C079 /* AnalyticsView.swift */; };
 		CBBEE9332AFAB9DE0033B5D1 /* AnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBEE9322AFAB9DE0033B5D1 /* AnalyticsViewModel.swift */; };
 		CBBEE9352AFAB9F80033B5D1 /* AnalyticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBEE9342AFAB9F80033B5D1 /* AnalyticsModel.swift */; };
@@ -148,6 +149,7 @@
 		BEFC1D512AE0EB3A006F5644 /* PicturesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewModel.swift; sourceTree = "<group>"; };
 		BEFC1D532AE0EB51006F5644 /* Picture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
 		BEFC1D552AE0EC0B006F5644 /* PictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
+		CB53FA3C2AFC0FC800F932EF /* Inter Semi Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Inter Semi Bold.otf"; path = "../../../Downloads/Inter Semi Bold.otf"; sourceTree = "<group>"; };
 		CB7697AF2AF99F6C0070C079 /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		CBBEE9322AFAB9DE0033B5D1 /* AnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViewModel.swift; sourceTree = "<group>"; };
 		CBBEE9342AFAB9F80033B5D1 /* AnalyticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsModel.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 		52DB5AA22ACD3470004611A7 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				CB53FA3C2AFC0FC800F932EF /* Inter Semi Bold.otf */,
 				52DB5AA32ACD3480004611A7 /* Montserrat-Regular.ttf */,
 				52DB5AA52ACD34F1004611A7 /* Montserrat-Bold.ttf */,
 				52DB5AA42ACD3493004611A7 /* Montserrat-ExtraBold.ttf */,
@@ -519,6 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				52DB5AB12ACD36D9004611A7 /* Montserrat-Regular.ttf in Resources */,
+				CB53FA3D2AFC0FC800F932EF /* Inter Semi Bold.otf in Resources */,
 				52DB5AA92ACD36CC004611A7 /* Montserrat-Bold.ttf in Resources */,
 				52DB5A7F2ACD2372004611A7 /* Preview Assets.xcassets in Resources */,
 				52DB5AAE2ACD36D4004611A7 /* Roboto-Light.ttf in Resources */,
