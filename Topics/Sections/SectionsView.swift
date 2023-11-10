@@ -31,26 +31,11 @@ struct SectionsView: View {
                                     .font(.title)
                                     .foregroundColor(.white)
                             }
-                            .padding(EdgeInsets(top: -10, leading: 20, bottom: 0, trailing: 20))
+                            .padding(EdgeInsets(top: -10, leading: -5, bottom: 0, trailing: 0))
                             
                             Spacer()
                         }
-                        HStack {
-                            // Botón del menú
-                            Button(action: {
-                                withAnimation {
-                                    self.showMenu.toggle()
-                                }
-                            }) {
-                                Image(systemName: "line.horizontal.3")
-                                    .font(.title)
-                                    .foregroundColor(.white)
-                            }
-                            Spacer()
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 50, height: 50)
-                        }
+                        
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
                         Text(topicTitle)
                             .font(.largeTitle)
@@ -61,59 +46,50 @@ struct SectionsView: View {
                         if isLoading{
                             ProgressView(messageLoad)
                                 .foregroundColor(Color.white)
-                                .frame(width: geometry.size.width, height: geometry.size.height-120)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .frame(width: geometry.size.width, height: geometry.size.height-110) 
                                 .scaleEffect(1.5)
                         }
-                        List(SectionsVM.resultSections){content in
-                            Sections(text: content.text ?? "", video: content.video ?? "", image: content.image ?? "")
-                                .listRowBackground(Color.black)
-                                .frame(maxWidth:.infinity, alignment:.center)
-                                .listRowSeparator(.hidden)
-                        }
-                        .background(.black)
-                        .onAppear{
-                            Task{
-                                do{
-                                    try await SectionsVM.getSections(topicIDVM: topicID)
-                                    if SectionsVM.resultSections.isEmpty {
-                                        messageLoad = "No hay datos"
-                                        
-                                    }
-                                    isLoading = SectionsVM.resultSections.isEmpty // Verifica si la lista está vacía
-                                }
-                                catch{
-                                    print("error")
-                                }
+                        
+                        else{
+                            
+                            List(SectionsVM.resultSections){content in
+                                Sections(text: content.text ?? "", video: content.video ?? "", image: content.image ?? "")
+                                    .listRowBackground(Color.black)
+                                    .frame(maxWidth:.infinity, alignment:.center)
+                                    .listRowSeparator(.hidden)
                             }
+                            .background(.black)
                         }
-                        .frame(height: geometry.size.height-170)
-                        .listStyle(PlainListStyle())
                           
                         
                         Spacer()
                         
                     }
                     
-                    if showMenu{
-                        ZStack{
-                            Color(.black)
-                        }
-                        .opacity(0.5)
-                        .onTapGesture {
-                            withAnimation{
-                                showMenu = false
-                            }
+                }
+                }
+            .onAppear{
+                Task{
+                    do{
+                        try await SectionsVM.getSections(topicIDVM: topicID)
+                        if SectionsVM.resultSections.isEmpty {
+                            messageLoad = "No hay datos"
                             
                         }
+                        isLoading = SectionsVM.resultSections.isEmpty // Verifica si la lista está vacía
                     }
-                    
-                        Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
-                        .frame(width: 300, height:.infinity)
-                        .ignoresSafeArea(.all)
+                    catch{
+                        print("error")
+                    }
                 }
-                }
+            }
+            .frame(height: geometry.size.height)
+            .listStyle(PlainListStyle())
+            
         }
+        
+            .navigationBarBackButtonHidden(true)
         .onAppear{
             if isChecked == false{
                 TopicsVM.postTopic(user: user, topic: topicID)
@@ -231,6 +207,6 @@ func extractYouTubeVideoID(from url: String) -> String? {
 
 struct Sections_Previews: PreviewProvider {
     static var previews: some View {
-        SectionsView(topicID: 2, topicTitle: "Titulo del topico", user: 1, isChecked: false)
+        SectionsView(topicID: 1, topicTitle: "Titulo del topico", user: 1, isChecked: false)
     }
 }

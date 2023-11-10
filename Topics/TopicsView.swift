@@ -30,31 +30,15 @@ struct TopicsView: View {
                                     .font(.title)
                                     .foregroundColor(.white)
                             }
-                            .padding(EdgeInsets(top: -10, leading: 20, bottom: 0, trailing: 20))
+                            .padding(EdgeInsets(top: 50, leading: 15, bottom: 0, trailing: 0))
                             
                             Spacer()
                         }
-                        HStack {
-                            // Botón del menú
-                            Button(action: {
-                                withAnimation {
-                                    self.showMenu.toggle()
-                                }
-                            }) {
-                                Image(systemName: "line.horizontal.3")
-                                    .font(.title)
-                                    .foregroundColor(.white)
-                            }
-                            Spacer()
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 50, height: 50)
-                        }
-                        .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
+                        
                         Text("Temas del contenido")
                             .font(.largeTitle)
                             .bold()
-                            .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 10))
                             .foregroundColor(.white)
                         Text(contentTitle)
                             .font(.title)
@@ -64,73 +48,59 @@ struct TopicsView: View {
                         if isLoading{
                             ProgressView(messageLoad)
                                 .foregroundColor(Color.white)
-                                .frame(width: geometry.size.width, height: geometry.size.height-160)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .frame(width: geometry.size.width, height: geometry.size.height-100)
                             
                             .scaleEffect(1.5)
                         }
-                        
-                        
-                        List(TopicsVM.resultTopics, id:\.topic){content in
+                        else{
                             
                             
-                            NavigationLink(destination: SectionsView(topicID: content.topic, topicTitle: content.title, user: user, isChecked: content.done ?? false)){
-                                Topics(title: content.title, description: content.description, isChecked: content.done ?? false, user: user, topic: content.topic)
-                                    .listRowBackground(Color.black)
-                                    .frame(maxWidth:.infinity, alignment:.center)
-                                .listRowSeparator(.hidden)}
-                            .listRowBackground(Color.black)
-                            .frame(maxWidth:.infinity, alignment:.center)
-                        .listRowSeparator(.hidden)
-                            
-                        }
-                        .background(.black)
-                        .onAppear{
-                            Task{
-                                do{
-                                    try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
-                                    
-                                    if TopicsVM.resultTopics.isEmpty {
-                                        messageLoad = "No hay datos"
-                                    }
-                                    isLoading = TopicsVM.resultTopics.isEmpty // Verifica si la lista está vacía
-                                }
-                                catch{
-                                    print("error")
-                                }
+                            List(TopicsVM.resultTopics, id:\.topic){content in
+                                
+                                
+                                NavigationLink(destination: SectionsView(topicID: content.topic, topicTitle: content.title, user: user, isChecked: content.done ?? false)){
+                                    Topics(title: content.title, description: content.description, isChecked: content.done ?? false, user: user, topic: content.topic)
+                                        .listRowBackground(Color.black)
+                                        .frame(maxWidth:.infinity, alignment:.center)
+                                    .listRowSeparator(.hidden)}
+                                .listRowBackground(Color.black)
+                                .frame(maxWidth:.infinity, alignment:.center)
+                                .listRowSeparator(.hidden)
+                                
                             }
+                            .background(.black)
+                            .frame(height: geometry.size.height-100)
                         }
-                        .frame(height: geometry.size.height-170)
-                        .listStyle(PlainListStyle())
-                          
                         Spacer()
                         
                     }
-                    
-                    if showMenu{
-                        ZStack{
-                            Color(.black)
-                        }
-                        .opacity(0.5)
-                        .onTapGesture {
-                            withAnimation{
-                                showMenu = false
-                            }
-                            
-                        }
-                    }
-                    
-                        Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
-                        .frame(width: 300, height:.infinity)
-                        .ignoresSafeArea(.all)
-                         
+                           
                     
                 }
             }
             
+            .onAppear{
+                Task{
+                    do{
+                        try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
+                        
+                        if TopicsVM.resultTopics.isEmpty {
+                            messageLoad = "No hay datos"
+                        }
+                        isLoading = TopicsVM.resultTopics.isEmpty // Verifica si la lista está vacía
+                    }
+                    catch{
+                        print("error")
+                    }
+                }
+            }
+            .frame(height: geometry.size.height)
+            .listStyle(PlainListStyle())
+             
+                .navigationBarBackButtonHidden(true)
         }
     }
-    
     
 }
 
