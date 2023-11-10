@@ -101,9 +101,9 @@ struct TabBarView: View {
                         .background(Color.black)
                     
                     // Second tab view
-                    InitialFormView()
+                    AnalyticsView()
                         .tabItem {
-                            Image(systemName: selectedTab == 4 ? "person.fill" : "person")
+                            Image(systemName: selectedTab == 4 ? "chart.bar.fill" : "chart.bar")
                                 .environment(\.symbolVariants, .none)
                         }
                         .tag(4)
