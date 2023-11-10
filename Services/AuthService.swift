@@ -10,6 +10,7 @@ import Alamofire
 
 struct LoginResponse: Decodable {
     let token: String
+    let userID: Int
 }
 
 class AuthService {
@@ -17,7 +18,7 @@ class AuthService {
     
     private let baseURL = "https://philbackend.onrender.com/api/auth"
     
-    func register(email: String, username: String, password: String, confirmPassword: String, completion: @escaping (Result<String, Error>) -> Void) {
+    func register(email: String, username: String, password: String, confirmPassword: String, completion: @escaping (Result<LoginResponse, Error>) -> Void) {
         let url = "\(baseURL)/register"
         let parameters = [
             "email": email,
@@ -34,13 +35,10 @@ class AuthService {
             switch response.result {
             case .success(let data):
                 // Registro exitoso y token obtenido
-                completion(.success(data.token))
+                completion(.success(data))
             case .failure:
                 // Verificamos el código de estado
-                if response.response?.statusCode == 201 {
-                    // Esto no debería suceder si la respuesta es un error, pero lo mantenemos por precaución
-                    completion(.success("Token not found but registration successful."))
-                } else if let data = response.data, let serverResponse = String(data: data, encoding: .utf8) {
+                if let data = response.data, let serverResponse = String(data: data, encoding: .utf8) {
                     // Otros códigos de estado
                     completion(.failure(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: serverResponse])))
                 } else {
@@ -52,7 +50,7 @@ class AuthService {
     }
 
     
-    func login(username: String, password: String, completion: @escaping (Result<String, Error>) -> Void) {
+    func login(username: String, password: String, completion: @escaping (Result<LoginResponse, Error>) -> Void) {
         let url = "\(baseURL)/login"
         let parameters = [
             "loginIdentifier": username,
@@ -62,7 +60,10 @@ class AuthService {
         AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default).responseDecodable(of: LoginResponse.self) { response in  print("Response: \(response)")
             switch response.result {
             case .success(let data):
-                completion(.success(data.token))
+                print(data.userID)
+                print(data.token)
+                LoginViewModel().userID = data.userID
+                completion(.success(data))
             case .failure(let error):
                 if let statusCode = response.response?.statusCode {
                     switch statusCode {
