@@ -85,7 +85,7 @@ final class GPTViewModel : ObservableObject {
     
     // Utiliza APIClient para obtener el formulario del usuario
         func fetchUserForm(Users_id: Int) {
-            APIClient.get(path: "getUserForm/\(Users_id)") { [weak self] (result: Result<[UserForm], AFError>) in
+            APIClient.getN(path: "getUserForm/\(Users_id)") { [weak self] (result: Result<[UserForm], AFError>) in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let forms):
@@ -107,7 +107,7 @@ final class GPTViewModel : ObservableObject {
                 "conversationId": conversationId
             ]
             
-            APIClient.post(path: "addMessage", parameters: parameters) { response in
+            APIClient.postN(path: "addMessage", parameters: parameters) { response in
                 switch response.result {
                 case .success:
                     if let statusCode = response.response?.statusCode, statusCode == 200 {
@@ -121,5 +121,4 @@ final class GPTViewModel : ObservableObject {
             }
         }
 
-    
 }

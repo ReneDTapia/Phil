@@ -44,7 +44,7 @@ struct MyChatsView: View {
                             }
                         }
                         
-                        if isLoading{                            ProgressView(messageLoad)
+                        if isLoading{ProgressView(messageLoad)
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
                                 .foregroundColor(Color.white)
                                 .frame(width: geometry.size.width, height: geometry.size.height-100)
@@ -78,35 +78,26 @@ struct MyChatsView: View {
                 }
             }
             .onAppear {
-                task{
-                    do{
-                        try await viewModel.fetchConversations(userId: 1)
-                        if viewModel.conversations.isEmpty {
-                            messageLoad = "No hay datos"
-                            
-                        }
-                        isLoading = viewModel.conversations.isEmpty // Verifica si la lista está vacía
-
+                Task{
+                    await viewModel.fetchConversations(userId: 1)
+                    
+                    if viewModel.conversations.isEmpty {
+                        messageLoad = "No hay datos"
                     }
-                    catch{
-                        print("error")
-                    }
+                    isLoading = viewModel.conversations.isEmpty
+                    
+                    
                 }
-                
-                
-                            }
-            
-            
-            
-            
-            
-            
-            /////
-            
-           
+            }
+                    
         }
+                
+                
     }
+            
 }
+    
+
 
 struct MyChatsView_Previews: PreviewProvider {
     static var previews: some View {

@@ -83,9 +83,10 @@ struct GPTView: View {
                 
                 
             }.onAppear {
+            
                 viewModel.fetchUserForm(Users_id: 1)
-                print("datos del usuario")
                 chatViewModel.fetchMessages(conversationId: conversationId) //
+                
             }
 
         }
