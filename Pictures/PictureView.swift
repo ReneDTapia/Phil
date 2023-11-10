@@ -7,34 +7,34 @@ struct Day: Identifiable {
 
 struct DayView: View {
     var day: Day
-    @Binding var selectedDate: Date // Nuevo binding para manejar la fecha seleccionada
+    @Binding var selectedDate: Date
+    @Environment(\.calendar) var calendar
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 18.39)
-                .fill(isSelected ? Color(red: 0.3725, green: 0.8588, blue: 0.9255) : Color(#colorLiteral(red: 0.8117647171020508, green: 0.8549019694328308, blue: 0.929411768913269, alpha: 1)))
-
-            RoundedRectangle(cornerRadius: 18.39)
-                .strokeBorder(Color(#colorLiteral(red: 0.41960784792900085, green: 0.4313725531101227, blue: 0.6705882549285889, alpha: 1)), lineWidth: 4.5973334312438965)
-
+        Button(action: {
+            self.selectedDate = day.date
+        }) {
             VStack {
                 Text(weekdayText)
-                    .font(.system(size: 12)) // Ajusta el tamaño de la fuente según sea necesario
-                    .bold()
-                Text(dayText)
-                    .bold()
+                    .font(.system(size: 10))
+                    .foregroundColor(.gray)
+
+                ZStack {
+                    Circle()
+                        .fill(isSelected ? Color.blue : Color.white.opacity(0.8))
+                        .frame(width: 30, height: 30)
+
+                    Text(dayText)
+                        .bold()
+                        .foregroundColor(isSelected ? .white : .primary)
+                }
             }
-            .foregroundColor(Color(red: 0.4196, green: 0.4314, blue: 0.6706))
-            .padding()
         }
-        .frame(width: 69, height: 117.5)
-        .onTapGesture { // Agregado para actualizar la fecha seleccionada cuando se toca un DayView
-            selectedDate = day.date
-        }
+        .frame(width: 44, height: 60)
     }
 
     var isSelected: Bool {
-        Calendar.current.isDate(day.date, equalTo: selectedDate, toGranularity: .day)
+        calendar.isDate(day.date, inSameDayAs: selectedDate)
     }
 
     var dayText: String {
@@ -50,105 +50,134 @@ struct DayView: View {
     }
 }
 
-struct MonthView: View {
-    let days: [Day]
-    @Binding var selectedDate: Date  // Binding para manejar la fecha seleccionada
+struct WeekView: View {
+    @Binding var selectedDate: Date
+    @Environment(\.calendar) var calendar
 
     var body: some View {
-        // El código existente de MonthView aquí
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: (UIScreen.main.bounds.width - (4 * 89)) / 5) {
-                ForEach(days) { day in
-                    DayView(day: day, selectedDate: $selectedDate) // Corregido aquí
+        VStack {
+            Text(monthText)
+                .font(.title)
+                .padding(.bottom, 4)
+                .foregroundColor(Color.purple)
+
+            HStack {
+                Button(action: {
+                    self.adjustDate(by: -1)
+                }) {
+                    Image(systemName: "chevron.left.circle.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(Color.purple)
+                }
+
+                LazyHStack(spacing: 0) {
+                    ForEach(daysInWeek(for: selectedDate)) { day in
+                        DayView(day: day, selectedDate: $selectedDate)
+                    }
+                }
+
+                Button(action: {
+                    self.adjustDate(by: 1)
+                }) {
+                    Image(systemName: "chevron.right.circle.fill")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(Color.purple)
                 }
             }
-            .padding(.horizontal, (UIScreen.main.bounds.width - (4 * 61.6)) / 10)
         }
+    }
+
+    func adjustDate(by weeks: Int) {
+        if let newDate = calendar.date(byAdding: .weekOfYear, value: weeks, to: selectedDate) {
+            selectedDate = newDate
+        }
+    }
+
+    func daysInWeek(for date: Date) -> [Day] {
+        var days: [Day] = []
+        guard let weekRange = calendar.range(of: .weekday, in: .weekOfYear, for: date) else { return [] }
+        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date))!
+        for offset in weekRange {
+            if let weekdayDate = calendar.date(byAdding: .day, value: offset - 1, to: startOfWeek) {
+                days.append(Day(date: weekdayDate))
+            }
+        }
+        return days
+    }
+
+    var monthText: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM"
+        return formatter.string(from: selectedDate)
     }
 }
 
-
 struct PictureView: View {
-    @StateObject var pictureVM = PicturesViewModel()
-    @State private var selectedUserId: Int = 2
+    @ObservedObject var pictureVM = PicturesViewModel()
     @State private var selectedDate: Date = Date()
-    private var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
+
+    // Suponiendo que cada imagen ocupe aproximadamente la mitad de la pantalla menos el padding y el espacio entre imágenes.
+    private let imageWidth = (UIScreen.main.bounds.width / 2) - (16 + 8) // 16 de padding y 8 de spacing
+
     var body: some View {
         ZStack {
-            Color(red: 0.1176, green: 0.1176, blue: 0.1176)
-                .ignoresSafeArea()
-            
-            VStack(alignment: .leading) {
-                Text("Mis fotos")
-                    .font(.custom("Roboto Bold", size: 35))
-                    .foregroundColor(Color.white)
-                    .padding([.top, .leading])
-                
-                Text("Select Date")
-                    .font(.custom("Kodchasan SemiBold", size: 23))
-                    .foregroundColor(Color(#colorLiteral(red: 0.42, green: 0.43, blue: 0.67, alpha: 1)))
-                    .padding([.leading])
-                    .padding(.top, 0.01)
-                    .lineSpacing(6.03)
-                
-                MonthView(days: generateDays(), selectedDate: $selectedDate)
-                    .padding([.leading, .trailing])
-                    .onChange(of: selectedDate) { newDate in  // Aquí está el .onChange
-                        pictureVM.clearPictures()
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "yyyy-MM-dd"
-                        let dateString = formatter.string(from: newDate)
-                        pictureVM.fetchPictures(user: selectedUserId, date: dateString)
-                    }
+            Color.black.ignoresSafeArea()
+            VStack {
+                Text("Your Photos")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .padding()
+
+                WeekView(selectedDate: $selectedDate)
 
                 ScrollView {
-                                    LazyVGrid(columns: columns, spacing: 16) {
-                                        ForEach(pictureVM.pictures) { picture in
-                                            if let url = URL(string: picture.url) {
-                                                AsyncImage(url: url) { image in
-                                                    image.resizable()
-                                                        .aspectRatio(contentMode: .fill)
-                                                        .frame(minWidth: 0, maxWidth: .infinity)
-                                                        .frame(height: 200)
-                                                        .cornerRadius(10)  // Esquinas redondeadas
-                                                        .clipped()  // Asegura que la imagen se recorte a las esquinas redondeadas
-                                                } placeholder: {
-                                                    ProgressView()
-                                                }
-                                            }
-                                        }
-                                    }
-                                    .padding()  // Espacio entre la cuadrícula y la orilla
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                        ForEach(pictureVM.pictures) { picture in
+                            AsyncImage(url: URL(string: picture.url)) { phase in
+                                switch phase {
+                                case .success(let image):
+                                    image.resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: imageWidth, height: 200)
+                                        .cornerRadius(10)
+                                case .failure(_):
+                                    Image(systemName: "photo") // Puedes personalizar la imagen de error.
+                                        .resizable()
+                                        .frame(width: imageWidth, height: 200)
+                                        .cornerRadius(10)
+                                        .foregroundColor(.gray)
+                                case .empty:
+                                    Image(systemName: "photo") // Imagen de placeholder.
+                                        .resizable()
+                                        .frame(width: imageWidth, height: 200)
+                                        .cornerRadius(10)
+                                        .foregroundColor(.gray)
+                                @unknown default:
+                                    EmptyView()
                                 }
-                                .padding(.top, 16)
-                
-                Spacer()
+                            }
+                            .frame(height: 200) // Esto mantiene el tamaño de la imagen fijo
+                        }
+                    }
+                    .padding(.horizontal)
+                }
             }
-            .padding([.leading, .trailing])
         }
         .onAppear {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            let dateString = formatter.string(from: selectedDate)
-            pictureVM.fetchPictures(user: selectedUserId, date: dateString)
+            fetchPictures()
         }
+        .onChange(of: selectedDate) { _ in
+            pictureVM.pictures = []
+            fetchPictures() }
     }
 
-    func generateDays() -> [Day] {
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month], from: Date())
-        guard let firstDayOfMonth = calendar.date(from: dateComponents),
-              let lastDayOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: firstDayOfMonth) else {
-            return []
-        }
-
-        var currentDay = firstDayOfMonth
-        var days = [Day]()
-        while currentDay <= lastDayOfMonth {
-            days.append(Day(date: currentDay))
-            currentDay = calendar.date(byAdding: .day, value: 1, to: currentDay)!
-        }
-        return days
+    func fetchPictures() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: selectedDate)
+        pictureVM.fetchPictures(user: 2, date: dateString)
     }
 }
 
