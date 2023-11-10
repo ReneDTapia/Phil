@@ -17,14 +17,15 @@ class LoginViewModel: ObservableObject {
     @Published var viewState: ViewState = .username
     @Published var showAlert = false
     @Published var alertMessage = ""
+    @Published var userID : Int = 0
     
     func login() {
         AuthService.shared.login(username: user.username, password: user.password) { result in
             switch result {
-            case .success(let token):
-                TokenHelper.save(token: token)
-                if !TokenHelper.isTokenExpired(token: token) {
- 
+            case .success(let data):
+                TokenHelper.save(token: data.token, userID: data.userID)
+                
+                if !TokenHelper.isTokenExpired(token: data.token) {
                     self.viewState = .ContentsView
                 } else {
                     self.alertMessage = "Login session has expired. Please log in again."
@@ -49,7 +50,6 @@ class LoginViewModel: ObservableObject {
     
     func logout() {
             AuthService.shared.logout()
-            self.user = User(username: "", password: "")
             self.viewState = .username 
         }
     

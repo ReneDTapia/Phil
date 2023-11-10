@@ -179,6 +179,6 @@ struct Topics: View{
 
 struct Topics_Previews: PreviewProvider {
     static var previews: some View {
-        TopicsView(contentID: 1, contentTitle: "adsad", user: 1)
+        TopicsView(contentID: 1, contentTitle: "adsad", user: 37 )
     }
 }

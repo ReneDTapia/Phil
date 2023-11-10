@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentsView: View {
     
-    let user = 2
+    let user : Int
     
     @State private var progress: Double = 1
     @State private var showMenu = false
@@ -187,6 +187,7 @@ struct Contents: View{
 struct Menu: View {
     @Binding var showMenu: Bool
     @State var progress: Double = 0.5
+    @StateObject var LoginVM = LoginViewModel()
     var body: some View {
         
     
@@ -237,7 +238,7 @@ struct Menu: View {
                                     .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
                                     .navigationBarBackButtonHidden(true)
                                 
-                                NavigationLink(destination : ContentsView()){
+                                NavigationLink(destination : ContentsView(user: 2)){
                                     HStack{
                                         Image(systemName: "star.fill")
                                         Text("Contenidos")
@@ -249,6 +250,10 @@ struct Menu: View {
                                     .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
                                     .navigationBarBackButtonHidden(true)
                                 
+                                
+                                Button(action: LoginVM.logout){
+                                    Text("Salir")
+                                }
                                 
                                 
                                 
@@ -279,6 +284,6 @@ struct Menu: View {
 
 struct Contents_Previews: PreviewProvider {
     static var previews: some View {
-        ContentsView()
+        ContentsView( user: 37 )
     }
 }

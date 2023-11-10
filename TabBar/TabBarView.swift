@@ -12,6 +12,7 @@ struct TabBarView: View {
     
     @State private var selectedTab: Int = 0 // Agregar una propiedad de estado para rastrear la pestaña seleccionada
     
+    @StateObject var VM = LoginViewModel()
     @State private var showMenu = false
     
     init() {
@@ -52,6 +53,9 @@ struct TabBarView: View {
                             .font(.title)
                             .foregroundColor(.white)
                     }
+                    
+                    Text(String(TokenHelper.getUserID() ?? 0))
+                            .foregroundColor(.white)
                     Spacer()
                     Circle()
                         .fill(Color.white)
@@ -60,7 +64,7 @@ struct TabBarView: View {
                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 1, trailing: 10))
                 TabView(selection: $selectedTab) { // Usar el binding al estado para la selección
                     // First tab view
-                    ContentsView()
+                    ContentsView(user:TokenHelper.getUserID() ?? 0)
                         .tabItem {
                             Image(systemName: selectedTab == 0 ? "house.fill" : "house")
                                 .environment(\.symbolVariants, .none)
