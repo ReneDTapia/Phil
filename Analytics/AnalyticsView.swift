@@ -136,12 +136,12 @@ struct BarChart: View {
                         .padding(.leading, 38)
                     HStack(spacing: 22) {
                         Spacer()
-                        ForEach(0..<values.count, id:\.self) { index in
+                        ForEach(0..<values.prefix(5).count, id:\.self) { index in
                             VStack {
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color(hex: "6B6EAB"))
-                                    .frame(width: 20, height: values[index])
+                                    .frame(width: 20, height: values[index]*1.29)
                                     .clipShape(Rectangle().offset(y: -10))
                             }
                             .padding(.leading, 15)
