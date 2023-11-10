@@ -41,17 +41,11 @@ struct ContentView: View{
                         .bold()
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 8, trailing: 10))
                         .foregroundColor(.white)
-                    Spacer()
                     
                     // Aqui
                     BarChart()
-                    
-                    
                 }.padding()
-                
                 // touchid and faceid instead of logging in, la clave no se envía y le da seguridad
-                
-                
             }
             
             
@@ -82,9 +76,13 @@ struct ContentView: View{
 }
 
 struct BarChart: View {
-    // Arreglo de alturas para cada barra de la gráfica
-    let values: [CGFloat] = [51, 20, 30, 20, 80]
-
+    @ObservedObject var viewModel = AnalyticsViewModel()
+    let minimenu: [String] = ["10", "30", "all"]
+    @State private var selectedIndex: Int? = nil
+    
+    var values: [CGFloat] {
+        return viewModel.emotions.map { CGFloat($0.Percentage) }
+    }
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -92,7 +90,6 @@ struct BarChart: View {
                     .fill(Color.white)
                     .frame(width: geometry.size.width, height: geometry.size.height/2.5)
                     .shadow(color: Color(hex: "B9B6B6"), radius:2, x:0, y:0)
-                
                 ZStack{
                     HStack{
                         VStack(alignment: .trailing){
@@ -113,15 +110,32 @@ struct BarChart: View {
                     .frame(width: geometry.size.width/1.1, height: geometry.size.height/2.5)
                     VStack {
                         Text("Your feelings last days")
-                            .font(.custom("Inter Semi Bold", size: 24))
+                            .font(.custom("Inter Semi Bold", size: 20))
                             .tracking(-0.41)
                             .multilineTextAlignment(.center)
-                            .padding(.bottom, 188)
+                            .padding(.bottom, 195)
                     }
-                    
+                    HStack{
+                        ForEach(0..<minimenu.count, id:\.self){
+                            i in
+                            Button(action: {
+                                self.selectedIndex = i
+                            }) {
+                                ZStack
+                                {
+                                    Circle()
+                                        .fill(self.selectedIndex == i ? Color(hex: "6B6EAB") : Color(hex: "B9B6B6"))
+                                        .frame(width: 16, height: 16)
+                                        .padding(30)
+                                    
+                                    Text(minimenu[i]).font(.custom("Inter Semi Bold", size: 10)).foregroundColor(Color.white).tracking(-0.41).multilineTextAlignment(.center)
+                                }
+                            }
+                        }
+                    }.padding(.bottom, 145)
+                        .padding(.leading, 38)
                     HStack(spacing: 22) {
                         Spacer()
-                        
                         ForEach(0..<values.count, id:\.self) { index in
                             VStack {
                                 Spacer()
@@ -129,84 +143,40 @@ struct BarChart: View {
                                     .fill(Color(hex: "6B6EAB"))
                                     .frame(width: 20, height: values[index])
                                     .clipShape(Rectangle().offset(y: -10))
-                                    
                             }
                             .padding(.leading, 15)
                             .padding(.trailing, 3)
                         }
                     }.padding(.bottom, 218)
                         .padding(.trailing, 25)
+
+                    HStack(spacing: 22){
+                        ForEach(0..<5)
+                        {
+                            i in
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 80)
+                                    .fill(Color(hex: "ECBB5F"))
+                                
+                                RoundedRectangle(cornerRadius: 80)
+                                    .strokeBorder(Color(hex: "6B6EAB"), lineWidth: 4)
+                            }
+                            .frame(width: 30, height: 30)
+                        }
+                        .padding(.top, 170)
+                        .padding(.leading, 8)
+                    }
+                    .padding(.trailing, 1)
+                    .padding(.leading, 38)
                 }
+            }
+        }.onAppear {
+            viewModel.getAnal() {
+                print("Emotions fetched")
             }
         }
     }
 }
-
-
-
-
-
-
-
-/*
- struct BarChart: View {
- var body: some View {
- GeometryReader { geometry in
- ZStack {
- RoundedRectangle(cornerRadius: 17)
- .fill(Color(hex: "FFFFFF"))
- .frame(width: geometry.size.width, height: geometry.size.height/2.5)
- .shadow(color: Color(hex: "B9B6B6"), radius:2, x:0, y:0)
- 
- ZStack{
- 
- // Líneas de fondo
- VStack{
- ForEach(0..<6) { index in
- HStack{
- VStack{
- Text("\(100 - index * 20)%") // Agrega los porcentajes
- .font(.custom("Inter Semi Bold", size: 10))
- .foregroundColor(Color(hex:"000000"))
- 
- }.padding(.trailing, 8)
- VStack{
- Divider()
- .background(Color.gray)
- .opacity(0.5)
- }
- }
- }
- }
- .frame(width: geometry.size.width/1.1, height: geometry.size.height/2.5) // Ajusta el ancho de las líneas de fondo
- .padding(.horizontal)
- 
- VStack {
- Text("Your feelings last days")
- .font(.custom("Inter Semi Bold", size: 24))
- .tracking(-0.41)
- .multilineTextAlignment(.center)
- .padding(.bottom, 180)
- }
- 
- HStack {
- ForEach(0..<5) { _ in
- Rectangle()
- .fill(Color(hex: "6B6EAB"))
- .frame(width: 20, height: 51)
- .cornerRadius(10)
- .padding(10)
- }
- }
- }
- }
- }
- }
- }
- */
-
-
-
 
 #Preview{
     ContentView()

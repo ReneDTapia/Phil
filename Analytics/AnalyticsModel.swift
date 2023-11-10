@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct ToyShape: Identifiable {
-    var type: String
-    var count: Double
-    var id = UUID()
+struct AnalyticsModel: Decodable {
+    let idUsersEmotion: Int
+    let Users_id: Int
+    let Emotions_idEmotion: Int
+    let Percentage: Int
 }
