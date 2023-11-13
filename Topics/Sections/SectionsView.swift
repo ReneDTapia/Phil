@@ -47,21 +47,47 @@ struct SectionsView: View {
                             ProgressView(messageLoad)
                                 .foregroundColor(Color.white)
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .frame(width: geometry.size.width, height: geometry.size.height-110) 
+                                .frame(width: geometry.size.width, height: geometry.size.height-200) 
                                 .scaleEffect(1.5)
                         }
                         
                         else{
                             
-                            List(SectionsVM.resultSections){content in
-                                Sections(text: content.text ?? "", video: content.video ?? "", image: content.image ?? "")
-                                    .listRowBackground(Color.black)
-                                    .frame(maxWidth:.infinity, alignment:.center)
-                                    .listRowSeparator(.hidden)
+                            List {
+                                ForEach(SectionsVM.resultSections, id: \.id) { content in
+                                    Sections(text: content.text ?? "",
+                                             video: content.video ?? "",
+                                             image: content.image ?? "")
+                                        .listRowBackground(Color.black)
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .listRowSeparator(.hidden)
+                                }
+                                HStack{
+                                    Spacer()
+                                    Button(action: {
+                                        if isChecked == false{
+                                            TopicsVM.postTopic(user: user, topic: topicID)
+                                        }
+                                            }) {
+                                                Text(isChecked ? "Deshacer" : "Hecho")
+                                                    .padding()
+                                                    .foregroundColor(.white)
+                                                    .background(isChecked ? Color.red : Color.green)
+                                                    .cornerRadius(10)
+                                            }
+                                    Spacer()
+                                }
+                                .listRowBackground(Color.black)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .listRowSeparator(.hidden)
                             }
+
                             .background(.black)
+                            
+                            
                         }
-                          
+                        
+                        
                         
                         Spacer()
                         
@@ -90,11 +116,7 @@ struct SectionsView: View {
         }
         
             .navigationBarBackButtonHidden(true)
-        .onAppear{
-            if isChecked == false{
-                TopicsVM.postTopic(user: user, topic: topicID)
-            }
-        }
+        
     }
     
         

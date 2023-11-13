@@ -4,6 +4,7 @@ import Alamofire
 
 class TopicsViewModel: ObservableObject{
     @Published var resultTopics: [TopicsModel] = []
+    @Published var topicStatus: [TopicsStatusModel] = []
      
 
     func getTopics(contentIDVM : Int, userIDVM : Int) async throws{
@@ -27,6 +28,30 @@ class TopicsViewModel: ObservableObject{
         print(results)
         DispatchQueue.main.async{
             self.resultTopics = results
+        }
+    }
+    
+    func getTopicsStatus(contentIDVM : Int, userIDVM : Int) async throws{
+        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getUserResult/\(userIDVM)/\(contentIDVM)") else{
+
+            print("invalid url")
+            return
+        }
+        print(url)
+        let urlRequest = URLRequest(url: url)
+        
+        let (data,response) = try await URLSession.shared.data(for: urlRequest)
+        
+        guard (response as? HTTPURLResponse)?.statusCode == 200 else{
+            print("error")
+            return
+        }
+        
+        let results = try JSONDecoder().decode([TopicsStatusModel].self, from: data)
+        
+        print(results)
+        DispatchQueue.main.async{
+            self.topicStatus = results
         }
     }
     

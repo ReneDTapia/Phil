@@ -192,6 +192,3 @@ struct ProgressBarView : View {
 }
 
 
-#Preview{
-    InitialFormView()
-}
