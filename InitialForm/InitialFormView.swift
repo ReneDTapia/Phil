@@ -64,10 +64,14 @@ struct InitialFormView: View {
                     print("Botón presionado")
                     Task {
                         do {
-                            try await viewModel.deleteAnswers(user_id: 1)
-                            viewModel.postAnswers()
+                            if viewModel.isFirstTime {
+                                try await viewModel.postAnswers(user_id: 1)
+                                viewModel.isFirstTime = false
+                            } else {
+                                try await viewModel.updateAnswers(user_id: 1)
+                            }
                         } catch {
-                            print("Error al eliminar las respuestas: \(error)")
+                            print("Error al enviar las respuestas: \(error)")
                         }
                     }
                 }) {
@@ -84,6 +88,8 @@ struct InitialFormView: View {
                         )
                 }
                 .padding()
+
+
             }
         }
     }
@@ -192,8 +198,6 @@ struct ProgressBarView : View {
 }
 
 
-struct InitialFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        InitialFormView()
-    }
+#Preview{
+    InitialFormView()
 }

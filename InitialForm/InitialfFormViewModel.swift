@@ -18,9 +18,13 @@ class InitialFormViewModel: ObservableObject {
     
     @Published var answers:[Int: Double] = [:]
     
+    @Published var isFirstTime = true
+
+    
     func updateAnswer(for questionId: Int, with value: Double) {
         answers[questionId] = value
     }
+    
     
     
     func getForm() {
@@ -46,7 +50,7 @@ class InitialFormViewModel: ObservableObject {
         }.resume()
     }
     
-    func postAnswers() {
+    func postAnswers(user_id: Int) {
         // Crear la URL para la solicitud
         guard let url = URL(string: "\(API.baseURL)postUserForm") else {
             print("URL inválida")
@@ -74,6 +78,34 @@ class InitialFormViewModel: ObservableObject {
             }
         }.resume()
     }
+    func updateAnswers(user_id: Int) {
+        // Crear la URL para la solicitud
+        guard let url = URL(string: "\(APIClient.baseURL)updateUserForm/\(user_id)") else {
+            print("URL inválida")
+            return
+        }
+        
+        // Crear el cuerpo de la solicitud
+        let body = answers.map { ["Users_id": 1, "Cuestionario_id": $0.key, "Percentage": $0.value] }
+        let finalBody = try? JSONSerialization.data(withJSONObject: body)
+        
+        // Crear la solicitud
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.httpBody = finalBody
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Enviar la solicitud
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("Error al actualizar las respuestas: \(error)")
+            } else if let data = data {
+                let str = String(data: data, encoding: .utf8)
+                print("Respuesta recibida: \(str ?? "")")
+            }
+        }.resume()
+    }
+
     
     func deleteAnswers(user_id: Int) async throws {
         // Crear la URL para la solicitud
@@ -104,38 +136,3 @@ class InitialFormViewModel: ObservableObject {
 
 
 }
-
-/*
- struct FormData: Codable {
- let value: Int
- }
- func sendPostRequest(value: Int) {
- // Crear una URL para tu API
- guard let url = URL(string: "https://tu-api.com/ruta") else {
- print("Invalid URL")
- return
- }
- // Crear tu objeto de datos
- let formData = FormData(value: value)
- 
- // Convertir tu objeto de datos en JSON
- guard let jsonData = try? JSONEncoder().encode(formData) else {
- print("Failed to encode data")
- return
- }
- // Crear la solicitud POST
- var request = URLRequest(url: url)
- request.httpMethod = "POST"
- request.httpBody = jsonData
- request.setValue("application/json", forHTTPHeaderField: "Content-Type")
- 
- // Enviar la solicitud POST
- URLSession.shared.dataTask(with: request) { data, response, error in
- if let error = error {
- print("Error: \(error)")
- } else if let response = response as? HTTPURLResponse {
- print("Response status code: \(response.statusCode)")
- }
- }.resume()
- }
- */

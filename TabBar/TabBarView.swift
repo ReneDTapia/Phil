@@ -14,6 +14,7 @@ struct TabBarView: View {
     
     @StateObject var VM = LoginViewModel()
     @State private var showMenu = false
+    @StateObject private var cameraViewModel = CameraViewController()
     
     init() {
         // Customize the appearance of the Tab Bar
@@ -83,7 +84,7 @@ struct TabBarView: View {
                         .background(Color.black)
                     
                     // Special tab with a larger 'plus.circle' icon
-                    PictureView()
+                    ModeloView()
                         .tabItem {
                             Image(systemName: selectedTab == 2 ? "plus.circle.fill" : "plus.circle")
                                 .environment(\.symbolVariants, .none)
@@ -100,9 +101,9 @@ struct TabBarView: View {
                         .background(Color.black)
                     
                     // Second tab view
-                    InitialFormView()
+                    AnalyticsView()
                         .tabItem {
-                            Image(systemName: selectedTab == 4 ? "person.fill" : "person")
+                            Image(systemName: selectedTab == 4 ? "chart.bar.fill" : "chart.bar")
                                 .environment(\.symbolVariants, .none)
                         }
                         .tag(4)

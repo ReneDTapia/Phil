@@ -71,7 +71,7 @@ struct WeekView: View {
                         .foregroundColor(Color.purple)
                 }
 
-                LazyHStack(spacing: 0) {
+                HStack(spacing: 0) {
                     ForEach(daysInWeek(for: selectedDate)) { day in
                         DayView(day: day, selectedDate: $selectedDate)
                     }
@@ -87,6 +87,7 @@ struct WeekView: View {
                 }
             }
         }
+        .padding(.bottom, 10)
     }
 
     func adjustDate(by weeks: Int) {
@@ -124,7 +125,7 @@ struct PictureView: View {
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            VStack {
+            VStack{
                 Text("Your Photos")
                     .font(.largeTitle)
                     .foregroundColor(.white)
@@ -177,7 +178,7 @@ struct PictureView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: selectedDate)
-        pictureVM.fetchPictures(user: 2, date: dateString)
+        pictureVM.fetchPictures(user: 1, date: dateString)
     }
 }
 
