@@ -42,101 +42,110 @@ struct BarChart: View {
     let minimenu: [String] = ["10", "30", "all"]
     @State private var selectedIndex: Int? = nil
     
-    var values: [CGFloat] {
-        return viewModel.emotions.map { CGFloat($0.Percentage) }
-    }
+//    var values: [CGFloat] {
+//        return viewModel.emotions.map { CGFloat($0.Percentage) }
+//    }
+    var values: [CGFloat] = [80, 10, 10, 50, 70]
     var body: some View {
         GeometryReader { geometry in
             ZStack {
                 RoundedRectangle(cornerRadius: 17)
                     .fill(Color.white)
-                    .frame(width: geometry.size.width, height: geometry.size.height/2.15)
+                    .frame(width: geometry.size.width, height: geometry.size.height/2.8)
                     .shadow(color: Color(hex: "B9B6B6"), radius:2, x:0, y:0)
                 ZStack{
-                    HStack{
-                        VStack(alignment: .trailing){
-                            ForEach(0..<6) { index in
-                                Text("\(100 - index * 20)%")
-                                    .font(.custom("Inter Semi Bold", size: 15))
-                                    .foregroundColor(Color.black)
-                            }.padding(.bottom, 1)
-                        }
-                        VStack(spacing: 22){
-                            ForEach(0..<6) { index in
-                                Divider()
-                                    .background(Color.gray)
-                                    .opacity(0.5)
-                            }.padding(.bottom, 1)
-                        }
-                    }
-                    .frame(width: geometry.size.width/1.05, height: geometry.size.height/2.2)
                     VStack {
                         Text("Your feelings last days")
                             .font(.custom("Inter Semi Bold", size: 20))
                             .tracking(-0.41)
                             .multilineTextAlignment(.center)
-                            .padding(.bottom, 190)
-                    }
-                    HStack{
-                        ForEach(0..<minimenu.count, id:\.self){
-                            i in
-                            Button(action: {
-                                self.selectedIndex = i
-                            }) {
-                                ZStack
-                                {
-                                    Circle()
-                                        .fill(self.selectedIndex == i ? Color(hex: "6B6EAB") : Color(hex: "B9B6B6"))
-                                        .frame(width: 16, height: 16)
-                                        .padding(30)
-                                    
-                                    Text(minimenu[i]).font(.custom("Inter Semi Bold", size: 10)).foregroundColor(Color.white).tracking(-0.41).multilineTextAlignment(.center)
+                            .padding(.top, 8)
+                        HStack{
+                            ForEach(0..<minimenu.count, id:\.self){
+                                i in
+                                Button(action: {
+                                    self.selectedIndex = i
+                                }) {
+                                    ZStack
+                                    {
+                                        Circle()
+                                            .fill(self.selectedIndex == i ? Color(hex: "6B6EAB") : Color(hex: "B9B6B6"))
+                                            .frame(width: geometry.size.width/20, height: geometry.size.width/20)
+                                            .padding(.horizontal)
+                                        Text(minimenu[i]).font(.custom("Inter Semi Bold", size: 10)).foregroundColor(Color.white).tracking(-0.41).multilineTextAlignment(.center)
+
+                                    }
                                 }
                             }
                         }
-                    }.padding(.bottom, 150)
-                        .padding(.leading, 38)
-                    HStack(spacing: 22) {
-                        Spacer()
+                        HStack{
+                            VStack(alignment: .trailing){
+                                ForEach(0..<6) { index in
+                                    Text("\(100 - index * 20)%")
+                                        .font(.custom("Inter Semi Bold", size: 15))
+                                        .foregroundColor(Color.black)
+                                        .padding(.bottom,-0.5)
+                                        .padding(.leading, 4)
+                                }
+                            }
+                            VStack(spacing: 22){
+                                ForEach(0..<6) { index in
+                                    Divider()
+                                        .background(Color.gray)
+                                        .opacity(0.5)
+                                }
+                            }.padding(.trailing, 44)
+                        }
+                    }.frame(width: geometry.size.width, height: geometry.size.height/2.8, alignment: .top)
+
+                    
+                    HStack(spacing: geometry.size.width/10.8) {
+                        
                         ForEach(0..<values.prefix(5).count, id:\.self) { index in
                             VStack {
                                 Spacer()
                                 RoundedRectangle(cornerRadius: 10)
                                     .fill(Color(hex: "6B6EAB"))
-                                    .frame(width: 20, height: values[index]*1.29)
+                                    .frame(width: geometry.size.width/20, height: values[index]*1.29)
                                     .clipShape(Rectangle().offset(y: -10))
                             }
-                            .padding(.leading, 15)
-                            .padding(.trailing, 3)
                         }
-                    }.padding(.bottom, 164)
-                        .padding(.trailing, 25)
-
-                    HStack(spacing: 22){
+                    }
+                    .frame(width: geometry.size.width, height: geometry.size.height/4.3)
+                    
+                    HStack(spacing: geometry.size.width/20){
+                        
                         ForEach(0..<5)
                         {
                             i in
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 80)
-                                    .fill(Color(hex: "ECBB5F"))
+                            VStack{
+                                Spacer()
+                                ZStack {
+                                    
+                                    RoundedRectangle(cornerRadius: 80)
+                                        .fill(Color(hex: "ECBB5F"))
+                                    
+                                    RoundedRectangle(cornerRadius: 80)
+                                        .strokeBorder(Color(hex: "6B6EAB"), lineWidth: 4)
+                                }
+                                .frame(width: geometry.size.width/11, height: geometry.size.width/11)
                                 
-                                RoundedRectangle(cornerRadius: 80)
-                                    .strokeBorder(Color(hex: "6B6EAB"), lineWidth: 4)
                             }
-                            .frame(width: 30, height: 30)
+                            
                         }
-                        .padding(.top, 162)
-                        .padding(.leading, 8)
-                    }
-                    .padding(.trailing, 1)
-                    .padding(.leading, 38)
+                    }.frame(width: geometry.size.width, height: geometry.size.height/3.1)
+                    
                 }
             }
         }.onAppear {
-            viewModel.getAnal() {
-                print("Emotions fetched")
-            }
+            viewModel.getAnal(userId: 1)
+            print("Emotions fetched")
         }
     }
+}
+
+
+#Preview{
+    AnalyticsView()
 }
 
