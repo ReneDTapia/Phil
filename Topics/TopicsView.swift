@@ -9,7 +9,6 @@ struct TopicsView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
-    @State private var check = false
     
     
     var body: some View {

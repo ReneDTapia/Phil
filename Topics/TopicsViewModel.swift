@@ -31,8 +31,8 @@ class TopicsViewModel: ObservableObject{
         }
     }
     
-    func getTopicsStatus(contentIDVM : Int, userIDVM : Int) async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getUserResult/\(userIDVM)/\(contentIDVM)") else{
+    func getTopicsStatus(topicIDVM : Int, userIDVM : Int) async throws{
+        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getUserResult/\(userIDVM)/\(topicIDVM)") else{
 
             print("invalid url")
             return
@@ -52,6 +52,28 @@ class TopicsViewModel: ObservableObject{
         print(results)
         DispatchQueue.main.async{
             self.topicStatus = results
+        }
+    }
+    
+    func UpdateDone(user: Int, topic: Int, done: Bool) {
+        
+        let url = "https://philbackend.onrender.com/api/auth/UpdateDone"
+
+        // Define el cuerpo de la petición
+        let parameters: [String: Any] = [
+            "user": user,
+            "topic": topic,
+            "done": done
+        ]
+
+        // ejecutamos con alamofire
+        AF.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default).response { response in
+            switch response.result {
+            case .success:
+                print("Message registered successfully!")
+            case .failure(let error):
+                print("Error registering message: \(error)")
+            }
         }
     }
     

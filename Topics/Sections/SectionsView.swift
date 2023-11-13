@@ -13,6 +13,8 @@ struct SectionsView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
+    @State private var checkButton = false
+    @State private var exist = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -65,15 +67,27 @@ struct SectionsView: View {
                                 HStack{
                                     Spacer()
                                     Button(action: {
-                                        if isChecked == false{
+                                        
+                                        if exist == true{
+                                            checkButton.toggle()
+                                            print(checkButton)
+                                            TopicsVM.UpdateDone(user: user, topic: topicID, done: checkButton)
+                                        }
+                                        else{
+                                            exist = true
+                                            checkButton.toggle()
                                             TopicsVM.postTopic(user: user, topic: topicID)
                                         }
-                                            }) {
-                                                Text(isChecked ? "Deshacer" : "Hecho")
+                                        
+                                        
+                                        }
+                                            ) {
+                                                Text(checkButton ? "Deshacer" : "Hecho")
                                                     .padding()
                                                     .foregroundColor(.white)
-                                                    .background(isChecked ? Color.red : Color.green)
+                                                    .background(checkButton ? Color.red : Color.green)
                                                     .cornerRadius(10)
+                                                    
                                             }
                                     Spacer()
                                 }
@@ -101,9 +115,10 @@ struct SectionsView: View {
                         try await SectionsVM.getSections(topicIDVM: topicID)
                         if SectionsVM.resultSections.isEmpty {
                             messageLoad = "No hay datos"
-                            
                         }
                         isLoading = SectionsVM.resultSections.isEmpty // Verifica si la lista está vacía
+                        
+                        
                     }
                     catch{
                         print("error")
@@ -114,8 +129,25 @@ struct SectionsView: View {
             .listStyle(PlainListStyle())
             
         }
-        
             .navigationBarBackButtonHidden(true)
+            .onAppear{
+                checkButton = isChecked
+                Task{
+                    do{
+                        try await TopicsVM.getTopicsStatus(topicIDVM: topicID, userIDVM: user)
+                        if TopicsVM.topicStatus.first?.userresult ?? 0 > 0{
+                            exist = true
+                        }
+                        else{
+                            exist = false
+                        }
+                        print(exist)
+                    }
+                    catch{
+                        print("Aca esta el error")
+                    }
+                }
+            }
         
     }
     
@@ -228,7 +260,8 @@ func extractYouTubeVideoID(from url: String) -> String? {
 }
 
 struct Sections_Previews: PreviewProvider {
-    static var previews: some View {
-        SectionsView(topicID: 1, topicTitle: "Titulo del topico", user: 1, isChecked: false)
-    }
-}
+ static var previews: some View {
+ SectionsView(topicID: 1, topicTitle: "Titulo del topico", user: 1, isChecked: false)
+ }
+ }
+ 
