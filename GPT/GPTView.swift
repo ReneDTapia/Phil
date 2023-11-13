@@ -84,7 +84,7 @@ struct GPTView: View {
                 
             }.onAppear {
             
-                viewModel.fetchUserForm(Users_id: 1)
+                viewModel.fetchUserForm(Users_id: 37)
                 chatViewModel.fetchMessages(conversationId: conversationId) //
                 
             }
@@ -95,7 +95,7 @@ struct GPTView: View {
     
     
     private func sendMessageWithUserContext() async {
-        let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Texto: \($0.texto), Percentage: \($0.Percentage)" }.joined(separator: "\n")
+        let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información, cada pregunta fue respondida por mi en un porcentaje del 1 al 10 de que tanto me identifico con ese problema):\n" + viewModel.userForm.map { "Texto: \($0.texto), Percentage: \($0.Percentage)" }.joined(separator: "\n")
            await viewModel.send(message: prompt, userContext: userContextMessage)
        }
 }

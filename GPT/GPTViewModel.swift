@@ -20,7 +20,7 @@ final class GPTViewModel : ObservableObject {
     
     @Published var currentMessage : MessageChatGPT = .init(text: "", role: .assistant)
     
-    var openAI = SwiftOpenAI(apiKey: "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")
+    var openAI = SwiftOpenAI(apiKey: "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")
     
     
     
@@ -31,7 +31,7 @@ final class GPTViewModel : ObservableObject {
         
         await MainActor.run {
             let userMessage = MessageChatGPT(text: message, role: .user, hidden: isHidden)
-            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: false)
+            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: true)
             self.messages.append(contextMessage)
             self.messages.append(userMessage)
             
