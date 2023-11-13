@@ -19,23 +19,6 @@ struct AnalyticsView: View{
                 Color.black
                     .ignoresSafeArea(.all)
                 VStack(alignment: .leading) {
-                    HStack {
-                        // Botón del menú
-                        Button(action: {
-                            withAnimation {
-                                self.showMenu.toggle()
-                            }
-                        }) {
-                            Image(systemName: "line.horizontal.3")
-                                .font(.title)
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 50, height: 50)
-                    }
-                    .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
                     Text("Metas Diarias")
                         .font(.largeTitle)
                         .bold()
@@ -48,27 +31,6 @@ struct AnalyticsView: View{
                 // touchid and faceid instead of logging in, la clave no se envía y le da seguridad
             }
             
-            
-            if showMenu{
-                ZStack{
-                    Color(.black)
-                }
-                .opacity(0.5)
-                .onTapGesture {
-                    withAnimation{
-                        showMenu = false
-                    }
-                    
-                }
-            }
-            
-            HStack{
-                Menu(showMenu: $showMenu)
-                    .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
-                    .frame(width: 300, height:.infinity)
-                    .ignoresSafeArea(.all)
-                
-            }
             
         }
         
@@ -178,6 +140,3 @@ struct BarChart: View {
     }
 }
 
-#Preview{
-    AnalyticsView()
-}

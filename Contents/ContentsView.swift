@@ -111,7 +111,7 @@ struct ProgressBar: View {
     }
 }
 
-struct Contents: View{
+struct Contents: View{  
     
     //@Binding var progress: Float
     
