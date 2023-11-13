@@ -42,6 +42,21 @@ struct ContentsView: View {
                                         .navigationBarHidden(false)
                                         .navigationBarBackButtonHidden(true)
                                 }
+                                .onAppear{
+                                    Task{
+                                        do{
+                                            try await ContentVM.getContents(userIDVM: user)
+                                            if ContentVM.resultContents.isEmpty {
+                                                messageLoad = "No hay datos"
+                                                
+                                            }
+                                            isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
+                                        }
+                                        catch{
+                                            print("error")
+                                        }
+                                    }
+                                }
                                 .listRowBackground(Color.black)
                                 .frame(maxWidth:.infinity, alignment:.center)
                                 .listRowSeparator(.hidden)
