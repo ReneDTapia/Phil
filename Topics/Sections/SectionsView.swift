@@ -89,6 +89,7 @@ struct SectionsView: View {
                                                     .cornerRadius(10)
                                                     
                                             }
+                                            .padding(.top,-30)
                                     Spacer()
                                 }
                                 .listRowBackground(Color.black)
@@ -103,7 +104,6 @@ struct SectionsView: View {
                         
                         
                         
-                        Spacer()
                         
                     }
                     
@@ -169,15 +169,16 @@ struct Sections: View{
                 VStack{
                     
                     if text != ""{
-                        Spacer()
                         Text(text)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.leading)
+                            .padding(.leading)
+                            .padding(.trailing)
+                            .padding(.top, -55)
                     }
                     
                     
                     if image != ""{
-                        Spacer()
                         AsyncImage(url: URL(string: image)) { phase in
                             if let image = phase.image {
                                 image
@@ -195,12 +196,10 @@ struct Sections: View{
                     }
                     
                     if video != ""{
-                        Spacer()
                         Video(url: video)
                             .frame(width: 350, height: 190 )
                             .cornerRadius(12)
                             .padding(.horizontal, 24)
-                        Spacer()
                     }
                     
                     Rectangle()
@@ -212,7 +211,7 @@ struct Sections: View{
                 
                 
             }
-            .padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 20))
+            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
             .background(Color.black)
             .frame(maxWidth: 500)
         }
