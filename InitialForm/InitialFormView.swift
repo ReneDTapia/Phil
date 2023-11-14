@@ -12,6 +12,8 @@ struct InitialFormView: View {
     @State private var contentHeight: CGFloat = 0
     @ObservedObject var viewModel = InitialFormViewModel()
     
+    let userId: Int
+    
     var body: some View {
         ZStack{
             Color(hex:"F6F6FE")
@@ -65,10 +67,10 @@ struct InitialFormView: View {
                     Task {
                         do {
                             if viewModel.isFirstTime {
-                                try await viewModel.postAnswers(user_id: 1)
+                                try await viewModel.postAnswers(user_id: userId)
                                 viewModel.isFirstTime = false
                             } else {
-                                try await viewModel.updateAnswers(user_id: 1)
+                                try await viewModel.updateAnswers(user_id: userId)
                             }
                         } catch {
                             print("Error al enviar las respuestas: \(error)")
@@ -198,3 +200,9 @@ struct ProgressBarView : View {
 }
 
 
+struct InitialFormView_Previews: PreviewProvider {
+    static var previews: some View {
+        InitialFormView(userId : 1)
+            .previewDevice("iPhone 12") // Puedes cambiar el dispositivo de vista previa aquí
+    }
+}

@@ -16,7 +16,10 @@ struct TabBarView: View {
     @State private var showMenu = false
     @StateObject private var cameraViewModel = CameraViewController()
     
-    init() {
+    let user : Int
+    
+    init(user : Int) {
+        self.user = user
         // Customize the appearance of the Tab Bar
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -127,7 +130,7 @@ struct TabBarView: View {
             }
             
             HStack{
-                Menu(showMenu: $showMenu, LoginVM: VM)
+                Menu(showMenu: $showMenu, LoginVM: VM, user: user )
                     .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
                     .frame(width: 300, height:.infinity)
                     .ignoresSafeArea(.all)
@@ -138,6 +141,6 @@ struct TabBarView: View {
 }
     struct TabBarView_Previews: PreviewProvider {
         static var previews: some View {
-            TabBarView()
+            TabBarView(user: 1)
         }
     }

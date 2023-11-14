@@ -203,6 +203,7 @@ struct Menu: View {
     @Binding var showMenu: Bool
     @State var progress: Double = 0.5
     @StateObject var LoginVM = LoginViewModel()
+    let user: Int
     var body: some View {
         
     
@@ -241,7 +242,7 @@ struct Menu: View {
                                 //////
                                 ///
                                 ///
-                                NavigationLink(destination : InitialFormView()){
+                                NavigationLink(destination : InitialFormView(userId : user)){
                                     HStack{
                                         Image(systemName: "person.fill")
                                         Text("Tu")

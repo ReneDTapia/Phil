@@ -11,8 +11,7 @@ import Foundation
 
 class APIClient {
     
-//    static let baseURL = "https://philbackend.onrender.com/api/auth/"
-    static let baseURL = "http://localhost:5005/api/auth/"
+    static let baseURL = "https://philbackend.onrender.com/api/auth/"
     
     // Función general para GET
     static func get<T: Decodable>(path: String) async throws -> T {
