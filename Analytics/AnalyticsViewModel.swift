@@ -11,17 +11,17 @@ import Alamofire
 class AnalyticsViewModel : ObservableObject {
     @Published var emotions: [AnalyticsModel] = []
     
-    func getAnal(completion: @escaping () -> Void) {
-        APIClient.getN(path: "getUserAnal/1") { (result: Result<[AnalyticsModel], AFError>) in
+    func getAnal(userId: Int) {
+        APIClient.getN(path: "getUserAnal/\(userId)") { (result: Result<[AnalyticsModel], AFError>) in
             switch result {
             case .success(let fetchedEmotions):
                 self.emotions = fetchedEmotions
-                completion()
             case .failure(let error):
                 print(error)
             }
         }
     }
+
     
     func topEmotions(count: Int) -> [AnalyticsModel] {
         return Array(emotions.sorted(by: { $0.Percentage > $1.Percentage }).prefix(count))
