@@ -37,7 +37,7 @@ struct InitialFormView: View {
                         QuestionBox(viewModel: viewModel)
                             .padding(-4)
                         
-                        Spacer(minLength: 50)
+//                        Spacer(minLength: 50)
                         
                     }
                     .background(GeometryReader {
@@ -56,7 +56,7 @@ struct InitialFormView: View {
                 
                 Spacer()
                 
-                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*5.18)
+                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*4.51)
                     .frame(height: 10)
                     .padding()
                 
@@ -197,4 +197,7 @@ struct ProgressBarView : View {
     }
 }
 
+#Preview{
+    InitialFormView()
+}
 

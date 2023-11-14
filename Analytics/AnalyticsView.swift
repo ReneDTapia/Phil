@@ -51,7 +51,7 @@ struct BarChart: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 17)
                     .fill(Color.white)
-                    .frame(width: geometry.size.width, height: geometry.size.height/2.8)
+                    .frame(width: geometry.size.width, height: geometry.size.height/2.2)
                     .shadow(color: Color(hex: "B9B6B6"), radius:2, x:0, y:0)
                 ZStack{
                     VStack {
@@ -96,7 +96,7 @@ struct BarChart: View {
                                 }
                             }.padding(.trailing, 44)
                         }
-                    }.frame(width: geometry.size.width, height: geometry.size.height/2.8, alignment: .top)
+                    }.frame(width: geometry.size.width, height: geometry.size.height/2.2, alignment: .top)
 
                     
                     HStack(spacing: geometry.size.width/10.8) {
@@ -111,7 +111,7 @@ struct BarChart: View {
                             }
                         }
                     }
-                    .frame(width: geometry.size.width, height: geometry.size.height/4.3)
+                    .frame(width: geometry.size.width, height: geometry.size.height/4)
                     
                     HStack(spacing: geometry.size.width/20){
                         
@@ -133,7 +133,7 @@ struct BarChart: View {
                             }
                             
                         }
-                    }.frame(width: geometry.size.width, height: geometry.size.height/3.1)
+                    }.frame(width: geometry.size.width, height: geometry.size.height/2.5)
                     
                 }
             }
@@ -146,6 +146,6 @@ struct BarChart: View {
 
 
 #Preview{
-    AnalyticsView()
+    TabBarView()
 }
 
