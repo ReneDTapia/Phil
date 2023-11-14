@@ -127,7 +127,7 @@ struct TabBarView: View {
             }
             
             HStack{
-                Menu(showMenu: $showMenu, LoginVM: <#LoginViewModel#>)
+                Menu(showMenu: $showMenu, LoginVM: VM)
                     .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
                     .frame(width: 300, height:.infinity)
                     .ignoresSafeArea(.all)

@@ -145,7 +145,4 @@ struct BarChart: View {
 }
 
 
-#Preview{
-    TabBarView()
-}
 
