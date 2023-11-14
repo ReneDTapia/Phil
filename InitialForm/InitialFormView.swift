@@ -12,6 +12,8 @@ struct InitialFormView: View {
     @State private var contentHeight: CGFloat = 0
     @ObservedObject var viewModel = InitialFormViewModel()
     
+    let userId: Int
+    
     var body: some View {
         ZStack{
             Color(hex:"F6F6FE")
@@ -37,7 +39,7 @@ struct InitialFormView: View {
                         QuestionBox(viewModel: viewModel)
                             .padding(-4)
                         
-                        Spacer(minLength: 50)
+//                        Spacer(minLength: 50)
                         
                     }
                     .background(GeometryReader {
@@ -56,7 +58,7 @@ struct InitialFormView: View {
                 
                 Spacer()
                 
-                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*5.18)
+                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*4.51)
                     .frame(height: 10)
                     .padding()
                 
@@ -64,10 +66,14 @@ struct InitialFormView: View {
                     print("Botón presionado")
                     Task {
                         do {
-                            try await viewModel.deleteAnswers(user_id: 1)
-                            viewModel.postAnswers()
+                            if viewModel.isFirstTime {
+                                try await viewModel.postAnswers(user_id: userId)
+                                viewModel.isFirstTime = false
+                            } else {
+                                try await viewModel.updateAnswers(user_id: userId)
+                            }
                         } catch {
-                            print("Error al eliminar las respuestas: \(error)")
+                            print("Error al enviar las respuestas: \(error)")
                         }
                     }
                 }) {
@@ -84,6 +90,8 @@ struct InitialFormView: View {
                         )
                 }
                 .padding()
+
+
             }
         }
     }
@@ -194,6 +202,7 @@ struct ProgressBarView : View {
 
 struct InitialFormView_Previews: PreviewProvider {
     static var previews: some View {
-        InitialFormView()
+        InitialFormView(userId : 1)
+            .previewDevice("iPhone 12") // Puedes cambiar el dispositivo de vista previa aquí
     }
 }

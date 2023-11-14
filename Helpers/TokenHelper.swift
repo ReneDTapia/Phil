@@ -1,10 +1,3 @@
-//
-//  TokenHelper.swift
-//  Phil
-//
-//  Created by Rene  on 05/10/23.
-//
-
 import Foundation
 import JWTDecode
 import KeychainSwift
@@ -12,19 +5,29 @@ import KeychainSwift
 class TokenHelper {
     
     private static let keychain = KeychainSwift()
-       private static let tokenKey = "userToken"
-       
-       static func save(token: String) {
-           keychain.set(token, forKey: tokenKey)
-       }
+    private static let tokenKey = "userToken"
+    private static let userIDKey = "userID"
+    
+    static func save(token: String, userID: Int) {
+        keychain.set(token, forKey: tokenKey)
+        keychain.set(String(userID), forKey: userIDKey)
+    }
 
-       static func getToken() -> String? {
-           return keychain.get(tokenKey)
-       }
+    static func getToken() -> String? {
+        return keychain.get(tokenKey)
+    }
 
-       static func deleteToken() {
-           keychain.delete(tokenKey)
-       }
+    static func getUserID() -> Int? {
+        if let userIDString = keychain.get(userIDKey), let userID = Int(userIDString) {
+            return userID
+        }
+        return nil
+    }
+
+    static func deleteToken() {
+        keychain.delete(tokenKey)
+        keychain.delete(userIDKey)
+    }
     
     static func isTokenExpired(token: String) -> Bool {
         do {

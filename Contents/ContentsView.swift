@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentsView: View {
     
-    let user = 2
+    let user : Int
     
     @State private var progress: Double = 1
     @State private var showMenu = false
@@ -11,110 +11,93 @@ struct ContentsView: View {
     @State private var messageLoad = "Cargando..."
     
     var body: some View {
-    GeometryReader { geometry in
-        NavigationStack {
-            ZStack(alignment: .leading) {
-                Color.black
-                    .ignoresSafeArea(.all)
-                VStack(alignment: .leading) {
-                    HStack {
-                        // Botón del menú
-                        Button(action: {
-                            withAnimation {
-                                self.showMenu.toggle()
-                            }
-                        }) {
-                            Image(systemName: "line.horizontal.3")
-                                .font(.title)
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 50, height: 50)
-                    }
-                    .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
-                    Text("Contenidos")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
-                        .foregroundColor(.white)
-                    if isLoading{
-                        ProgressView(messageLoad)
-                            .foregroundColor(Color.white)
-                            .frame(width: geometry.size.width, height: geometry.size.height-100)
+        GeometryReader { geometry in
+            NavigationStack {
+                ZStack(alignment: .leading) {
+                    Color.black
+                        .ignoresSafeArea(.all)
+                    VStack(alignment: .leading) {
                         
-                        .scaleEffect(1.5)
-                    }
-                    List(ContentVM.resultContents, id:\.id){content in
-                        NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: user)){
-                            Contents(title: content.title, description: content.description, progress: content.proporcion ?? 0)
+                        Text("Contenidos")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
+                            .foregroundColor(.white)
+                        if isLoading{                            ProgressView(messageLoad)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .foregroundColor(Color.white)
+                                .frame(width: geometry.size.width, height: geometry.size.height-100)
+                            
+                                .scaleEffect(1.5)
+                            
+                            
+                        }
+                        else{
+                            List(ContentVM.resultContents, id:\.id){content in
+                                NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: user)){
+                                    Contents(title: content.title, description: content.description, progress: content.proporcion ?? 0)
+                                        .listRowBackground(Color.black)
+                                        .frame(maxWidth:.infinity, alignment:.center)
+                                        .listRowSeparator(.hidden)
+                                        .navigationBarHidden(false)
+                                        .navigationBarBackButtonHidden(true)
+                                }
+                                .onAppear{
+                                    Task{
+                                        do{
+                                            try await ContentVM.getContents(userIDVM: user)
+                                            if ContentVM.resultContents.isEmpty {
+                                                messageLoad = "No hay datos"
+                                                
+                                            }
+                                            isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
+                                        }
+                                        catch{
+                                            print("error")
+                                        }
+                                    }
+                                }
                                 .listRowBackground(Color.black)
                                 .frame(maxWidth:.infinity, alignment:.center)
                                 .listRowSeparator(.hidden)
                                 .navigationBarHidden(false)
-                                .navigationBarBackButtonHidden(false)
-                        }
-                        .listRowBackground(Color.black)
-                        .frame(maxWidth:.infinity, alignment:.center)
-                        .listRowSeparator(.hidden)
-                        .navigationBarHidden(false)
-                        .navigationBarBackButtonHidden(false)
-                    }
-                    .background(.black)
-                    .onAppear{
-                        Task{
-                            do{
-                                try await ContentVM.getContents(userIDVM: user)
-                                if ContentVM.resultContents.isEmpty {
-                                    messageLoad = "No hay datos"
-                                    
-                                }
-                                isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
+                                .navigationBarBackButtonHidden(true)
                             }
-                            catch{
-                                print("error")
-                            }
-                        }
-                    }
-                    .frame(height: geometry.size.height-90)
-                    .listStyle(PlainListStyle())
-                    
-                    Spacer()
-                    
-                }
-                
-                if showMenu{
-                    ZStack{
-                        Color(.black)
-                    }
-                    .opacity(0.5)
-                    .onTapGesture {
-                        withAnimation{
-                            showMenu = false
+                            .background(.black)
+                            .frame(height: geometry.size.height-100)
+                            
+                            Spacer()
                         }
                         
+                        
+                        
+                        
+                        
                     }
-                }
-                
-                HStack{
-                    Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
-                        .frame(width: 300, height:.infinity)
-                        .ignoresSafeArea(.all)
                     
                 }
-                
-                
-                
-                
+                .navigationBarHidden(false)
             }
+            .onAppear{
+                Task{
+                    do{
+                        try await ContentVM.getContents(userIDVM: user)
+                        if ContentVM.resultContents.isEmpty {
+                            messageLoad = "No hay datos"
+                            
+                        }
+                        isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
+                    }
+                    catch{
+                        print("error")
+                    }
+                }
+            }
+            .listStyle(PlainListStyle())
             
         }
+        
     }
-    }
-    
-    
 }
 
 struct ProgressBar: View {
@@ -143,7 +126,7 @@ struct ProgressBar: View {
     }
 }
 
-struct Contents: View{
+struct Contents: View{  
     
     //@Binding var progress: Float
     
@@ -219,6 +202,8 @@ struct Contents: View{
 struct Menu: View {
     @Binding var showMenu: Bool
     @State var progress: Double = 0.5
+    @StateObject var LoginVM = LoginViewModel()
+    let user: Int
     var body: some View {
         
     
@@ -257,7 +242,7 @@ struct Menu: View {
                                 //////
                                 ///
                                 ///
-                                NavigationLink(destination : InitialFormView()){
+                                NavigationLink(destination : InitialFormView(userId : user)){
                                     HStack{
                                         Image(systemName: "person.fill")
                                         Text("Tu")
@@ -269,7 +254,7 @@ struct Menu: View {
                                     .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
                                     .navigationBarBackButtonHidden(true)
                                 
-                                NavigationLink(destination : ContentsView()){
+                                NavigationLink(destination : ContentsView(user: 2)){
                                     HStack{
                                         Image(systemName: "star.fill")
                                         Text("Contenidos")
@@ -282,44 +267,9 @@ struct Menu: View {
                                     .navigationBarBackButtonHidden(true)
                                 
                                 
-                                NavigationLink(destination : PictureView()){
-                                    HStack{
-                                        Image(systemName: "photo.fill")
-                                        Text("Tus fotos")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.black)
-                                    .padding()
-                                }.navigationBarHidden(true)
-                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
-                                    .navigationBarBackButtonHidden(true)
-                                
-                                NavigationLink(destination : MyChatsView(userId: 1)){
-                                    HStack{
-                                        Image(systemName: "message")
-                                        Text("Chatea con Phil")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.black)
-                                    .padding()
-                                }.navigationBarHidden(true)
-                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
-                                    .navigationBarBackButtonHidden(true)
-
-                                
-                                
-                                NavigationLink(destination : MyChatsView(userId: 1)){
-                                    HStack{
-                                        Image(systemName: "photo.fill")
-                                        Text("Tus fotos")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.black)
-                                    .padding()
-                                }.navigationBarHidden(true)
-                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
-                                    .navigationBarBackButtonHidden(true)
-                                
+                                Button(action: LoginVM.logout){
+                                    Text("Salir")
+                                }
                                 
                                 
                                 
@@ -329,7 +279,8 @@ struct Menu: View {
                             
                             
                             
-                        }.navigationBarHidden(true)
+                        }
+                            .navigationBarHidden(false)
                             .navigationBarBackButtonHidden(true)
                             .frame(width: 250)
                         
@@ -349,6 +300,6 @@ struct Menu: View {
 
 struct Contents_Previews: PreviewProvider {
     static var previews: some View {
-        ContentsView()
+        ContentsView( user: 37 )
     }
 }

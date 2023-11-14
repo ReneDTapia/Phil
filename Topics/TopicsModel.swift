@@ -18,3 +18,13 @@ struct TopicsModel: Decodable{
         case content
     }
 }
+
+
+
+struct TopicsStatusModel: Decodable{
+    var userresult: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case userresult
+    }
+}

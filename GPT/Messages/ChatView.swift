@@ -7,7 +7,8 @@ import SwiftOpenAI
 struct ChatView: View {
     @StateObject var viewModel: ChatViewModel = ChatViewModel()
     @State private var newMessage: String = ""
-
+    @State private var messageLoad = "Cargando..."
+    
     var conversationId: Int
     
     var body: some View {
@@ -22,7 +23,18 @@ struct ChatView: View {
           
         }
         .onAppear {
-            viewModel.fetchMessages(conversationId: conversationId) 
+            task{
+                do{
+                    try await viewModel.fetchMessages(conversationId: conversationId)
+                    if viewModel.messages.isEmpty{
+                        messageLoad = "No hay datos"
+                        
+                    }
+                }
+                catch{
+                    print("error")
+                }
+            }
         }
     }
 }
@@ -41,4 +53,3 @@ struct ChatView_Previews: PreviewProvider {
         return ChatView(viewModel: viewModel, conversationId: 1) // Aquí puedes cambiar el ID según sea necesario
     }
 }
-

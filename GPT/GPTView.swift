@@ -12,6 +12,7 @@ import SwiftOpenAI
 struct GPTView: View {
     
     var conversationId: Int
+    var userId : Int 
     
     @StateObject var viewModel = GPTViewModel()
     @State var prompt : String = "Que onda, cómo te llamas puedes ayudarme a identificar mis emociones?"
@@ -82,7 +83,7 @@ struct GPTView: View {
                 
             }.onAppear {
             
-                viewModel.fetchUserForm(Users_id: 6)
+                viewModel.fetchUserForm(Users_id: userId)
                 chatViewModel.fetchMessages(conversationId: conversationId) //
                 
             }
@@ -108,7 +109,7 @@ struct GPTView_Previews: PreviewProvider {
         let chatViewModel = ChatViewModel()
         
         // Pasas las instancias al inicializador de GPTView
-        GPTView(conversationId:3, viewModel: gptViewModel, chatViewModel: chatViewModel)
+        GPTView(conversationId:3, userId : 1, viewModel: gptViewModel, chatViewModel: chatViewModel)
             .environmentObject(gptViewModel) // Si GPTView depende de un EnvironmentObject
     }
 }

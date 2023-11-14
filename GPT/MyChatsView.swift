@@ -10,6 +10,7 @@ struct MyChatsView: View {
     @State private var newConversationName: String = ""
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
+    @State private var showingAddConversation = false
 
     var userId: Int
 
@@ -25,24 +26,35 @@ struct MyChatsView: View {
                             .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
                             .foregroundColor(.white)
 
-                        // Campo de texto y botón para agregar nuevas conversaciones
+                        // Botón para mostrar el campo de texto de nueva conversación
                         HStack {
-                            TextField("Nueva Conversación", text: $newConversationName)
+                            Spacer()
+                            Button(action: {
+                                showingAddConversation.toggle()
+                            }) {
+                                Image(systemName: "plus")
+                                    .padding()
+                                    .foregroundColor(.white)
+                            }
+                        }
+
+                        // Campo de texto que aparece solo cuando showingAddConversation es true
+                        if showingAddConversation {
+                            TextField("Nombre de la conversación:", text: $newConversationName)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .padding()
-
                             Button("Agregar") {
                                 Task {
                                     let success = await viewModel.registerConversationWithAlamofire(name: newConversationName, userId: userId)
                                     if (success != nil) {
                                         newConversationName = ""
+                                        showingAddConversation = false
                                         await viewModel.fetchConversations(userId: userId)
                                     }
                                 }
                             }
                             .buttonStyle(BorderlessButtonStyle())
                         }
-                        .padding()
 
                         Spacer()
 
@@ -55,7 +67,7 @@ struct MyChatsView: View {
                         } else {
                             List {
                                 ForEach(viewModel.conversations, id: \.id) { conversation in
-                                    NavigationLink(destination: GPTView(conversationId: conversation.id)) {
+                                    NavigationLink(destination: GPTView(conversationId: conversation.id, userId: userId)) {
                                         VStack(alignment: .leading) {
                                             if isEditing && editingConversationId == conversation.id {
                                                 TextField("Nuevo nombre", text: Binding(

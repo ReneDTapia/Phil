@@ -27,11 +27,11 @@ class SignUpViewModel: ObservableObject {
             
             AuthService.shared.register(email: user.email, username: user.username, password: user.password, confirmPassword: user.confirmPassword) { result in
                 switch result {
-                case .success(let token):
+                case .success(let data):
                     print("Successfully registered!")
                     
                     // Guardar el token
-                    TokenHelper.save(token: token)
+                    TokenHelper.save(token: data.token, userID: data.userID)
                     
                     self.loginViewModel?.viewState = .ContentsView
 
