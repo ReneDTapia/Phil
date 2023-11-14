@@ -39,19 +39,15 @@ class APIClient {
     
     
     //asinc para delete
-    static func delete<T: Decodable>(path: String) async throws -> T {
+    static func delete(path: String) async throws {
         let request = AF.request(baseURL + path, method: .delete).validate()
-        return try await request.serializingDecodable(T.self).value
+        _ = try await request.serializingData().result.get()
     }
+
 
     //estandar para funciones no asincronas JAJAJAJAJJA.
     
     
-    // Función general para DELETE
-    static func deleteN<T: Decodable>(path: String) async throws -> T {
-        let request = AF.request(baseURL + path, method: .delete).validate()
-        return try await request.serializingDecodable(T.self).value
-    }
     
 // Función general para GET
     static func getN<T: Decodable>(path: String, completion: @escaping (Result<T, AFError>) -> Void) {
