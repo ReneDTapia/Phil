@@ -18,7 +18,7 @@ struct Message: Identifiable, Encodable, Decodable {
 
     enum CodingKeys: String, CodingKey {
         case id
-        case userId = "user" // 
+        case userId = "user" //
         case text
         case sentByUser
         case conversationId
@@ -28,12 +28,22 @@ struct Message: Identifiable, Encodable, Decodable {
 
 struct Conversation: Identifiable, Decodable {
     let id: Int
-    let lastMessageAt: String
+    let name : String
+    let lastMessageAt: String?
     
     
     enum CodingKeys: String, CodingKey {
         case id = "conversationId"
+        case name
         case lastMessageAt
+        
     }
 }
 
+struct ConversationResponse: Codable {
+    let conversationId: Int
+}
+
+struct UpdateConversationResponse: Decodable {
+    let success: String
+}

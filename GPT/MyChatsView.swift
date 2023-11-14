@@ -3,122 +3,136 @@ import SwiftUI
 struct MyChatsView: View {
     @StateObject var viewModel = ChatViewModel()
     @StateObject var GPTviewModel = GPTViewModel()
-    
+
+    @State private var isEditing = false
+    @State private var editingConversationId: Int? = nil
+    @State private var updatedConversationName: String = ""
+    @State private var newConversationName: String = ""
+    @State private var isLoading = true
+    @State private var messageLoad = "Cargando..."
+
     var userId: Int
 
-    @State private var showMenu = false
-    
-    
     var body: some View {
         NavigationStack {
-            
-            GeometryReader{
-                
-                geometry in
-                
+            GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    Color.black
-                        .ignoresSafeArea(.all)
+                    Color.black.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
-                        HStack {
-                            // Botón del menú
-                            Button(action: {
-                                withAnimation {
-                                    self.showMenu.toggle()
-                                }
-                            }) {
-                                Image(systemName: "line.horizontal.3")
-                                    .font(.title)
-                                    .foregroundColor(.white)
-                            }
-                            Spacer()
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 50, height: 50)
-                        }
-                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                         Text("Chatea con Phil")
                             .font(.largeTitle)
                             .bold()
                             .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
                             .foregroundColor(.white)
-                        
-                        
-                        ////
-                        //seccion DE MIS CONVERSACIONES?)
-                        
-                        Spacer()
-                       
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                            }) {
-                                Image(systemName: "plus").padding()
-                            }
-                        }
-                        
-                        List(viewModel.conversations) { conversation in
-                            NavigationLink(destination: GPTView(conversationId: conversation.id, viewModel: GPTviewModel)) {
-                                VStack(alignment: .leading) {
-                                    Text("Conversación \(conversation.id)")
-                                        .foregroundColor(Color.white)
-                                    Text("Último mensaje: \(conversation.lastMessageAt)")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
+
+                        // Campo de texto y botón para agregar nuevas conversaciones
+                        HStack {
+                            TextField("Nueva Conversación", text: $newConversationName)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding()
+
+                            Button("Agregar") {
+                                Task {
+                                    let success = await viewModel.registerConversationWithAlamofire(name: newConversationName, userId: userId)
+                                    if (success != nil) {
+                                        newConversationName = ""
+                                        await viewModel.fetchConversations(userId: userId)
+                                    }
                                 }
-                            }.listRowBackground(Color.black)
-                        }.listStyle(PlainListStyle())
-                        
-                        
-                        .onAppear {
-                            viewModel.fetchConversations(userId: 1)
-                        }
-                        
-                        
-                        //SECCION DE MIS CONVERSACIONES
-                    
-                    }
-                    
-                    
-                    if showMenu{
-                        ZStack{
-                            Color(.black)
-                        }
-                        .opacity(0.5)
-                        .onTapGesture {
-                            withAnimation{
-                                showMenu = false
                             }
-                            
+                            .buttonStyle(BorderlessButtonStyle())
+                        }
+                        .padding()
+
+                        Spacer()
+
+                        if isLoading {
+                            ProgressView(messageLoad)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .foregroundColor(Color.white)
+                                .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                .scaleEffect(1.5)
+                        } else {
+                            List {
+                                ForEach(viewModel.conversations, id: \.id) { conversation in
+                                    NavigationLink(destination: GPTView(conversationId: conversation.id)) {
+                                        VStack(alignment: .leading) {
+                                            if isEditing && editingConversationId == conversation.id {
+                                                TextField("Nuevo nombre", text: Binding(
+                                                    get: { updatedConversationName },
+                                                    set: { updatedConversationName = $0 }
+                                                ))
+                                                .foregroundColor(Color.white)
+                                            } else {
+                                                Text("\(conversation.name)")
+                                                    .foregroundColor(Color.white)
+                                            }
+
+                                            Text("Último mensaje: \(conversation.lastMessageAt ?? "No hay mensajes")")
+                                                .font(.subheadline)
+                                                .foregroundColor(.gray)
+                                        }
+                                    }
+                                    .swipeActions {
+                                        Button(role: .destructive) {
+                                            Task {
+                                                let success = await viewModel.deleteConversation(conversationId: conversation.id)
+                                                if success {
+                                                    // Actualizar lista de conversaciones
+                                                }
+                                            }
+                                        } label: {
+                                            Label("Eliminar", systemImage: "trash")
+                                        }
+                                        Button {
+                                            if isEditing && editingConversationId == conversation.id {
+                                                // Guardar cambios
+                                                Task {
+                                                    let success = await viewModel.updateConversationName(conversationId: conversation.id, newName: updatedConversationName)
+                                                    if success {
+                                                        print("Nombre de la conversación actualizado")
+                                                        await viewModel.fetchConversations(userId: userId) // Recargar conversaciones
+                                                    }
+                                                    editingConversationId = nil
+                                                    isEditing = false
+                                                }
+                                            } else if isEditing && editingConversationId != nil {
+                                                // Cancelar edición
+                                                editingConversationId = nil
+                                                isEditing = false
+                                            } else {
+                                                // Iniciar edición
+                                                updatedConversationName = conversation.name
+                                                editingConversationId = conversation.id
+                                                isEditing = true
+                                            }
+                                        } label: {
+                                            Label(isEditing && editingConversationId != nil && editingConversationId == conversation.id ? "Guardar" : "Editar", systemImage: "pencil")
+                                        }
+                                    }
+                                    .listRowBackground(Color.black)
+                                }
+                            }
+                            .listStyle(PlainListStyle())
                         }
                     }
-                    
-                    HStack{
-                        Menu(showMenu: $showMenu)
-                            .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
-                            .frame(width: 300, height:.infinity)
-                            .ignoresSafeArea(.all)
-                        
-                    }
-                    
                 }
             }
-            
-            
-            
-            
-            
-            
-            
-            /////
-            
-           
+            .onAppear {
+                Task {
+                    await viewModel.fetchConversations(userId: userId)
+                    isLoading = viewModel.conversations.isEmpty
+                    if viewModel.conversations.isEmpty {
+                        messageLoad = "No hay datos"
+                    }
+                }
+            }
         }
     }
 }
 
 struct MyChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        return MyChatsView(userId: 1)
+        MyChatsView(userId: 1)
     }
 }

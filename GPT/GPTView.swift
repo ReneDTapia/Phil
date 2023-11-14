@@ -15,9 +15,7 @@ struct GPTView: View {
     
     @StateObject var viewModel = GPTViewModel()
     @State var prompt : String = "Que onda, cómo te llamas puedes ayudarme a identificar mis emociones?"
-    
     @State private var showMenu = false
-    
     @StateObject var chatViewModel = ChatViewModel()
 
     
@@ -33,23 +31,7 @@ struct GPTView: View {
                 Color.black
                     .ignoresSafeArea(.all)
                 VStack(alignment: .leading) {
-                    HStack {
-                        // Botón del menú
-                        Button(action: {
-                            withAnimation {
-                                self.showMenu.toggle()
-                            }
-                        }) {
-                            Image(systemName: "line.horizontal.3")
-                                .font(.title)
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 50, height: 50)
-                    }
-                    .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
+                    
                     Text("Chatea con Phil")
                         .font(.largeTitle)
                         .bold()
@@ -98,31 +80,11 @@ struct GPTView: View {
                 }
                 
                 
-                if showMenu{
-                    ZStack{
-                        Color(.black)
-                    }
-                    .opacity(0.5)
-                    .onTapGesture {
-                        withAnimation{
-                            showMenu = false
-                        }
-                        
-                    }
-                }
-                
-                HStack{
-                    Menu(showMenu: $showMenu)
-                        .offset(x:showMenu ? 0 : UIScreen.main.bounds.width * -1, y:0)
-                        .frame(width: 300, height:.infinity)
-                        .ignoresSafeArea(.all)
-                    
-                }
-                
             }.onAppear {
-                viewModel.fetchUserForm(Users_id: 1)
-                print("datos del usuario")
+            
+                viewModel.fetchUserForm(Users_id: 6)
                 chatViewModel.fetchMessages(conversationId: conversationId) //
+                
             }
 
         }
@@ -132,7 +94,7 @@ struct GPTView: View {
     
     private func sendMessageWithUserContext() async {
         let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Texto: \($0.texto), Percentage: \($0.Percentage)" }.joined(separator: "\n")
-           await viewModel.send(message: prompt, userContext: userContextMessage)
+           await viewModel.send(message: prompt, userContext: userContextMessage, conversationId: conversationId)
        }
 }
 

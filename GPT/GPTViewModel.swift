@@ -20,18 +20,18 @@ final class GPTViewModel : ObservableObject {
     
     @Published var currentMessage : MessageChatGPT = .init(text: "", role: .assistant)
     
-    var openAI = SwiftOpenAI(apiKey: "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")
+    var openAI = SwiftOpenAI(apiKey: "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")
     
     
     
     ///Funcion SEND
     ///
-    func send(message: String, isHidden: Bool = false, userContext: String) async {
+    func send(message: String, isHidden: Bool = false, userContext: String, conversationId : Int) async {
         let optionalParameters = ChatCompletionsOptionalParameters(temperature: 0.7, stream: true, maxTokens: 770)
         
         await MainActor.run {
             let userMessage = MessageChatGPT(text: message, role: .user, hidden: isHidden)
-            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: false)
+            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: true)
             self.messages.append(contextMessage)
             self.messages.append(userMessage)
             
@@ -39,7 +39,7 @@ final class GPTViewModel : ObservableObject {
             self.messages.append(self.currentMessage)
         }
         // Registra el mensaje del usuario en la base de datos
-            registerMessageWithAlamofire(message: message, sentByUser: true, userId: 1, conversationId: 3)
+            registerMessageWithAlamofire(message: message, sentByUser: true, userId: 1, conversationId: conversationId)
         
         do {
             let stream = try await openAI.createChatCompletionsStream(
@@ -50,7 +50,7 @@ final class GPTViewModel : ObservableObject {
             
             for try await response in stream {
                 print(response)
-                await onReceive(newMessage: response)
+                await onReceive(newMessage: response, conversationId:  conversationId)
             }
         } catch {
             print("Error: \(error)")
@@ -61,12 +61,12 @@ final class GPTViewModel : ObservableObject {
     
     
     @MainActor
-        private func onReceive(newMessage: ChatCompletionsStreamDataModel){
+    private func onReceive(newMessage: ChatCompletionsStreamDataModel, conversationId : Int){
             let lastMessage = newMessage.choices[0]
             
             guard lastMessage.finishReason == nil else{
                 print("finished sendin el message pa lol")
-                registerMessageWithAlamofire(message: currentMessage.text, sentByUser: false, userId: 1, conversationId: 3)
+                registerMessageWithAlamofire(message: currentMessage.text, sentByUser: false, userId: 1, conversationId: conversationId)
                 return
             }
             
@@ -85,7 +85,7 @@ final class GPTViewModel : ObservableObject {
     
     // Utiliza APIClient para obtener el formulario del usuario
         func fetchUserForm(Users_id: Int) {
-            APIClient.get(path: "getUserForm/\(Users_id)") { [weak self] (result: Result<[UserForm], AFError>) in
+            APIClient.getN(path: "getUserForm/\(Users_id)") { [weak self] (result: Result<[UserForm], AFError>) in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let forms):
@@ -107,7 +107,7 @@ final class GPTViewModel : ObservableObject {
                 "conversationId": conversationId
             ]
             
-            APIClient.post(path: "addMessage", parameters: parameters) { response in
+            APIClient.postN(path: "addMessage", parameters: parameters) { response in
                 switch response.result {
                 case .success:
                     if let statusCode = response.response?.statusCode, statusCode == 200 {
@@ -121,5 +121,4 @@ final class GPTViewModel : ObservableObject {
             }
         }
 
-    
 }
