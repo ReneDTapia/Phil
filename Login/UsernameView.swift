@@ -2,7 +2,7 @@
 //  UsernameView.swift
 //  Phil
 //
-//  Created by Rene  on 04/10/23.
+//  Created by Pingli  on 04/10/23.
 //
 
 import SwiftUI
@@ -11,8 +11,7 @@ struct UsernameView: View {
 
     @ObservedObject var viewModel: LoginViewModel
     @Environment(\.colorScheme) var colorScheme
-
-
+    @State private var showUsernameView = false
 
     
     var body: some View {
@@ -47,7 +46,9 @@ struct UsernameView: View {
             HStack {
                 // Continue Button
                 Button(action: {
-                    self.viewModel.viewState = .password  // Cambia a la vista de contraseña
+                    self.showUsernameView = true
+                     // Cambia a la vista de contraseña
+                        
                 }) {
                     Text("Continue")
                         .font(Font.custom("Montserrat-Bold", size: 15).weight(.bold))
@@ -64,6 +65,9 @@ struct UsernameView: View {
                 .frame(width: 284, height: 47)
                 .background(Color(red: 0.42, green: 0.43, blue: 0.67))
                 .cornerRadius(10)
+                .fullScreenCover(isPresented: $showUsernameView) {
+                    PasswordView(viewModel: viewModel)
+                }
             }
           
             
@@ -125,6 +129,9 @@ struct UsernameView: View {
                             Spacer()
                         }
                         .padding(.horizontal, 20)
+                        .onAppear{
+                            viewModel.logout() // god dice el BienAndroid
+                        }
     }
             
     

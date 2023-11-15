@@ -12,27 +12,25 @@ struct AnalyticsView: View{
     @State private var showMenu = false
     
     var body: some View{
-        GeometryReader{
-            
-            geometry in
-            ZStack(alignment: .leading) {
-                Color.black
-                    .ignoresSafeArea(.all)
-                VStack(alignment: .leading) {
-                    Text("Metas Diarias")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding(EdgeInsets(top: 20, leading: 20, bottom: 8, trailing: 10))
-                        .foregroundColor(.white)
-                    
-                    // Aqui
-                    BarChart()
-                }.padding()
-                // touchid and faceid instead of logging in, la clave no se envía y le da seguridad
-            }
-            
-            
+        
+        ZStack(alignment: .leading) {
+            Color.black
+                .ignoresSafeArea(.all)
+            VStack(alignment: .leading) {
+                Text("Metas Diarias")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(EdgeInsets(top: 20, leading: 20, bottom: 8, trailing: 10))
+                    .foregroundColor(.white)
+                
+                // Aqui
+                BarChart()
+            }.padding()
+            // touchid and faceid instead of logging in, la clave no se envía y le da seguridad
         }
+        
+        
+        
         
     }
 }
@@ -42,10 +40,10 @@ struct BarChart: View {
     let minimenu: [String] = ["10", "30", "all"]
     @State private var selectedIndex: Int? = nil
     
-//    var values: [CGFloat] {
-//        return viewModel.emotions.map { CGFloat($0.Percentage) }
-//    }
-    var values: [CGFloat] = [80, 10, 10, 50, 70]
+    var values: [CGFloat] {
+        return viewModel.emotions.map { CGFloat($0.Percentage) }
+    }
+    //    var values: [CGFloat] = [80, 10, 10, 50, 70]
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -73,7 +71,7 @@ struct BarChart: View {
                                             .frame(width: geometry.size.width/20, height: geometry.size.width/20)
                                             .padding(.horizontal)
                                         Text(minimenu[i]).font(.custom("Inter Semi Bold", size: 10)).foregroundColor(Color.white).tracking(-0.41).multilineTextAlignment(.center)
-
+                                        
                                     }
                                 }
                             }
@@ -97,7 +95,7 @@ struct BarChart: View {
                             }.padding(.trailing, 44)
                         }
                     }.frame(width: geometry.size.width, height: geometry.size.height/2.2, alignment: .top)
-
+                    
                     
                     HStack(spacing: geometry.size.width/10.8) {
                         
@@ -142,6 +140,11 @@ struct BarChart: View {
             print("Emotions fetched")
         }
     }
+}
+
+
+#Preview{
+    TabBarView(user: 1)
 }
 
 

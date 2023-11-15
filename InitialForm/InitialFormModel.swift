@@ -8,7 +8,7 @@
 struct InitialFormModel: Codable, Identifiable, Hashable {
     let id: Int
     let texto: String
-    let order: Int
+    let videoURL: String
 
     // Implementación de Hashable
     static func == (lhs: InitialFormModel, rhs: InitialFormModel) -> Bool {
