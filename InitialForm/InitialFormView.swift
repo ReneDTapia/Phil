@@ -234,6 +234,12 @@ struct ProgressBarView : View {
 }
 
 
-#Preview{
-    InitialFormView(userId: 1)
+//#Preview{
+    //InitialFormView(userId: 1)
+//}
+
+struct InitialFormView_Previews: PreviewProvider {
+    static var previews: some View {
+        InitialFormView(userId: 1)
+    }
 }

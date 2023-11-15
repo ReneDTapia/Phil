@@ -20,13 +20,13 @@ final class GPTViewModel : ObservableObject {
     
     @Published var currentMessage : MessageChatGPT = .init(text: "", role: .assistant)
     
-    var openAI = SwiftOpenAI(apiKey: "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")
+    var openAI = SwiftOpenAI(apiKey: "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")
     
     
     
     ///Funcion SEND
     ///
-    func send(message: String, isHidden: Bool = false, userContext: String, conversationId : Int) async {
+    func send(message: String, isHidden: Bool = false, userContext: String, conversationId : Int, userId : Int) async {
         let optionalParameters = ChatCompletionsOptionalParameters(temperature: 0.7, stream: true, maxTokens: 770)
         
         await MainActor.run {
@@ -39,7 +39,7 @@ final class GPTViewModel : ObservableObject {
             self.messages.append(self.currentMessage)
         }
         // Registra el mensaje del usuario en la base de datos
-            registerMessageWithAlamofire(message: message, sentByUser: true, userId: 1, conversationId: conversationId)
+            registerMessageWithAlamofire(message: message, sentByUser: true, userId: userId, conversationId: conversationId)
         
         do {
             let stream = try await openAI.createChatCompletionsStream(
@@ -50,7 +50,7 @@ final class GPTViewModel : ObservableObject {
             
             for try await response in stream {
                 print(response)
-                await onReceive(newMessage: response, conversationId:  conversationId)
+                await onReceive(newMessage: response, conversationId:  conversationId, userId : userId)
             }
         } catch {
             print("Error: \(error)")
@@ -61,12 +61,12 @@ final class GPTViewModel : ObservableObject {
     
     
     @MainActor
-    private func onReceive(newMessage: ChatCompletionsStreamDataModel, conversationId : Int){
+    private func onReceive(newMessage: ChatCompletionsStreamDataModel, conversationId : Int,  userId : Int){
             let lastMessage = newMessage.choices[0]
             
             guard lastMessage.finishReason == nil else{
                 print("finished sendin el message pa lol")
-                registerMessageWithAlamofire(message: currentMessage.text, sentByUser: false, userId: 1, conversationId: conversationId)
+                registerMessageWithAlamofire(message: currentMessage.text, sentByUser: false, userId: userId, conversationId: conversationId)
                 return
             }
             

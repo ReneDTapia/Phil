@@ -95,7 +95,7 @@ struct GPTView: View {
     
     private func sendMessageWithUserContext() async {
         let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Texto: \($0.texto), Percentage: \($0.Percentage)" }.joined(separator: "\n")
-           await viewModel.send(message: prompt, userContext: userContextMessage, conversationId: conversationId)
+        await viewModel.send(message: prompt, userContext: userContextMessage, conversationId: conversationId, userId: userId)
        }
 }
 

@@ -313,12 +313,12 @@ struct Menu: View {
 
     
 
-//struct Contents_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentsView( user: 37 )
-//    }
-//}
-
-#Preview{
-    TabBarView(user: 1)
+struct Contents_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentsView( user: 37 )
+    }
 }
+
+//#Preview{
+   // TabBarView(user: 1)
+//}
