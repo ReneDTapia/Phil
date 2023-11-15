@@ -28,26 +28,26 @@ struct MainView: View {
     
     
     var body: some View {
-        if loginViewModel.isLoggedIn{
-            TabBarView(user: 1)
-        }
-        UsernameView(viewModel: loginViewModel)
-//            if loginViewModel.isLoggedIn {
-//                // Si el usuario está loggeado, muestra la TabBarView
-//                TabBarView(user: 1)
-//            } else {
-//                // Si no está loggeado, muestra la vista de login o registro
-//                switch loginViewModel.viewState {
-//                case .username:
-//                    UsernameView(viewModel: loginViewModel)
-//                case .password:
-//                    PasswordView(viewModel: loginViewModel)
-//                case .signUp:
-//                    SignUpView(viewModel: signUpViewModel)
-//                default:
-//                    Text("Bienvenido a la app de Phil")
-//                }
-//            }
+//        if loginViewModel.isLoggedIn{
+//            TabBarView(user: 1)
+//        }
+//        UsernameView(viewModel: loginViewModel)
+            if loginViewModel.isLoggedIn {
+                // Si el usuario está loggeado, muestra la TabBarView
+                TabBarView(user: 1)
+            } else {
+                // Si no está loggeado, muestra la vista de login o registro
+                switch loginViewModel.viewState {
+                case .username:
+                    UsernameView(viewModel: loginViewModel)
+                case .password:
+                    PasswordView(viewModel: loginViewModel)
+                case .signUp:
+                    SignUpView(viewModel: signUpViewModel)
+                default:
+                    Text("Bienvenido a la app de Phil")
+                }
+            }
         }
 }
         
