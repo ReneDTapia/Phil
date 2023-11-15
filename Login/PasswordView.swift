@@ -11,12 +11,16 @@ import SwiftUI
 struct PasswordView: View {
     @ObservedObject var viewModel: LoginViewModel
     @Environment(\.colorScheme) var colorScheme
+    
 
     var body: some View {
+        
         let backgroundColor = colorScheme == .dark ? Color.black : Color.white
         let textColor = colorScheme == .dark ? Color.white : Color.black
         let lineColor = colorScheme == .dark ? Color.white : Color.black
-
+        if viewModel.isLoggedIn{
+            TabBarView(user: 37)
+        }
 
 
         return VStack(spacing: 20) {
