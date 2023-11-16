@@ -46,10 +46,16 @@ struct MyChatsView: View {
                             Button("Agregar") {
                                 Task {
                                     let success = await viewModel.registerConversationWithAlamofire(name: newConversationName, userId: userId)
+                                    
+                                        
                                     if (success != nil) {
                                         newConversationName = ""
                                         showingAddConversation = false
                                         await viewModel.fetchConversations(userId: userId)
+                                        isLoading = viewModel.conversations.isEmpty
+                                    if viewModel.conversations.isEmpty {
+                                        messageLoad = "No hay datos"
+                                    }
                                     }
                                 }
                             }
@@ -89,7 +95,14 @@ struct MyChatsView: View {
                                         Button(role: .destructive) {
                                             Task {
                                                 let success = await viewModel.deleteConversation(conversationId: conversation.id)
+                                                
+                                                
                                                 if success {
+                                                        await viewModel.fetchConversations(userId: userId)
+                                                        isLoading = viewModel.conversations.isEmpty
+                                                        if viewModel.conversations.isEmpty {
+                                                            messageLoad = "No hay datos"
+                                                        }
                                                     // Actualizar lista de conversaciones
                                                 }
                                             }
@@ -104,6 +117,11 @@ struct MyChatsView: View {
                                                     if success {
                                                         print("Nombre de la conversación actualizado")
                                                         await viewModel.fetchConversations(userId: userId) // Recargar conversaciones
+                                                        await viewModel.fetchConversations(userId: userId)
+                                                        isLoading = viewModel.conversations.isEmpty
+                                                    if viewModel.conversations.isEmpty {
+                                                        messageLoad = "No hay datos"
+                                                    }
                                                     }
                                                     editingConversationId = nil
                                                     isEditing = false

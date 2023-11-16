@@ -95,7 +95,7 @@ struct TabBarView: View {
                         .tag(2)
                         .background(Color.black)
                     
-                    MyChatsView(userId: 1)
+                    MyChatsView(userId: TokenHelper.getUserID() ?? 0)
                         .tabItem {
                             Image(systemName: selectedTab == 3 ? "message.fill" : "message")
                                 .environment(\.symbolVariants, .none)
