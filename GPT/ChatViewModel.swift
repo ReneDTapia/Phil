@@ -58,16 +58,18 @@ class ChatViewModel: ObservableObject {
         }
     
     func deleteConversation(conversationId: Int) async -> Bool {
-            do {
-                try await APIClient.delete(path: "deleteConversation/\(conversationId)")
-                print(conversationId)
-                return true
-            } catch {
-                print("Error deleting conversation: \(error.localizedDescription)")
-                print(conversationId)
-                return false
+        do {
+            try await APIClient.delete(path: "deleteConversation/\(conversationId)")
+            DispatchQueue.main.async { [weak self] in
+                self?.conversations.removeAll { $0.id == conversationId }
             }
+            return true
+        } catch {
+            print("Error deleting conversation: \(error.localizedDescription)")
+            return false
         }
+    }
+
     
     func updateConversationName(conversationId: Int, newName: String) async -> Bool {
             let parameters: Parameters = ["name": newName]
