@@ -1,184 +1,237 @@
 import SwiftUI
 
-struct Day: Identifiable {
-    let id = UUID()
-    let date: Date
-}
-
-struct DayView: View {
-    var day: Day
-    @Binding var selectedDate: Date
-    @Environment(\.calendar) var calendar
-
-    var body: some View {
-        Button(action: {
-            self.selectedDate = day.date
-        }) {
-            VStack {
-                Text(weekdayText)
-                    .font(.system(size: 10))
-                    .foregroundColor(.gray)
-
-                ZStack {
-                    Circle()
-                        .fill(isSelected ? Color.blue : Color.white.opacity(0.8))
-                        .frame(width: 30, height: 30)
-
-                    Text(dayText)
-                        .bold()
-                        .foregroundColor(isSelected ? .white : .primary)
-                }
-            }
-        }
-        .frame(width: 44, height: 60)
-    }
-
-    var isSelected: Bool {
-        calendar.isDate(day.date, inSameDayAs: selectedDate)
-    }
-
-    var dayText: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d"
-        return formatter.string(from: day.date)
-    }
-
-    var weekdayText: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE"
-        return formatter.string(from: day.date).uppercased()
-    }
-}
-
-struct WeekView: View {
-    @Binding var selectedDate: Date
-    @Environment(\.calendar) var calendar
-
-    var body: some View {
-        VStack {
-            Text(monthText)
-                .font(.title)
-                .padding(.bottom, 4)
-                .foregroundColor(Color.purple)
-
-            HStack {
-                Button(action: {
-                    self.adjustDate(by: -1)
-                }) {
-                    Image(systemName: "chevron.left.circle.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(Color.purple)
-                }
-
-                HStack(spacing: 0) {
-                    ForEach(daysInWeek(for: selectedDate)) { day in
-                        DayView(day: day, selectedDate: $selectedDate)
-                    }
-                }
-
-                Button(action: {
-                    self.adjustDate(by: 1)
-                }) {
-                    Image(systemName: "chevron.right.circle.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(Color.purple)
-                }
-            }
-        }
-        .padding(.bottom, 10)
-    }
-
-    func adjustDate(by weeks: Int) {
-        if let newDate = calendar.date(byAdding: .weekOfYear, value: weeks, to: selectedDate) {
-            selectedDate = newDate
-        }
-    }
-
-    func daysInWeek(for date: Date) -> [Day] {
-        var days: [Day] = []
-        guard let weekRange = calendar.range(of: .weekday, in: .weekOfYear, for: date) else { return [] }
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date))!
-        for offset in weekRange {
-            if let weekdayDate = calendar.date(byAdding: .day, value: offset - 1, to: startOfWeek) {
-                days.append(Day(date: weekdayDate))
-            }
-        }
-        return days
-    }
-
-    var monthText: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM"
-        return formatter.string(from: selectedDate)
-    }
-}
-
 struct PictureView: View {
-    @ObservedObject var pictureVM = PicturesViewModel()
-    @State private var selectedDate: Date = Date()
-
-    // Suponiendo que cada imagen ocupe aproximadamente la mitad de la pantalla menos el padding y el espacio entre imágenes.
-    private let imageWidth = (UIScreen.main.bounds.width / 2) - (16 + 8) // 16 de padding y 8 de spacing
-
+    @StateObject var viewModel = PictureViewModel()
+    @State private var isMonthYearSelected = false
+    private let columns = [GridItem](repeating: .init(.flexible()), count: 4)
     var body: some View {
+        
         ZStack {
-            Color.black.ignoresSafeArea()
-            VStack{
-                Text("Your Photos")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
-                    .padding()
+            Color.black.edgesIgnoringSafeArea(.all)
 
-                WeekView(selectedDate: $selectedDate)
+            
+                VStack(alignment: .leading) {
+                    
+                    Text("Mis fotos")
+                        .font(.custom("Roboto Bold", size: 34))
+                        .foregroundColor(Color.white)
+                        .padding([.leading, .top])
+                    Spacer()
+                        .frame(height: 10)
+                    HStack {
+                        Button(action: { viewModel.previousMonth() }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Color(red: 0.42, green: 0.43, blue: 0.67))
+                                .clipShape(Circle())
+                        }
 
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                        ForEach(pictureVM.pictures) { picture in
-                            AsyncImage(url: URL(string: picture.url)) { phase in
-                                switch phase {
-                                case .success(let image):
-                                    image.resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: imageWidth, height: 200)
-                                        .cornerRadius(10)
-                                case .failure(_):
-                                    Image(systemName: "photo") // Puedes personalizar la imagen de error.
-                                        .resizable()
-                                        .frame(width: imageWidth, height: 200)
-                                        .cornerRadius(10)
-                                        .foregroundColor(.gray)
-                                case .empty:
-                                    Image(systemName: "photo") // Imagen de placeholder.
-                                        .resizable()
-                                        .frame(width: imageWidth, height: 200)
-                                        .cornerRadius(10)
-                                        .foregroundColor(.gray)
-                                @unknown default:
-                                    EmptyView()
-                                }
-                            }
-                            .frame(height: 200) // Esto mantiene el tamaño de la imagen fijo
+                        Spacer()
+
+                        Text(monthYearFormatter.string(from: viewModel.currentDate))
+                        .font(.custom("Roboto Bold", size: 32))
+                        .foregroundColor(Color(.white))
+                        .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 4)
+                        .onTapGesture {
+                            isMonthYearSelected.toggle()
+                        }
+                        
+                        
+
+                        Spacer()
+
+                        Button(action: { viewModel.nextMonth() }) {
+                            Image(systemName: "chevron.right")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .frame(width: 44, height: 44)
+                                .background(Color(red: 0.42, green: 0.43, blue: 0.67))
+                                .clipShape(Circle())
                         }
                     }
                     .padding(.horizontal)
+                ScrollView {
+                    ForEach(groupedPhotos(), id: \.key) { (date, photos) in
+                      VStack {
+                          Text(formatDateString(date))
+                              .font(.custom("Roboto Thin Italic", size: 17))
+                              .foregroundColor(Color.white)
+                              .frame(maxWidth: .infinity, alignment: .leading)
+                              .padding(.vertical, 5)
+                              .padding(.leading)
+
+                          LazyVGrid(columns: columns) {
+                              ForEach(photos, id: \.id) { photo in
+                                  if let url = URL(string: photo.url) {
+                                      AsyncImage(url: url) { phase in
+                                          if let image = phase.image {
+                                              image.resizable() // Redimensiona la imagen cargada
+                                                   .aspectRatio(contentMode: .fill)
+                                                   .frame(width: 82, height: 143)
+                                                   .cornerRadius(20)
+                                                   .clipped()
+                                          } else if phase.error != nil {
+                                              Color.red // Puede reemplazar esto con algún indicador de error
+                                                   .frame(width: 82, height: 143)
+                                                   .cornerRadius(20)
+                                          } else {
+                                              ProgressView() // Muestra un indicador de carga
+                                                   .frame(width: 82, height: 143)
+                                                   .background(Color.gray.opacity(0.3))
+                                                   .cornerRadius(20)
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                    }
                 }
             }
         }
+        .overlay(
+            
+            isMonthYearSelected ? BottomRectangleView(date: $viewModel.currentDate) {
+                isMonthYearSelected = false // Esto cierra la vista
+            } : nil
+        )
         .onAppear {
-            fetchPictures()
+            viewModel.fetchPhotos(for: viewModel.currentDate)
         }
-        .onChange(of: selectedDate) { _ in
-            pictureVM.pictures = []
-            fetchPictures() }
+        .onReceive(viewModel.$currentDate) { newDate in
+          viewModel.fetchPhotos(for: newDate)
+        }
     }
-
-    func fetchPictures() {
+    private func groupedPhotos() -> [(key: String, value: [Picture])] {
+        let grouped = Dictionary(grouping: viewModel.photos, by: { $0.Date })
+        return grouped.map { ($0.key, $0.value) }
+               .sorted { $0.key > $1.key } // Ordenar por fecha, si es necesario
+    }
+    private func formatDateString(_ dateString: String) -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd" // Asegúrate de que esto coincida con el formato de tu fecha en String
+        if let date = inputFormatter.date(from: dateString) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "d 'de' MMM, yyyy"
+            outputFormatter.locale = Locale(identifier: "es_ES") // Para obtener el mes en español
+            return outputFormatter.string(from: date)
+        } else {
+            return dateString // Devuelve la cadena original si no se puede formatear
+        }
+    }
+    private var monthYearFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let dateString = formatter.string(from: selectedDate)
-        pictureVM.fetchPictures(user: 1, date: dateString)
+        formatter.dateFormat = "MMMM, yyyy"
+        return formatter
+    }
+}
+
+struct BottomRectangleView: View {
+    @Binding var date: Date // Usa un Binding para actualizar la fecha
+    let months = Calendar.current.monthSymbols.map { String($0.prefix(3)) } // Nombres abreviados de los meses
+    var onClose: () -> Void
+
+    var body: some View {
+        ZStack{
+            Color.black.opacity(0.50)
+                .edgesIgnoringSafeArea(.all)
+                .onTapGesture {
+                    onClose()
+                }
+            VStack {
+                HStack {
+                    Button(action: { changeYear(by: -1) }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.white)
+                    }
+                    .padding(.leading, 10)
+                    
+                    Spacer()
+                    
+                    Text(yearString(from: date))
+                        .font(.custom("Roboto Thin", size: 23))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button(action: { changeYear(by: 1) }) {
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.white)
+                    }
+                    .padding(.trailing, 10)
+                }
+                .padding(.vertical, 10)
+   
+                LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 4), spacing: 15) {
+                  ForEach(months.indices, id: \.self) { index in
+                      let month = months[index]
+                      Button(action: { selectMonth(month) }) {
+                          ZStack {
+                              if currentMonthIndex() == index {
+                                Circle()
+                                    .fill(Color(red: 0.42, green: 0.43, blue: 0.67)) // Círculo completamente morado para el mes seleccionado
+                              } else {
+                                Circle()
+                                    .fill(Color(red: 0.250980, green: 0.250980, blue: 0.250980)) // Color de fondo para los no seleccionados
+                                    .overlay(
+                                        Circle()
+                                            .strokeBorder(Color.white, lineWidth: 1) // Delineado blanco para los no seleccionados
+                                    )
+                              }
+                              
+                              Text(month)
+                                  .foregroundColor(.white)
+                          }
+                      }
+                      .frame(width: 47, height: 47)
+                  }
+                }
+                .padding(.bottom, 20)
+                .padding(.horizontal, 45)
+            }
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color(.black))
+                    // Añadir un borde blanco alrededor del rectángulo
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.white, lineWidth: 1)
+                    )
+            )
+            .padding(.horizontal, 20)
+            .padding(.bottom, 50)
+           
+        }
+        
+    }
+    private func changeYear(by amount: Int) {
+        if let newDate = Calendar.current.date(byAdding: .year, value: amount, to: date) {
+            date = newDate
+        }
+    }
+    private func currentMonthIndex() -> Int {
+      let calendar = Calendar.current
+      return calendar.component(.month, from: date) - 1 // Los meses están indexados a partir de 1
+    }
+    private func selectMonth(_ month: String) {
+        if let monthIndex = months.firstIndex(of: month) {
+            var components = Calendar.current.dateComponents([.year, .month, .day], from: date)
+            components.month = monthIndex + 1
+
+            // Asegúrate de mantener el mismo año
+            if let newDate = Calendar.current.date(from: components) {
+                date = newDate
+            }
+        }
+        onClose()
+    }
+    private func yearString(from date: Date) -> String {
+      let formatter = DateFormatter()
+      formatter.dateFormat = "yyyy" // Formato que solo muestra el año
+      return formatter.string(from: date)
     }
 }
 

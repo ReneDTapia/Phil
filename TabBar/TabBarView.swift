@@ -11,7 +11,7 @@ import SwiftUI
 struct TabBarView: View {
     
     @State private var selectedTab: Int = 0 // Agregar una propiedad de estado para rastrear la pestaña seleccionada
-    
+  
     @StateObject var VM = LoginViewModel()
     @State private var showMenu = false
     @StateObject private var cameraViewModel = CameraViewController()

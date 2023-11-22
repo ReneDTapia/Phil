@@ -1,45 +1,66 @@
-//
-//  PicturesViewModel.swift
-//  Phil
-//
-//  Created by Jesús Daniel Martínez García on 18/10/23.
-//
-
 import Foundation
+import Alamofire
 
-class PicturesViewModel: ObservableObject {
-    
-    @Published var pictures: [Picture] = []
-    
-    func fetchPictures(user: Int, date: String) {
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/GetPictures/\(user)/\(date)") else {
-            print("Invalid URL")
+class PictureViewModel: ObservableObject {
+    @Published var photos: [Picture] = []
+    private var userID: Int?
+    @Published var currentDate = Date()
+
+    init() {
+        self.userID = 1 // Asegúrate de configurar esto adecuadamente
+        fetchPhotos(for: currentDate)
+    }
+
+    func fetchPhotos(for date: Date) {
+        self.photos = []
+        guard let userID = userID else {
+            print("UserID no disponible")
             return
         }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Error fetching data: \(error.localizedDescription)")
-                return
-            }
 
-            if let data = data {
-                do {
-                    let fetchedPictures = try JSONDecoder().decode([Picture].self, from: data)
-                    DispatchQueue.main.async {
-                        self.pictures = fetchedPictures
-                        print("Pictures: \(fetchedPictures)")
-                    }
-                } catch {
-                    print("Decoding error: \(error)")
+        let yearFormatter = DateFormatter()
+        yearFormatter.dateFormat = "yyyy"
+        let monthFormatter = DateFormatter()
+        monthFormatter.dateFormat = "MM"
+        
+        let yearString = yearFormatter.string(from: date)
+        let monthString = monthFormatter.string(from: date)
+
+        let urlString = "https://philbackend.onrender.com/api/auth/GetPicturesMonth/\(userID)/\(yearString)/\(monthString)"
+
+        AF.request(urlString).response { response in
+            switch response.result {
+            case .success(let data):
+                if let data = data, let string = String(data: data, encoding: .utf8) {
+                    print("Respuesta en bruto: \(string)")
+                    self.decodePictures(data: data)
                 }
+            case .failure(let error):
+                print("Error al realizar la petición: \(error.localizedDescription)")
             }
-        }.resume()
+        }
     }
-    
-    func clearPictures() {
-            pictures = []
+
+    func nextMonth() {
+        guard let nextMonth = Calendar.current.date(byAdding: .month, value: 1, to: currentDate) else { return }
+        currentDate = nextMonth
+        fetchPhotos(for: currentDate)
     }
-    
-    
+
+    func previousMonth() {
+        guard let prevMonth = Calendar.current.date(byAdding: .month, value: -1, to: currentDate) else { return }
+        currentDate = prevMonth
+        fetchPhotos(for: currentDate)
+    }
+    private func decodePictures(data: Data) {
+        let decoder = JSONDecoder()
+        do {
+            let pictures = try decoder.decode([Picture].self, from: data)
+            DispatchQueue.main.async {
+                self.photos = pictures
+            }
+        } catch {
+            print("Error al decodificar: \(error)")
+        }
+    }
 }
