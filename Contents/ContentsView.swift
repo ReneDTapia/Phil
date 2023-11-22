@@ -246,7 +246,7 @@ struct Menu: View {
                             .background(Color(hex:"F6F6FE"))
                             .padding(.bottom,-10)
                             .fullScreenCover(isPresented: $showInitialFormView) {
-                                InitialFormView(userId: user)
+                                UserView(userId: user)
                             }
                             Button(action: {
                                 self.showInitialFormView = true
