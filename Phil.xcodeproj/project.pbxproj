@@ -81,6 +81,8 @@
 		CBEC68BD2AFE9F350042A309 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC68BC2AFE9F350042A309 /* AnalyticsView.swift */; };
 		CBEC68BF2AFE9F610042A309 /* AnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC68BE2AFE9F610042A309 /* AnalyticsViewModel.swift */; };
 		CBEC68C12AFE9F770042A309 /* AnalyticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC68C02AFE9F770042A309 /* AnalyticsModel.swift */; };
+		FB2524B72B0F054D00A0224D /* GoalsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FB2524B52B0F054D00A0224D /* GoalsModel.xcdatamodeld */; };
+		FB2524B92B0F063600A0224D /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2524B82B0F063600A0224D /* DataController.swift */; };
 		FB5BC7692B0C89210091190C /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5BC7682B0C89210091190C /* UserViewModel.swift */; };
 		FB5BC76B2B0C89DB0091190C /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5BC76A2B0C89DB0091190C /* UserView.swift */; };
 		FB5BC76D2B0C8A810091190C /* User2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5BC76C2B0C8A810091190C /* User2.swift */; };
@@ -170,6 +172,8 @@
 		CBEC68BC2AFE9F350042A309 /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		CBEC68BE2AFE9F610042A309 /* AnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViewModel.swift; sourceTree = "<group>"; };
 		CBEC68C02AFE9F770042A309 /* AnalyticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsModel.swift; sourceTree = "<group>"; };
+		FB2524B62B0F054D00A0224D /* GoalsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GoalsModel.xcdatamodel; sourceTree = "<group>"; };
+		FB2524B82B0F063600A0224D /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		FB5BC7682B0C89210091190C /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		FB5BC76A2B0C89DB0091190C /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		FB5BC76C2B0C8A810091190C /* User2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User2.swift; sourceTree = "<group>"; };
@@ -269,6 +273,7 @@
 		52DB5A6B2ACD236B004611A7 = {
 			isa = PBXGroup;
 			children = (
+				FB2524B42B0F051A00A0224D /* Goals */,
 				FB5BC7652B0C73690091190C /* User */,
 				CBEC68BB2AFE9F190042A309 /* Analytics */,
 				BEDB38182AFE3BEB005D1FAC /* Model */,
@@ -446,6 +451,15 @@
 				CBEC68C02AFE9F770042A309 /* AnalyticsModel.swift */,
 			);
 			path = Analytics;
+			sourceTree = "<group>";
+		};
+		FB2524B42B0F051A00A0224D /* Goals */ = {
+			isa = PBXGroup;
+			children = (
+				FB2524B52B0F054D00A0224D /* GoalsModel.xcdatamodeld */,
+				FB2524B82B0F063600A0224D /* DataController.swift */,
+			);
+			path = Goals;
 			sourceTree = "<group>";
 		};
 		FB5BC7652B0C73690091190C /* User */ = {
@@ -666,6 +680,8 @@
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
 				BE8B015C2ADFB480003909BB /* ChatViewModel.swift in Sources */,
 				52DB5ABF2ACE22A9004611A7 /* SignUpViewModel.swift in Sources */,
+				FB2524B92B0F063600A0224D /* DataController.swift in Sources */,
+				FB2524B72B0F054D00A0224D /* GoalsModel.xcdatamodeld in Sources */,
 				FB5BC76D2B0C8A810091190C /* User2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1063,6 +1079,19 @@
 			productName = SwiftOpenAI;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		FB2524B52B0F054D00A0224D /* GoalsModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FB2524B62B0F054D00A0224D /* GoalsModel.xcdatamodel */,
+			);
+			currentVersion = FB2524B62B0F054D00A0224D /* GoalsModel.xcdatamodel */;
+			path = GoalsModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 52DB5A6C2ACD236B004611A7 /* Project object */;
 }
