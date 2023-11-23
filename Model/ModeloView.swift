@@ -11,23 +11,28 @@ struct ModeloView: View {
     @StateObject private var cameraViewModel = CameraViewController()
 
     var body: some View {
-        VStack {
-            Text(classificationLabel)
-                .padding()
+        ZStack{
+            Color.black
+                .ignoresSafeArea(.all)
+            VStack {
+                Text(classificationLabel)
+                    .padding()
 
-            if let image = image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
+                if let image = image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                }
+
+                Button("Tomate la foto") {
+                    self.showImagePicker = true
+                }
             }
-
-            Button("Tomate la foto") {
-                self.showImagePicker = true
+            .sheet(isPresented: $showImagePicker) {
+                ImagePicker(image: self.$image, classificationLabel: self.$classificationLabel, cameraViewModel: cameraViewModel)
             }
         }
-        .sheet(isPresented: $showImagePicker) {
-            ImagePicker(image: self.$image, classificationLabel: self.$classificationLabel, cameraViewModel: cameraViewModel)
-        }
+        
     }
 }
 

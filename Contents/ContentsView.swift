@@ -205,6 +205,7 @@ struct Menu: View {
     @StateObject var LoginVM = LoginViewModel()
     let user: Int
     @State private var showInitialFormView = false
+    @State private var showPerfilView = false
     @State private var showUserView = false
     @ObservedObject var loginViewModel = LoginViewModel()
 
@@ -232,7 +233,7 @@ struct Menu: View {
                 VStack(alignment:.leading){
                     NavigationStack{
                             Button(action: {
-                                self.showInitialFormView = true
+                                self.showPerfilView = true
                             }) {
                                 HStack{
                                     Image(systemName: "person.fill")
@@ -245,14 +246,14 @@ struct Menu: View {
                             }
                             .background(Color(hex:"F6F6FE"))
                             .padding(.bottom,-10)
-                            .fullScreenCover(isPresented: $showInitialFormView) {
+                            .fullScreenCover(isPresented: $showPerfilView) {
                                 UserView(userId: user)
                             }
                             Button(action: {
                                 self.showInitialFormView = true
                             }) {
                                 HStack{
-                                    Image(systemName: "pencil.and.list.clipboard")
+                                    Image(systemName: "square.and.pencil")
                                     Text("Mi estado")
                                     Spacer()
                                 }
@@ -270,7 +271,9 @@ struct Menu: View {
                             
                             Button(action: {
                                 LoginVM.logout()
+                                LoginVM.viewState = .username
                                 self.showUserView = true
+                                UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: MainView())
                             }) {
                                 HStack{
                                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -315,7 +318,7 @@ struct Menu: View {
 
 struct Contents_Previews: PreviewProvider {
     static var previews: some View {
-        ContentsView( user: 37 )
+        TabBarView( user: 37 )
     }
 }
 

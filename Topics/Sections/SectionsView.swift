@@ -2,6 +2,7 @@ import SwiftUI
 import WebKit
 
 struct SectionsView: View {
+    @Environment(\.managedObjectContext) var moc
     let topicID : Int
     let topicTitle: String
     let user: Int
@@ -66,9 +67,12 @@ struct SectionsView: View {
                                 }
                                 HStack{
                                     Spacer()
+                                    
                                     Button(action: {
                                         
                                         if exist == true{
+                                            
+                                            
                                             checkButton.toggle()
                                             print(checkButton)
                                             TopicsVM.UpdateDone(user: user, topic: topicID, done: checkButton)
@@ -131,6 +135,8 @@ struct SectionsView: View {
         }
             .navigationBarBackButtonHidden(true)
             .onAppear{
+                
+                
                 checkButton = isChecked
                 Task{
                     do{

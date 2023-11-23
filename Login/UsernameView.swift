@@ -54,7 +54,7 @@ struct UsernameView: View {
                         .font(Font.custom("Montserrat-Bold", size: 15).weight(.bold))
                         .foregroundColor(Color(red: 0.96, green: 0.96, blue: 1))
                         // center horizontally without affecting the arrow
-                        .padding(.leading, 100)
+                        .padding(.leading, 90)
                     
                     Spacer()
                     Image(systemName: "chevron.forward")
