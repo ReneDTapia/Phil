@@ -145,9 +145,9 @@ struct QuestionBox: View {
             ForEach(viewModel.formGroups.indices, id: \.self) { index in
                 ForEach(viewModel.formGroups[index], id: \.self) { form in
                     ZStack{
-                        RoundedRectangle(cornerRadius: 18)
+                        RoundedRectangle(cornerRadius: 18) 
                             .fill(Color(hex: "FFFFFF"))
-                            .frame(width: 345, height: 200)
+                            .frame(width: 365, height: 300)
                             .shadow(color: Color(hex:"000000").opacity(0.1), radius:4, x:0, y:0)
                         VStack(alignment: .center){
                             SliderRow(form: form, boxColor: boxColors[form.id % boxColors.count], viewModel: viewModel)
@@ -168,7 +168,7 @@ struct SliderRow: View {
     let boxColor: Color
     @ObservedObject var viewModel: InitialFormViewModel
     @State private var sliderValue = 5.0
-    @State private var playvideo = false
+    @State private var playvideo = true
     
     var body: some View {
         VStack(alignment:.center){
@@ -176,8 +176,9 @@ struct SliderRow: View {
             if playvideo == true{
                 
                 Video(url: form.videoURL, autoplay: 1)
-                    .frame(width: 100, height: 60)
+                    .frame(width: 330, height: 200)
                     .padding(.bottom,10)
+                    .cornerRadius(18)
             }
             else{
                 Image(systemName: "video")

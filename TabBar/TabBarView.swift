@@ -58,8 +58,6 @@ struct TabBarView: View {
                             .foregroundColor(.white)
                     }
                     
-                    Text(String(TokenHelper.getUserID() ?? 0))
-                            .foregroundColor(.white)
                     Spacer()
                     Circle()
                         .fill(Color.white)
