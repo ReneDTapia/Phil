@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AnalyticsView: View{
     @State private var showMenu = false
+    let user : Int
     
     var body: some View{
         
@@ -24,7 +25,7 @@ struct AnalyticsView: View{
                     .foregroundColor(.white)
                 
                 // Aqui
-                BarChart()
+                BarChart(user: user)
                     .frame(height: 600)
             }.padding()
             // touchid and faceid instead of logging in, la clave no se envía y le da seguridad
@@ -37,10 +38,17 @@ struct AnalyticsView: View{
 }
 
 struct BarChart: View {
+    let user: Int
     @ObservedObject var viewModel = AnalyticsViewModel()
     let minimenu: [String] = ["10", "30", "all"]
     @State private var selectedIndex: Int? = nil
-    
+    let objectivesArray: [String] = [
+            "Paputilin",
+            "Hablar con Phil",
+            "Aprender algo nuevo en contenidos",
+            "Superpendejo"
+            // ... Puedes agregar más objetivos según sea necesario
+        ]
     var values: [CGFloat] {
         return viewModel.emotions.map { CGFloat($0.Percentage) }
     }
@@ -97,7 +105,7 @@ struct BarChart: View {
                                     }
                                 }.padding(.trailing, 44)
                             }
-                        }.frame(width: geometry.size.width, height: geometry.size.height/2.2, alignment: .top)
+                        }.frame(width: geometry.size.width, height: geometry.size.height/2.5, alignment: .top)
                         
                         
                         HStack(spacing: geometry.size.width/10.8) {
@@ -139,25 +147,23 @@ struct BarChart: View {
                     }
                 }
                 ZStack {
-                    RoundedRectangle(cornerRadius: 17)
-                        .fill(Color.white)
-                        .frame(width: geometry.size.width, height: geometry.size.height/3)
-                        .shadow(color: Color(hex: "B9B6B6"), radius:2, x:0, y:0)
-                    VStack{
-                        Text("Objetivos Diarios:")
-                            .font(.custom("Inter Semi Bold", size: 22))
-                            .bold()
-                        Objectives(text: "Hacer el formulario")
-                        Objectives(text: "Hablar con Phil")
-                        Objectives(text: "Aprender algo nuevo en contenidos")
+                        RoundedRectangle(cornerRadius: 17)
+                            .fill(Color.white)
+                            .frame(width: geometry.size.width, height: geometry.size.height/3)
+                            .shadow(color: Color(hex: "B9B6B6"), radius: 2, x: 0, y: 0)
+
+                        VStack {
+                            ForEach(objectivesArray.indices, id: \.self) { index in
+                                Objectives(text: objectivesArray[index], index: index)
+                            }
+                        }
                     }
-                }
-                .padding(.top,10)
-                
+                    .padding(.top, 10)
+
             }
             
         }.onAppear {
-            viewModel.getAnal(userId: 1)
+            viewModel.getAnal(userId: TokenHelper.getUserID() ?? 0)
             print("Emotions fetched")
         }
         
@@ -167,15 +173,25 @@ struct BarChart: View {
 struct Objectives: View {
     @State private var isChecked = true
     let text: String
+    var index: Int
+    let boxColors: [Color] = [
+        Color(hex: "ABFCC7"),
+        Color(hex: "ABBFFC"),
+        Color(hex: "F2A7A5"),
+        Color(hex: "FFCE85")
+    ]
+
     var body: some View {
-        HStack{
-            HStack(){
+        HStack {
+            HStack {
+//                RoundedRectangle(cornerRadius: 2)
+//                    .strokeBorder(boxColors[index % boxColors.count], lineWidth: 2) // Usa el índice para seleccionar el color
+//                    .frame(width: 20, height: 20)
                 Image(systemName: isChecked ? "checkmark.square" : "square")
-                    .foregroundColor(Color(red: 0.42, green: 0.43, blue: 0.67))
+                    .foregroundColor(boxColors[index % boxColors.count])
                     .bold()
                     .font(.title)
-                    .offset(x: 0)
-                
+
                 Text(text)
                     .font(.custom("Inter Bold", size: 18))
             }
@@ -183,11 +199,11 @@ struct Objectives: View {
             .padding(.leading, 20)
             Spacer()
         }
-        .padding(.top, 5)
-        .padding(.bottom, 5)
-        
+        .padding(.top, 2.5)
+        .padding(.bottom, 2.5)
     }
 }
+
 
 
 struct AnalyticsView_Previews: PreviewProvider {

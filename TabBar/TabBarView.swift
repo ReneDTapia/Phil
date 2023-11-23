@@ -102,7 +102,7 @@ struct TabBarView: View {
                         .background(Color.black)
                     
                     // Second tab view
-                    AnalyticsView()
+                    AnalyticsView(user: user)
                         .tabItem {
                             Image(systemName: selectedTab == 4 ? "chart.bar.fill" : "chart.bar")
                                 .environment(\.symbolVariants, .none)
