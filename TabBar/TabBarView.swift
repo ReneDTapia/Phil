@@ -59,9 +59,18 @@ struct TabBarView: View {
                     }
                     
                     Spacer()
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 50, height: 50)
+                    ZStack {
+                                    Circle()
+                                        .fill(Color.white)
+                                        .frame(width: 50, height: 50)
+
+                                    Image("God2")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                        .frame(width: 50, height: 50)
+                                }
                 }
                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 1, trailing: 10))
                 TabView(selection: $selectedTab) { // Usar el binding al estado para la selección

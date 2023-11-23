@@ -31,12 +31,22 @@ struct UserView: View {
                     ZStack {
                         Ellipse()
                             .fill(Color(.sRGB, red: 0.8509804010391235, green: 0.8509804010391235, blue: 0.8509804010391235))
-
+                        
                         Ellipse()
                             .strokeBorder(Color.white, lineWidth: 4)
+                        
+                        
                     }
                     .frame(width: 167, height: 165)
                     .position(x: geometry.size.width / 2, y: geometry.size.height * 0.35)
+                    Image("God2")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 150, height: 150) // ajusta el tamaño de la imagen según sea necesario
+                                        .clipShape(Ellipse())
+                                        .overlay(Ellipse().stroke(Color.white, lineWidth: 4))
+                                        .frame(width: 167, height: 165)
+                                        .position(x: geometry.size.width / 2, y: geometry.size.height * 0.35)
                    
                     Text(viewModel.user?.username ?? "")
                         .font(.custom("Roboto-Bold", size: 36))

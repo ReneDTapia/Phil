@@ -186,3 +186,8 @@ struct UsernameView: View {
 
 
 
+struct UsernameView_Previews: PreviewProvider {
+    static var previews: some View {
+        MainView()
+    }
+}
