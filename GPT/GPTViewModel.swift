@@ -20,7 +20,7 @@ final class GPTViewModel : ObservableObject {
     
     @Published var currentMessage : MessageChatGPT = .init(text: "", role: .assistant)
     
-    var openAI = SwiftOpenAI(apiKey: "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")
+    var openAI = SwiftOpenAI(apiKey: "")
     
     
     
