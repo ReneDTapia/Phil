@@ -17,6 +17,7 @@ struct ModeloView: View {
             VStack {
                 Text(classificationLabel)
                     .padding()
+                    .foregroundColor(.white)
 
                 if let image = image {
                     Image(uiImage: image)
