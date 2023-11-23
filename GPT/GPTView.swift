@@ -1,4 +1,3 @@
-//
 //  GPTView.swift
 //  Phil
 //
@@ -12,7 +11,7 @@ import SwiftOpenAI
 struct GPTView: View {
     
     var conversationId: Int
-    var userId : Int 
+    var userId : Int
     
     @StateObject var viewModel = GPTViewModel()
     @State var prompt : String = "Que onda, cómo te llamas puedes ayudarme a identificar mis emociones?"
@@ -97,6 +96,14 @@ struct GPTView: View {
         let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Texto: \($0.texto), Percentage: \($0.Percentage)" }.joined(separator: "\n")
         await viewModel.send(message: prompt, userContext: userContextMessage, conversationId: conversationId, userId: userId)
        }
+    
+    private func scrollToLatestMessage(using scrollViewProxy: ScrollViewProxy) {
+            if let lastMessage = chatViewModel.messages.last {
+                withAnimation {
+                    scrollViewProxy.scrollTo(lastMessage.id, anchor: .bottom)
+                }
+            }
+    }
 }
 
 

@@ -202,7 +202,7 @@ struct Sections: View{
                     }
                     
                     if video != ""{
-                        Video(url: video)
+                        Video(url: video, autoplay: 1)
                             .frame(width: 350, height: 190 )
                             .cornerRadius(12)
                             .padding(.horizontal, 24)
@@ -221,29 +221,64 @@ struct Sections: View{
             .background(Color.black)
             .frame(maxWidth: 500)
         }
+}
+struct Video: UIViewRepresentable {
+    let url: String
+    let id: String
+    let autoplay: Int
     
-    struct Video: UIViewRepresentable {
-        let url: String
-        let id: String
-        
-        init(url: String) {
-            self.url = url
-            self.id = extractYouTubeVideoID(from: url) ?? ""
+    init(url: String, autoplay: Int) {
+        self.url = url
+        self.id = extractYouTubeVideoID(from: url) ?? ""
+        self.autoplay = autoplay
+    }
+    
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        return webView
+    }
+    
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        guard let YouTubeURL = URL(string: "https://www.youtube.com/embed/\(id)?autoplay=\(String(autoplay))") else {
+            return
         }
         
-        
-        func makeUIView(context: Context) -> WKWebView {
-            let webView = WKWebView()
-            return webView
-        }
-        
-        func updateUIView(_ uiView: UIViewType, context: Context) {
-            guard let YouTubeURL = URL(string: "https://www.youtube.com/embed/\(id)") else
-            {return}
-            
-            uiView.scrollView.isScrollEnabled = false
-            uiView.load(URLRequest(url: YouTubeURL))
-        }
+        uiView.scrollView.isScrollEnabled = false
+        uiView.load(URLRequest(url: YouTubeURL))
+    }
+}
+
+struct YouTubeVideoView: View {
+    let url: String
+    let id: String
+    init(url: String) {
+        self.url = url
+        self.id = extractYouTubeVideoID(from: url) ?? ""
+    }
+
+    var body: some View {
+        WebView(html: """
+            <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/\(id)?autoplay=1"
+                frameborder="0"
+                allowfullscreen
+            ></iframe>
+        """)
+    }
+}
+
+struct WebView: UIViewRepresentable {
+    let html: String
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        return webView
+    }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        uiView.loadHTMLString(html, baseURL: nil)
     }
 }
 

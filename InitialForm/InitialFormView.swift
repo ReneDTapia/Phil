@@ -74,7 +74,7 @@ struct InitialFormView: View {
                 
                 Spacer()
                 
-                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*1.42)
+                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*1.26)
                     .frame(height: 10)
                     .padding()
                 
@@ -147,7 +147,7 @@ struct QuestionBox: View {
                     ZStack{
                         RoundedRectangle(cornerRadius: 18)
                             .fill(Color(hex: "FFFFFF"))
-                            .frame(width: 345, height: 120)
+                            .frame(width: 345, height: 200)
                             .shadow(color: Color(hex:"000000").opacity(0.1), radius:4, x:0, y:0)
                         VStack(alignment: .center){
                             SliderRow(form: form, boxColor: boxColors[form.id % boxColors.count], viewModel: viewModel)
@@ -168,20 +168,27 @@ struct SliderRow: View {
     let boxColor: Color
     @ObservedObject var viewModel: InitialFormViewModel
     @State private var sliderValue = 5.0
+    @State private var playvideo = false
     
     var body: some View {
         VStack(alignment:.center){
-            Button(action: {
-                if let url = URL(string: form.videoURL) {
-                    UIApplication.shared.open(url)
-                }
+            
+            if playvideo == true{
                 
-            }) {
+                Video(url: form.videoURL, autoplay: 1)
+                    .frame(width: 100, height: 60)
+                    .padding(.bottom,10)
+            }
+            else{
                 Image(systemName: "video")
                     .padding(.bottom, 10)
                     .foregroundColor(.black)
+                    .onTapGesture {
+                        playvideo.toggle()
+                    }
             }
-            
+//            Video(url: form.videoURL, autoplay: 1)
+//                .frame(width: 150, height: 50)
             
             Text(form.texto)
                 .font(.custom("Monsterrat-Regular", size: 15)).tracking(-0.41).multilineTextAlignment(.center)
