@@ -69,7 +69,6 @@ struct ImagePicker: UIViewControllerRepresentable {
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.image = uiImage
                 classifyImage(image: uiImage)
-                cameraViewModel.uploadImage(image: uiImage)
             }
 
             parent.presentationMode.wrappedValue.dismiss()
@@ -91,8 +90,11 @@ struct ImagePicker: UIViewControllerRepresentable {
                 dateFormatter.dateFormat = "yyyy-MM-dd"
                 let currentDateStr = dateFormatter.string(from: Date())
                 
+                let imageData = image.jpegData(compressionQuality: 0.5)
+                let base64Image = imageData?.base64EncodedString()
+                
 
-                cameraViewModel.addPicture(url: cameraViewModel.url, user: 1, date: currentDateStr)
+                cameraViewModel.addPicture(url: base64Image ?? "", user: 1, date: currentDateStr)
             } catch {
                 print("Error while making a prediction: \(error)")
             }
