@@ -7,53 +7,33 @@ class TopicsViewModel: ObservableObject{
     @Published var topicStatus: [TopicsStatusModel] = []
      
 
-    func getTopics(contentIDVM : Int, userIDVM : Int) async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getTopics/\(userIDVM)/\(contentIDVM)") else{
-
-            print("invalid url")
-            return
-        }
-        print(url)
-        let urlRequest = URLRequest(url: url)
+    func getTopics(contentIDVM: Int, userIDVM: Int) async{
         
-        let (data,response) = try await URLSession.shared.data(for: urlRequest)
-        
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else{
-            print("error")
-            return
+        do {
+            let topics: [TopicsModel] = try await APIClient.get(path: "getTopics/\(userIDVM)/\(contentIDVM)")
+            DispatchQueue.main.async {
+                self.resultTopics = topics
+            }
+        } catch {
+            print("Error fetching topics: \(error)")
         }
         
-        let results = try JSONDecoder().decode([TopicsModel].self, from: data)
-        
-        print(results)
-        DispatchQueue.main.async{
-            self.resultTopics = results
-        }
     }
+
     
-    func getTopicsStatus(topicIDVM : Int, userIDVM : Int) async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getUserResult/\(userIDVM)/\(topicIDVM)") else{
-
-            print("invalid url")
-            return
-        }
-        print(url)
-        let urlRequest = URLRequest(url: url)
+    func getTopicsStatus(topicIDVM: Int, userIDVM: Int) async {
         
-        let (data,response) = try await URLSession.shared.data(for: urlRequest)
-        
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else{
-            print("error")
-            return
+        do {
+            let topicsStatus: [TopicsStatusModel] = try await APIClient.get(path: "getUserResult/\(userIDVM)/\(topicIDVM)")
+            DispatchQueue.main.async {
+                self.topicStatus = topicsStatus
+            }
+        } catch {
+            print("Error fetching topics status: \(error)")
         }
         
-        let results = try JSONDecoder().decode([TopicsStatusModel].self, from: data)
-        
-        print(results)
-        DispatchQueue.main.async{
-            self.topicStatus = results
-        }
     }
+
     
     func UpdateDone(user: Int, topic: Int, done: Bool) {
         
