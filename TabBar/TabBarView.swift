@@ -11,7 +11,7 @@ import SwiftUI
 struct TabBarView: View {
     
     @State private var selectedTab: Int = 0 // Agregar una propiedad de estado para rastrear la pestaña seleccionada
-    
+  
     @StateObject var VM = LoginViewModel()
     @State private var showMenu = false
     @StateObject private var cameraViewModel = CameraViewController()
@@ -58,12 +58,19 @@ struct TabBarView: View {
                             .foregroundColor(.white)
                     }
                     
-                    Text(String(TokenHelper.getUserID() ?? 0))
-                            .foregroundColor(.white)
                     Spacer()
-                    Circle()
-                        .fill(Color.white)
-                        .frame(width: 50, height: 50)
+                    ZStack {
+                                    Circle()
+                                        .fill(Color.white)
+                                        .frame(width: 50, height: 50)
+
+                                    Image("God2")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white, lineWidth: 2))
+                                        .frame(width: 50, height: 50)
+                                }
                 }
                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 1, trailing: 10))
                 TabView(selection: $selectedTab) { // Usar el binding al estado para la selección
@@ -95,7 +102,7 @@ struct TabBarView: View {
                         .tag(2)
                         .background(Color.black)
                     
-                    MyChatsView(userId: 1)
+                    MyChatsView(userId: TokenHelper.getUserID() ?? 0)
                         .tabItem {
                             Image(systemName: selectedTab == 3 ? "message.fill" : "message")
                                 .environment(\.symbolVariants, .none)
@@ -104,7 +111,7 @@ struct TabBarView: View {
                         .background(Color.black)
                     
                     // Second tab view
-                    AnalyticsView()
+                    AnalyticsView(user: user)
                         .tabItem {
                             Image(systemName: selectedTab == 4 ? "chart.bar.fill" : "chart.bar")
                                 .environment(\.symbolVariants, .none)

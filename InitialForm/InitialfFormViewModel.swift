@@ -28,7 +28,7 @@ class InitialFormViewModel: ObservableObject {
     
     
     func getForm() {
-        guard let url = URL(string: "\(API.baseURL)getForm") else {
+        guard let url = URL(string: "\(APIClient.baseURL)getForm") else {
             return
         }
         
@@ -37,9 +37,7 @@ class InitialFormViewModel: ObservableObject {
                 if let data = data {
                     let forms = try JSONDecoder().decode([InitialFormModel].self, from: data)
                     DispatchQueue.main.async {
-                        self.formGroups = Dictionary(grouping: forms, by: { $0.order })
-                            .sorted(by: { $0.key < $1.key })
-                            .map({ $0.value })
+                        self.formGroups = [forms]
                     }
                 } else {
                     print("No data")
@@ -49,17 +47,18 @@ class InitialFormViewModel: ObservableObject {
             }
         }.resume()
     }
+
     
     func postAnswers(user_id: Int) {
         // Crear la URL para la solicitud
-        guard let url = URL(string: "\(API.baseURL)postUserForm") else {
+        guard let url = URL(string: "\(APIClient.baseURL)postUserForm") else {
             print("URL inválida")
             return
         } //
         // https://philbackend.onrender.com/api/auth/postUserForm
         
         // Crear el cuerpo de la solicitud
-        let body = answers.map { ["Users_id": 1, "Cuestionario_id": $0.key, "Percentage": $0.value] }
+        let body = answers.map { ["Users_id": user_id, "Cuestionario_id": $0.key, "Percentage": $0.value] }
         let finalBody = try? JSONSerialization.data(withJSONObject: body)
         
         // Crear la solicitud
@@ -86,7 +85,7 @@ class InitialFormViewModel: ObservableObject {
         }
         
         // Crear el cuerpo de la solicitud
-        let body = answers.map { ["Users_id": 1, "Cuestionario_id": $0.key, "Percentage": $0.value] }
+        let body = answers.map { ["Users_id": user_id, "Cuestionario_id": $0.key, "Percentage": $0.value] }
         let finalBody = try? JSONSerialization.data(withJSONObject: body)
         
         // Crear la solicitud

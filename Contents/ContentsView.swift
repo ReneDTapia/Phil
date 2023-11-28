@@ -204,102 +204,124 @@ struct Menu: View {
     @State var progress: Double = 0.5
     @StateObject var LoginVM = LoginViewModel()
     let user: Int
+    @State private var showInitialFormView = false
+    @State private var showPerfilView = false
+    @State private var showUserView = false
+    @ObservedObject var loginViewModel = LoginViewModel()
+
     var body: some View {
-        
-    
-            ZStack{
-                Color(red: 0.96, green: 0.96, blue: 1)
-                
-                VStack{
-        
-                
-                    Text("Phil")
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundColor(.black)
-                        .padding(.top, 100)
-                    Divider()
-                        .frame(height: 2)
-                        .background(Color.black)
-                    
-                    
-                    Text("Daily Objectives")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(.black)
-                    
-                    ProgressBar(progress: progress)
-                        .frame(height: 10)
-                    Text("Almost There")
-                        .foregroundColor(.black)
-                    
-                    VStack(alignment:.leading){
-                
-                        NavigationStack{
-                            
-                            List{
-                        
-                                //////
-                                ///
-                                ///
-                                NavigationLink(destination : InitialFormView(userId : user)){
-                                    HStack{
-                                        Image(systemName: "person.fill")
-                                        Text("Tu")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.black)
-                                    .padding()
-                                }.navigationBarHidden(true)
-                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
-                                    .navigationBarBackButtonHidden(true)
-                                
-                                NavigationLink(destination : ContentsView(user: 2)){
-                                    HStack{
-                                        Image(systemName: "star.fill")
-                                        Text("Contenidos")
-                                        Spacer()
-                                    }
-                                    .foregroundColor(.black)
-                                    .padding()
-                                }.navigationBarHidden(true)
-                                    .listRowBackground(Color(red: 0.96, green: 0.96, blue: 1))
-                                    .navigationBarBackButtonHidden(true)
-                                
-                                
-                                Button(action: LoginVM.logout){
-                                    Text("Salir")
+        ZStack{
+            Color(hex:"F6F6FE")
+            VStack{
+                Text("Phil")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(.black)
+                    .padding(.top, 100)
+                Divider()
+                    .frame(height: 2)
+                    .background(Color.black)
+                Text("Objetivos Diarios")
+                    .font(.title)
+                    .bold()
+                    .foregroundColor(.black)
+                    .padding(.bottom, 10)
+                ProgressBar(progress: progress)
+                    .frame(height: 10)
+                Text("Mi Progreso")
+                    .foregroundColor(.black)
+                VStack(alignment:.leading){
+                    NavigationStack{
+                            Button(action: {
+                                self.showPerfilView = true
+                            }) {
+                                HStack{
+                                    Image(systemName: "person.fill")
+                                    Text("Perfil")
+                                    Spacer()
                                 }
+                                .foregroundColor(.black)
+                                .padding()
                                 
+                            }
+                            .background(Color(hex:"F6F6FE"))
+                            .padding(.bottom,-10)
+                            .fullScreenCover(isPresented: $showPerfilView) {
+                                UserView(userId: user)
+                            }
+                            Button(action: {
+                                self.showInitialFormView = true
+                            }) {
+                                HStack{
+                                    Image(systemName: "square.and.pencil")
+                                    Text("Mi estado")
+                                    Spacer()
+                                }
+                                .foregroundColor(.black)
+                                .padding()
                                 
+                            }
+                            .background(Color(hex:"F6F6FE"))
+                            .padding(.bottom,-10)
+                            .fullScreenCover(isPresented: $showInitialFormView) {
+                                InitialFormView(userId: user)
+                            }
+                            Color(hex:"F6F6FE")
+                            .padding(.bottom,-10)
+                            
+                            Button(action: {
+                                LoginVM.logout()
+                                LoginVM.viewState = .username
+                                self.showUserView = true
+                                UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: MainView())
+                            }) {
+                                HStack{
+                                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                                    Text("Salir")
+                                    Spacer()
+                                }
+                                .foregroundColor(.black)
+                                .padding()
                                 
-                            }.listStyle(PlainListStyle())
-                                .background(Color(red: 0.96, green: 0.96, blue: 1))
+                            }
+                            
+                            .background(Color(hex:"F6F6FE"))
+                            .fullScreenCover(isPresented: $showUserView) {
+                                UsernameView(viewModel: loginViewModel)
+                            }
                             
                             
-                            
-                            
-                        }
-                            .navigationBarHidden(false)
-                            .navigationBarBackButtonHidden(true)
-                            .frame(width: 250)
                         
-                        //////
+                        
                     }
-                    
-                
+                    .navigationBarHidden(false)
+                    .navigationBarBackButtonHidden(true)
+                    .frame(width: 250)
+                    .background(Color(hex:"F6F6FE"))
+                }
                 .padding(16)
                 .edgesIgnoringSafeArea(.all)
                 
             }
             .frame(width: 250)
             .frame(maxWidth: 250)
+            
         }
     }
 }
 
+
+//    .frame(width: 250)
+//    .frame(maxWidth: 250)
+
+    
+
 struct Contents_Previews: PreviewProvider {
     static var previews: some View {
-        ContentsView( user: 37 )
+        TabBarView( user: 37 )
     }
 }
+
+//#Preview{
+   // TabBarView(user: 1)
+//}

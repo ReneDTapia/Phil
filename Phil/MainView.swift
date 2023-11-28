@@ -28,9 +28,13 @@ struct MainView: View {
     
     
     var body: some View {
+//        if loginViewModel.isLoggedIn{
+//            TabBarView(user: 1)
+//        }
+//        UsernameView(viewModel: loginViewModel)
             if loginViewModel.isLoggedIn {
                 // Si el usuario está loggeado, muestra la TabBarView
-                TabBarView(user: 1)
+                TabBarView(user: TokenHelper.getUserID() ?? 0)
             } else {
                 // Si no está loggeado, muestra la vista de login o registro
                 switch loginViewModel.viewState {
@@ -47,7 +51,9 @@ struct MainView: View {
         }
 }
         
-    
+//#Preview{
+    //MainView()
+//}
 
 
 

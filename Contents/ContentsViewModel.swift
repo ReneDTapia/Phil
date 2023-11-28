@@ -6,29 +6,20 @@ class ContentsViewModel: ObservableObject{
     
     
 
-    func getContents(userIDVM: Int) async throws{
-        guard let url = URL(string: "https://philbackend.onrender.com/api/auth/getContent/\(userIDVM)") else{
-
-            print("invalid url")
-            return
+    func getContents(userIDVM: Int) async {
+            
+            do {
+                let contents: [ContentsModel] = try await APIClient.get(path: "getContent/\(userIDVM)")
+                DispatchQueue.main.async {
+                    self.resultContents = contents
+                }
+            } catch {
+                print("Error fetching contents: \(error)")
+            }
+        
         }
-        
-        let urlRequest = URLRequest(url: url)
-        
-        let (data,response) = try await URLSession.shared.data(for: urlRequest)
-        
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else{
-            print("error")
-            return
-        }
-        
-        let results = try JSONDecoder().decode([ContentsModel].self, from: data)
-        
-        DispatchQueue.main.async{
-            self.resultContents = results
-        }
-    }
 }
+
 
 
 //Utilizando el API CLIENT.

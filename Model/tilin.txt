@@ -92,12 +92,19 @@ struct ImagePicker: UIViewControllerRepresentable {
                 
                 let imageData = image.jpegData(compressionQuality: 0.5)
                 let base64Image = imageData?.base64EncodedString()
-                print("pene1")
-                print(base64Image ?? "tilin")
+                
+                print(base64Image ?? "")
                 print(1)
                 print(currentDateStr)
 
-                cameraViewModel.addPicture(url: base64Image ?? "", user: 1, date: currentDateStr)
+                
+
+                if let base64Image = base64Image, let imageData = Data(base64Encoded: base64Image) {
+                    let image = UIImage(data: imageData)
+                    cameraViewModel.addPicture(image: image ?? UIImage(), user: 1, date: currentDateStr)
+                } else {
+                    print("Error: no se pudo convertir la imagen base64 a UIImage.")
+                }
             } catch {
                 print("Error while making a prediction: \(error)")
             }
@@ -165,4 +172,111 @@ struct ModeloView_Previews: PreviewProvider {
     }
 }
 
+
+//
+//  CameraViewController.swift
+//  ModeloViewPruebas
+//
+//  Created by Jesús Daniel Martínez García on 10/11/23.
+//
+
+import AVFoundation
+import UIKit
+import Alamofire
+
+class CameraViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ObservableObject {
+    
+    @Published var url : String = ""
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        checkCameraAccess()
+    }
+    
+    func checkCameraAccess() {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized: // El usuario ya autorizó el acceso a la cámara
+            break
+        case .notDetermined: // No se ha solicitado el permiso aún
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if !granted {
+                    // El usuario no otorgó el permiso
+                }
+            }
+        default: // El permiso fue negado
+            break
+        }
+    }
+    
+    @IBAction func takePhotoButtonTapped(_ sender: Any) {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .camera
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    @Published var networkError: String?
+    
+    
+    func addPicture(image: UIImage, user: Int, date: String) {
+    // Preparamos el endpoint y los parámetros
+    let requestURL = URL(string: "https://philbackend.onrender.com/api/auth/AddPicture") // Cambia esto a tu URL real
+    var request = URLRequest(url: requestURL!)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    // Reducir el tamaño de la imagen
+    let resizedImage = resizeImage(image: image, newWidth: 300)
+    
+    // Convertir la imagen a Data y luego a una cadena Base64
+    guard let imageData = resizedImage.jpegData(compressionQuality: 0.5) else {
+        print("No se pudo obtener los datos de la imagen.")
+        return
+    }
+    let base64Image = imageData.base64EncodedString()
+    
+    let parameters: [String: Any] = [
+        "url": base64Image,
+        "user": user,
+        "date": date // Ya no necesitas formatear 'date' ya que ya es un String.
+    ]
+    
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted)
+    } catch let error {
+        print("Error al añadir la imagen: \(error.localizedDescription)")
+        self.networkError = error.localizedDescription
+        return
+    }
+    
+    // Realizamos la solicitud POST
+    let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        if let error = error {
+            print("Error al añadir la imagen: \(error.localizedDescription)")
+            self.networkError = error.localizedDescription
+        } else if let httpResponse = response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode {
+            print("Imagen añadida con éxito.")
+        } else {
+            print("Error al añadir la imagen: respuesta no válida.")
+            self.networkError = "Respuesta no válida."
+            if let data = data, let body = String(data: data, encoding: .utf8) {
+                print("Cuerpo de la respuesta: \(body)")
+            }
+        }
+    }
+    
+    task.resume()
+}
+
+func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+    let scale = newWidth / image.size.width
+    let newHeight = image.size.height * scale
+    UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
+    image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+    let newImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    return newImage!
+}
+}
+    
 
