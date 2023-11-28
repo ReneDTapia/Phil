@@ -93,6 +93,9 @@ struct ImagePicker: UIViewControllerRepresentable {
                 let imageData = image.jpegData(compressionQuality: 0.5)
                 let base64Image = imageData?.base64EncodedString()
                 
+                print(base64Image ?? "")
+                print(1)
+                print(currentDateStr)
 
                 cameraViewModel.addPicture(url: base64Image ?? "", user: 1, date: currentDateStr)
             } catch {
