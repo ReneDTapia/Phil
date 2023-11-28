@@ -70,11 +70,7 @@ struct SectionsView: View {
                                     
                                     Button(action: {
                                         
-                                        let Goals = Goal(context: moc)
-                                        Goals.idGoal = 1
-                                        Goals.phil = true
-                                        Goals.date = Date()
-                                        try? moc.save()
+                                  
                                         
                                         if exist == true{
                                             

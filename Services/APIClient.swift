@@ -80,7 +80,7 @@ class APIClient {
             completion(response)
         }
     }
-
+                                                                                                                                                                                                                        
     // Función general para PUT
     static func putN<T: Decodable>(path: String, parameters: Parameters?, completion: @escaping (Result<T, AFError>) -> Void) {
         var headers: HTTPHeaders = []

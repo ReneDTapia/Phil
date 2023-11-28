@@ -4,26 +4,14 @@ import Foundation
 class SectionsViewModel: ObservableObject{
     @Published var resultSections: [SectionsModel] = []
      
-    func getSections(topicIDVM : Int) async throws{
-        guard let url = URL(string: "\(API.baseURL)getSections/" + String(topicIDVM)) else{
-            print("invalid url")
-            return
-        }
-        
-        let urlRequest = URLRequest(url: url)
-        
-        let (data,response) = try await URLSession.shared.data(for: urlRequest)
-        
-        guard (response as? HTTPURLResponse)?.statusCode == 200 else{
-            print("error")
-            return
-        }
-        
-        let results = try JSONDecoder().decode([SectionsModel].self, from: data)
-        
-        
-        DispatchQueue.main.async{
-            self.resultSections = results
-        }
+    func getSections(topicIDVM: Int) async {
+            do {
+                let sections: [SectionsModel] = try await APIClient.get(path: "getSections/\(topicIDVM)")
+                DispatchQueue.main.async {
+                    self.resultSections = sections
+                }
+            } catch {
+                print("Error al obtener las secciones: \(error)")
+            }
     }
 }
