@@ -42,7 +42,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     @Published var networkError: String?
     
     // Función para añadir la imagen. Nota que ahora 'date' es de tipo 'String'.
-    func addPicture(url: String, user: Int, date: Date) {
+    func addPicture(url: String, user: Int, date: String) {
         // Preparamos el endpoint y los parámetros
         let requestURL = "https://philbackend.onrender.com/api/auth/AddPicture" // Cambia esto a tu URL real
         let parameters: [String: Any] = [
