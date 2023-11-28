@@ -74,7 +74,7 @@ struct InitialFormView: View {
                 
                 Spacer()
                 
-                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*1.26)
+                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*1.18)
                     .frame(height: 10)
                     .padding()
                 
@@ -137,15 +137,12 @@ struct QuestionBox: View {
         Color(hex: "F2A7A5"),
         Color(hex: "FFCE85")
     ]
-    /**
-     Le puse rickroll a el video 4 en adelante, quitar xd
-     */
     var body: some View {
         VStack{
             ForEach(viewModel.formGroups.indices, id: \.self) { index in
                 ForEach(viewModel.formGroups[index], id: \.self) { form in
                     ZStack{
-                        RoundedRectangle(cornerRadius: 18) 
+                        RoundedRectangle(cornerRadius: 18)
                             .fill(Color(hex: "FFFFFF"))
                             .frame(width: 365, height: 300)
                             .shadow(color: Color(hex:"000000").opacity(0.1), radius:4, x:0, y:0)
@@ -170,6 +167,25 @@ struct SliderRow: View {
     @State private var sliderValue = 5.0
     @State private var playvideo = true
     
+    // CoreData
+        @Environment(\.managedObjectContext) private var viewContext
+
+        // Move the @FetchRequest declaration here
+        @FetchRequest var sliderPositions: FetchedResults<SliderPosition>
+
+        init(form: InitialFormModel, boxColor: Color, viewModel: InitialFormViewModel) {
+            self.form = form
+            self.boxColor = boxColor
+            self.viewModel = viewModel
+
+            // Initialize the @FetchRequest here
+            _sliderPositions = FetchRequest(
+                entity: SliderPosition.entity(),
+                sortDescriptors: [],
+                predicate: NSPredicate(format: "formId == %d", argumentArray: [form.id])
+            )
+        }
+    
     var body: some View {
         VStack(alignment:.center){
             
@@ -188,8 +204,8 @@ struct SliderRow: View {
                         playvideo.toggle()
                     }
             }
-//            Video(url: form.videoURL, autoplay: 1)
-//                .frame(width: 150, height: 50)
+            //            Video(url: form.videoURL, autoplay: 1)
+            //                .frame(width: 150, height: 50)
             
             Text(form.texto)
                 .font(.custom("Monsterrat-Regular", size: 15)).tracking(-0.41).multilineTextAlignment(.center)
@@ -200,17 +216,55 @@ struct SliderRow: View {
                 Text("0")
                     .font(.custom("Monsterrat-Regular", size: 16))
                     .foregroundColor(.black)
-                Slider(value:$sliderValue, in:0...10, step:1)
-                    .accentColor(boxColor)
-                    .onChange(of: sliderValue) { newValue in
-                        viewModel.updateAnswer(for: form.id, with: newValue)
-                    }
+                Slider(value: Binding(
+                                get: { sliderValue },
+                                set: { newValue in
+                                    sliderValue = newValue
+                                    viewModel.updateAnswer(for: form.id, with: newValue)
+                                    saveSliderPosition()
+                                }
+                            ), in: 0...10, step: 1)
+                            .accentColor(boxColor)
                 Image(systemName: "plus")
                     .foregroundColor(.black)
                 Text("10")
                     .font(.custom("Monsterrat-Regular", size: 16))
                     .foregroundColor(.black)
             }
+        }
+        // En tu vista SliderRow
+        .onAppear {
+            if let savedPosition = sliderPositions.first {
+                sliderValue = Double(savedPosition.value)
+            } else {
+                sliderValue = 5.0 // Valor por defecto
+            }
+        }
+    }
+
+    private func saveSliderPosition() {
+        let formId = form.id
+        
+        if let savedPosition = sliderPositions.first(where: { $0.formId == formId }) {
+            savedPosition.value = Int16(sliderValue.rounded())
+            print("Actualizando posición del slider existente a \(savedPosition.value)")
+        } else {
+            let newSliderPosition = SliderPosition(context: viewContext)
+            newSliderPosition.id = UUID()
+            newSliderPosition.formId = formId
+            newSliderPosition.value = Int16(sliderValue.rounded())
+            
+            // Guarda el newSliderPosition en el context
+            viewContext.insert(newSliderPosition)
+            print("Guardando nueva posición del slider: \(newSliderPosition.value)")
+        }
+
+        do {
+            try viewContext.save()
+            print("Posición del slider guardada exitosamente")
+        } catch {
+            let nsError = error as NSError
+            print("Error al guardar la posición del slider: \(nsError), \(nsError.userInfo)")
         }
     }
 }
@@ -243,7 +297,7 @@ struct ProgressBarView : View {
 
 
 //#Preview{
-    //InitialFormView(userId: 1)
+//InitialFormView(userId: 1)
 //}
 
 struct InitialFormView_Previews: PreviewProvider {

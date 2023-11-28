@@ -52,7 +52,7 @@ struct BarChart: View {
     var values: [CGFloat] {
         return viewModel.emotions.map { CGFloat($0.Percentage) }
     }
-    //    var values: [CGFloat] = [80, 10, 10, 50, 70]
+//        var values: [CGFloat] = [80, 10, 10, 50, 70]
     var body: some View {
         GeometryReader { geometry in
             VStack{
