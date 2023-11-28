@@ -90,7 +90,7 @@ struct ImagePicker: UIViewControllerRepresentable {
                 dateFormatter.dateFormat = "yyyy-MM-dd"
                 let currentDateStr = dateFormatter.string(from: Date())
                 
-                let imageData = image.jpegData(compressionQuality: 0.1)
+                let imageData = image.jpegData(compressionQuality: 0.5)
                 let base64Image = imageData?.base64EncodedString()
                 print("pene1")
                 print(base64Image ?? "tilin")
