@@ -12,14 +12,24 @@ struct ModeloView: View {
     @StateObject private var cameraViewModel = CameraViewController()
     
     let emotions = [
-        "Enojado": "😠",
-        "Disgustado": "🤢",
-        "Asustado": "😨",
-        "Feliz": "😊",
+        "Angry": "😠",
+        "Disgusted": "🤢",
+        "Fearful": "😨",
+        "Happy": "😊",
         "Neutral": "😐",
-        "Triste": "😢",
-        "Sorprendido": "😮"
+        "Sad": "😢",
+        "Surprised": "😮"
         
+    ]
+    
+    let emotionTranslations: [String: String] = [
+        "Angry": "Enojado",
+        "Disgusted": "Asqueado",
+        "Fearful": "Temeroso",
+        "Happy": "Feliz",
+        "Neutral": "Neutral",
+        "Sad": "Triste",
+        "Surprised": "Sorprendido"
     ]
 
     var body: some View {
@@ -27,7 +37,7 @@ struct ModeloView: View {
             Color.black.ignoresSafeArea(.all)
 
             VStack {
-                Text(classificationLabel)
+                Text((emotionTranslations[classificationLabel] ?? "") + " " + (emotions[classificationLabel] ?? ""))
                     .padding()
                     .foregroundColor(.white)
 
@@ -48,18 +58,13 @@ struct ModeloView: View {
         .alert(isPresented: $cameraViewModel.showEmotionAlert) {
             Alert(
                 title: Text("Emoción Detectada"),
-                message: Text("¿Es correcta esta emoción?: \(cameraViewModel.detectedEmotion)"),
+                message: Text("¿Es correcta esta emoción?: \(cameraViewModel.detectedEmotion) \(emotions[cameraViewModel.detectedEmotion] ?? "")"),
                 primaryButton: .default(Text("Sí")){
                     print("tu mama es mi papa")
                     // Enviar la emoción si es correcta
-//                    DispatchQueue.main.async {
-                        
-//                        cameraViewModel.detectedEmotion = cameraViewModel.detectedEmotion
-//                        cameraViewModel.shouldShowEmotionSelection = false
-                        
                         print("uploadedPhotoID: \(cameraViewModel.uploadedPhotoID)")
-print("detectedEmotion: \(cameraViewModel.detectedEmotion)")
-print("emotionIDs: \(cameraViewModel.emotionIDs)")
+                        print("detectedEmotion: \(cameraViewModel.detectedEmotion)")
+                        print("emotionIDs: \(cameraViewModel.emotionIDs)")
                         if let pictureID = cameraViewModel.uploadedPhotoID,
                            let emotionID = cameraViewModel.emotionIDs[cameraViewModel.detectedEmotion] {
                             print("Enviando emoción", pictureID, emotionID)
@@ -77,9 +82,6 @@ print("emotionIDs: \(cameraViewModel.emotionIDs)")
         }
     }
 }
-
-
-
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
@@ -124,6 +126,7 @@ struct ImagePicker: UIViewControllerRepresentable {
                 print("Failed to convert UIImage to CVPixelBuffer")
                 return
             };do {
+                
                 let model = try EmotionClassifier(configuration: MLModelConfiguration())
                 let prediction = try model.prediction(conv2d_input: buffer)
                 
@@ -134,7 +137,6 @@ struct ImagePicker: UIViewControllerRepresentable {
                     self.cameraViewModel.showEmotionAlert = true
                 }
 
-
                 // Aquí puedes llamar a la función addPicture del ViewModel
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -143,19 +145,16 @@ struct ImagePicker: UIViewControllerRepresentable {
                 let imageData = image.jpegData(compressionQuality: 0.5)
                 let base64Image = imageData?.base64EncodedString()
                
-
                 cameraViewModel.addPicture(url: base64Image ?? "", user: 1, date: currentDateStr)
+                
             } catch {
                 print("Error while making a prediction: \(error)")
             }
         }
     }
 }
-            // Aquí agregarías tu lógica de clasificación
-    
-    
-    
-    
+// Aquí agregarías tu lógica de clasificación
+  
 extension UIImage {
     func toCVPixelBuffer() -> CVPixelBuffer? {
         let width = 48
