@@ -11,6 +11,8 @@ struct ModeloView: View {
     @State private var classificationLabel: String = ""
     @StateObject private var cameraViewModel = CameraViewController()
     
+    var userId: Int
+    
     let emotions = [
         "Angry": "😠",
         "Disgusted": "🤢",
@@ -52,7 +54,7 @@ struct ModeloView: View {
                 }
             }
             .sheet(isPresented: $showImagePicker) {
-                ImagePicker(image: self.$image, classificationLabel: self.$classificationLabel, cameraViewModel: cameraViewModel)
+                ImagePicker(image: self.$image, classificationLabel: self.$classificationLabel, userId: userId, cameraViewModel: cameraViewModel)
             }
         }
         .alert(isPresented: $cameraViewModel.showEmotionAlert) {
@@ -87,6 +89,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     @Binding var image: UIImage?
     @Binding var classificationLabel: String
+    var userId: Int
     var cameraViewModel: CameraViewController
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -99,17 +102,20 @@ struct ImagePicker: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(self, cameraViewModel: cameraViewModel)
+        Coordinator(self, cameraViewModel: cameraViewModel, userId: userId)
     }
 
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         var parent: ImagePicker
         var cameraViewModel: CameraViewController
-
-        init(_ parent: ImagePicker, cameraViewModel: CameraViewController) {
-            self.parent = parent
-            self.cameraViewModel = cameraViewModel
+        var userId: Int
+        
+        init(_ parent: ImagePicker, cameraViewModel: CameraViewController, userId: Int) {
+                self.parent = parent
+                self.cameraViewModel = cameraViewModel
+                self.userId = userId
         }
+
 
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
@@ -145,7 +151,7 @@ struct ImagePicker: UIViewControllerRepresentable {
                 let imageData = image.jpegData(compressionQuality: 0.5)
                 let base64Image = imageData?.base64EncodedString()
                
-                cameraViewModel.addPicture(url: base64Image ?? "", user: 1, date: currentDateStr)
+                cameraViewModel.addPicture(url: base64Image ?? "", user: userId, date: currentDateStr)
                 
             } catch {
                 print("Error while making a prediction: \(error)")
@@ -207,7 +213,7 @@ extension UIImage {
 
 struct ModeloView_Previews: PreviewProvider {
     static var previews: some View {
-        ModeloView()
+        ModeloView(userId: TokenHelper.getUserID() ?? 0)
     }
 }
 

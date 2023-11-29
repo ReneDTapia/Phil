@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct PictureView: View {
-    @StateObject var viewModel = PictureViewModel()
+    @StateObject var viewModel = PictureViewModel(userID: TokenHelper.getUserID())
+    var userID: Int
     @State private var isMonthYearSelected = false
     private let columns = [GridItem](repeating: .init(.flexible()), count: 4)
     var body: some View {
@@ -237,6 +238,6 @@ struct BottomRectangleView: View {
 
 struct PictureView_Previews: PreviewProvider {
     static var previews: some View {
-        PictureView()
+        PictureView(userID :  TokenHelper.getUserID() ?? 0)
     }
 }

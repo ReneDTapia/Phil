@@ -85,7 +85,7 @@ struct TabBarView: View {
                         .background(Color.black)
                     
                     // Continue with other tabs...
-                    PictureView()
+                    PictureView(userID : TokenHelper.getUserID() ?? 0 )
                         .tabItem {
                             Image(systemName: selectedTab == 1 ? "calendar" : "calendar")
                                 .environment(\.symbolVariants, .none)
@@ -94,7 +94,7 @@ struct TabBarView: View {
                         .background(Color.black)
                     
                     // Special tab with a larger 'plus.circle' icon
-                    ModeloView()
+                    ModeloView(userId: TokenHelper.getUserID() ?? 0)
                         .tabItem {
                             Image(systemName: selectedTab == 2 ? "plus.circle.fill" : "plus.circle")
                                 .environment(\.symbolVariants, .none)

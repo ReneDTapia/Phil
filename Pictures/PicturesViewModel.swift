@@ -6,8 +6,8 @@ class PictureViewModel: ObservableObject {
     private var userID: Int?
     @Published var currentDate = Date()
 
-    init() {
-        self.userID = 1 // Asegúrate de configurar esto adecuadamente
+    init(userID: Int?) {
+        self.userID = userID // Asegúrate de configurar esto adecuadamente
         fetchPhotos(for: currentDate)
     }
 
