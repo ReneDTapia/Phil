@@ -20,11 +20,26 @@ struct EmotionSelectionView: View {
         "Sorprendido": "😲"
         
     ]
+    
+    
+    let emotionTranslationsInverted: [String: String] = [
+        "Enojado": "Angry",
+        "Disgustado": "Disgusted",
+        "Asustado": "Fearful",
+        "Feliz": "Happy",
+        "Neutral": "Neutral",
+        "Triste": "Sad",
+        "Sorprendido": "Surprised"
+    ]
+
+    
+    
+    
     var body: some View {
         List(emotions.keys.sorted(), id: \.self) { emotion in
             Button(action: {
                 DispatchQueue.main.async {
-                    cameraViewModel.detectedEmotion = emotion
+                    cameraViewModel.detectedEmotion = emotionTranslationsInverted[emotion] ?? ""
                     cameraViewModel.shouldShowEmotionSelection = false
 
                     // Enviar la emoción y el ID de la foto si es que los agarra el view model siuu (view controller por que luis no le sabe)

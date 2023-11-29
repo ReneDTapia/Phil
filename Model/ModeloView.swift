@@ -21,13 +21,13 @@ struct ModeloView: View {
         "Neutral": "😐",
         "Sad": "😢",
         "Surprised": "😮"
-        
+    
     ]
     
     let emotionTranslations: [String: String] = [
         "Angry": "Enojado",
-        "Disgusted": "Asqueado",
-        "Fearful": "Temeroso",
+        "Disgusted": "Disgustado",
+        "Fearful": "Asustado",
         "Happy": "Feliz",
         "Neutral": "Neutral",
         "Sad": "Triste",
@@ -52,6 +52,8 @@ struct ModeloView: View {
                 Button("Tomate la foto") {
                     self.showImagePicker = true
                 }
+            }.onReceive(cameraViewModel.$detectedEmotion) { newEmotion in
+                self.classificationLabel = newEmotion
             }
             .sheet(isPresented: $showImagePicker) {
                 ImagePicker(image: self.$image, classificationLabel: self.$classificationLabel, userId: userId, cameraViewModel: cameraViewModel)
