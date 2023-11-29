@@ -50,17 +50,22 @@ struct ModeloView: View {
                 title: Text("Emoción Detectada"),
                 message: Text("¿Es correcta esta emoción?: \(cameraViewModel.detectedEmotion)"),
                 primaryButton: .default(Text("Sí")){
+                    print("tu mama es mi papa")
                     // Enviar la emoción si es correcta
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         
-                        cameraViewModel.detectedEmotion = cameraViewModel.detectedEmotion
-                        cameraViewModel.shouldShowEmotionSelection = false
+//                        cameraViewModel.detectedEmotion = cameraViewModel.detectedEmotion
+//                        cameraViewModel.shouldShowEmotionSelection = false
                         
+                        print("uploadedPhotoID: \(cameraViewModel.uploadedPhotoID)")
+print("detectedEmotion: \(cameraViewModel.detectedEmotion)")
+print("emotionIDs: \(cameraViewModel.emotionIDs)")
                         if let pictureID = cameraViewModel.uploadedPhotoID,
                            let emotionID = cameraViewModel.emotionIDs[cameraViewModel.detectedEmotion] {
+                            print("Enviando emoción", pictureID, emotionID)
                             cameraViewModel.sendEmotion(pictureID: pictureID, emotionID: emotionID)
                         }
-                    }
+//                    }
                 },
                 secondaryButton: .cancel(Text("No, elegir otra")) {
                     cameraViewModel.shouldShowEmotionSelection = true

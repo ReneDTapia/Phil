@@ -20,7 +20,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
 
     @Published var uploadedPhotoID: Int?
     
-    let emotionIDs = ["Enojado": 1, "Disgustado": 2, "Asustado": 3, "Feliz": 4, "Neutral": 5, "Triste": 6, "Sorprendido": 7]
+    let emotionIDs = ["Angry": 1, "Disgusted": 2, "Fearful": 3, "Happy": 4, "Neutral": 5, "Sad": 6, "Surprised": 7]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,7 +69,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
                     // Almacenar el ID de la imagen  en la variabl epublished
                     self?.uploadedPhotoID = pictureResponse.id
                     
-                    print(pictureResponse.message) // Solo para depuraciónxd
+//                    print(pictureResponse.message) // Solo para depuraciónxd
                 case .failure(let error):
                     print("Error al añadir la imagen: \(error.localizedDescription)")
                     self?.networkError = error.localizedDescription

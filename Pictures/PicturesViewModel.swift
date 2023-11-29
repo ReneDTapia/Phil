@@ -32,7 +32,7 @@ class PictureViewModel: ObservableObject {
             switch response.result {
             case .success(let data):
                 if let data = data, let string = String(data: data, encoding: .utf8) {
-                    print("Respuesta en bruto: \(string)")
+//                    print("Respuesta en bruto: \(string)")
                     self.decodePictures(data: data)
                 }
             case .failure(let error):
