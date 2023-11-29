@@ -37,22 +37,64 @@ struct AnalyticsView: View{
     }
 }
 
+struct EmotionData {
+    let emoji: String
+    let color: Color
+}
+
+let emotionArray: [EmotionData] = [
+    EmotionData(emoji: "😡", color: Color(hex: "FF6347")), // Enojado: Rojo
+    EmotionData(emoji: "🤢", color: Color(hex: "ABFCC7")), // Náuseas: Verde
+    EmotionData(emoji: "😨", color: Color(hex: "A9A9A9")), // Miedo: Gris
+    EmotionData(emoji: "😄", color: Color(hex: "FFCE85")), // Feliz: Amarillo
+    EmotionData(emoji: "😐", color: Color(hex: "B0C4DE")), // Neutral: Azul claro
+    EmotionData(emoji: "😢", color: Color(hex: "4682B4")), // Triste: Azul oscuro
+    EmotionData(emoji: "😲", color: Color(hex: "9370DB"))  // Sorprendido: Morado
+]
+
+
 struct BarChart: View {
     let user: Int
     @ObservedObject var viewModel = AnalyticsViewModel()
     let minimenu: [String] = ["10", "30", "all"]
+    @State private var selectedValue: String = "10"
     @State private var selectedIndex: Int? = nil
     let objectivesArray: [String] = [
             "Paputilin",
             "Hablar con Phil",
             "Aprender algo nuevo en contenidos",
             "Superpendejo"
-            // ... Puedes agregar más objetivos según sea necesario
+           
         ]
-    var values: [CGFloat] {
-        return viewModel.emotions.map { CGFloat($0.Percentage) }
-    }
+
+    /*angry, disgusted, fearful, happy, neutral, sad, surprised*/
+//     let emojiArray: [String] = [
+//         "😡",
+//         "🤢",
+//         "😨",
+//         "😄",
+//         "😐",
+//         "😢",
+//         "😲"
+//     ]
+
+//     let emotionColor: [Color] = [
+//     Color(hex: "FF0000"), // 😡 Enojado: Rojo
+//     Color(hex: "008000"), // 🤢 Náuseas: Verde
+//     Color(hex: "808080"), // 😨 Miedo: Gris
+//     Color(hex: "FFFF00"), // 😄 Feliz: Amarillo
+//     Color(hex: "ADD8E6"), // 😐 Neutral: Azul claro
+//     Color(hex: "00008B"), // 😢 Triste: Azul oscuro
+//     Color(hex: "800080")  // 😲 Sorprendido: Morado
+// ]
+
+    // var values: [CGFloat] {
+    //     return viewModel.emotions.map { CGFloat($0.Percentage) }
+    // }
     //    var values: [CGFloat] = [80, 10, 10, 50, 70]
+    var values: [CGFloat] {
+    return viewModel.emotions.map { CGFloat(Double($0.emotionpercentage ?? "0") ?? 0.0) }
+}
     var body: some View {
         GeometryReader { geometry in
             VStack{
@@ -70,19 +112,17 @@ struct BarChart: View {
                                 .bold()
                                 .padding(.top, 8)
                             HStack{
-                                ForEach(0..<minimenu.count, id:\.self){
+                                ForEach(0..<minimenu.count, id:\.self) {
                                     i in
                                     Button(action: {
-                                        self.selectedIndex = i
+                                        self.selectedValue = minimenu[i]
                                     }) {
-                                        ZStack
-                                        {
+                                        ZStack {
                                             Circle()
-                                                .fill(self.selectedIndex == i ? Color(hex: "6B6EAB") : Color(hex: "B9B6B6"))
+                                                .fill(self.selectedValue == minimenu[i] ? Color(hex: "6B6EAB") : Color(hex: "B9B6B6"))
                                                 .frame(width: geometry.size.width/20, height: geometry.size.width/20)
-                                                .padding(.horizontal)
-                                            Text(minimenu[i]).font(.custom("Inter Semi Bold", size: 10)).foregroundColor(Color.white).tracking(-0.41).multilineTextAlignment(.center)
-                                            
+                                                .padding(.horizontal, 18)
+                                            Text(minimenu[i]).font(.custom("Inter Semi Bold", size: 11)).foregroundColor(Color.white).tracking(-0.41).multilineTextAlignment(.center)
                                         }
                                     }
                                 }
@@ -114,7 +154,7 @@ struct BarChart: View {
                                 VStack {
                                     Spacer()
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color(hex: "6B6EAB"))
+                                        .fill(emotionArray[index].color)
                                         .frame(width: geometry.size.width/20, height: values[index]*1.29)
                                         .clipShape(Rectangle().offset(y: -10))
                                 }
@@ -124,23 +164,18 @@ struct BarChart: View {
                         
                         HStack(spacing: geometry.size.width/20){
                             
-                            ForEach(0..<5)
-                            {
-                                i in
-                                VStack{
+                            ForEach(viewModel.emotions, id: \.emotion) { emotion in
+                                VStack {
                                     Spacer()
                                     ZStack {
-                                        
                                         RoundedRectangle(cornerRadius: 80)
-                                            .fill(Color(hex: "ECBB5F"))
-                                        
+                                            .fill(Color.white)
                                         RoundedRectangle(cornerRadius: 80)
-                                            .strokeBorder(Color(hex: "6B6EAB"), lineWidth: 4)
+                                            .strokeBorder(emotionArray[viewModel.emotions.firstIndex(where: {$0.emotion == emotion.emotion}) ?? 0].color, lineWidth: 4)
+                                        Text(emotionArray[viewModel.emotions.firstIndex(where: {$0.emotion == emotion.emotion}) ?? 0].emoji)
                                     }
                                     .frame(width: geometry.size.width/11, height: geometry.size.width/11)
-                                    
                                 }
-                                
                             }
                         }.frame(width: geometry.size.width, height: geometry.size.height/2.5)
                         
@@ -162,9 +197,8 @@ struct BarChart: View {
 
             }
             
-        }.onAppear {
-            viewModel.getAnal(userId: TokenHelper.getUserID() ?? 0)
-            print("Emotions fetched")
+        }.onAppear() {
+            viewModel.getUserEmotions(userId: user, days: Int(selectedValue) ?? 10)
         }
         
     }
