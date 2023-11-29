@@ -63,25 +63,25 @@ struct PictureView: View {
                               .padding(.leading)
 
                           LazyVGrid(columns: columns) {
-                              ForEach(photos, id: \.id) { photo in
-                                  if let base64String = photo.url,
-                                     let data = Data(base64Encoded: base64String),
-                                     let uiImage = UIImage(data: data) {
+                            ForEach(photos, id: \.id) { photo in
+                                let base64String = photo.url
+                                if let data = Data(base64Encoded: base64String),
+                                let uiImage = UIImage(data: data) {
 
-                                      Image(uiImage: uiImage)
-                                          .resizable()
-                                          .aspectRatio(contentMode: .fill)
-                                          .frame(width: 82, height: 143)
-                                          .cornerRadius(20)
-                                          .clipped()
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 82, height: 143)
+                                        .cornerRadius(20)
+                                        .clipped()
 
-                                  } else {
-                                      Color.red
-                                          .frame(width: 82, height: 143)
-                                          .cornerRadius(20)
-                                  }
-                              }
-                          }
+                                } else {
+                                    Color.red
+                                        .frame(width: 82, height: 143)
+                                        .cornerRadius(20)
+                                }
+                            }
+                        }
                       }
                     }
                 }
