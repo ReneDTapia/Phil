@@ -61,12 +61,11 @@ struct BarChart: View {
     @State private var selectedValue: String = "10"
     @State private var selectedIndex: Int? = nil
     @State private var isLoading = true
+    
     let objectivesArray: [String] = [
-            "Paputilin",
             "Hablar con Phil",
-            "Aprender algo nuevo en contenidos",
-            "Superpendejo"
-           
+            "Contestar formulario sobre mi",
+            "Aprender algo nuevo en contenidos"
         ]
 
     /*angry, disgusted, fearful, happy, neutral, sad, surprised*/
@@ -201,7 +200,7 @@ struct BarChart: View {
 
                         VStack {
                             ForEach(objectivesArray.indices, id: \.self) { index in
-                                Objectives(text: objectivesArray[index], index: index)
+                                Objectives(isChecked: true,text: objectivesArray[index], index: index)
                             }
                         }
                     }
@@ -222,7 +221,7 @@ struct BarChart: View {
 }
 
 struct Objectives: View {
-    @State private var isChecked = true
+    let isChecked: Bool
     let text: String
     var index: Int
     let boxColors: [Color] = [
@@ -257,11 +256,11 @@ struct Objectives: View {
 
 
 
-//struct AnalyticsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TabBarView(user: 1)
-//    }
-//}
+struct AnalyticsView_Previews: PreviewProvider {
+    static var previews: some View {
+        AnalyticsView(user: 1)
+    }
+}
 
 
 
