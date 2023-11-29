@@ -4,10 +4,23 @@ import UIKit
 import Vision
 
 struct ModeloView: View {
+    
+    
     @State private var image: UIImage? = nil
     @State private var showImagePicker: Bool = false
     @State private var classificationLabel: String = ""
     @StateObject private var cameraViewModel = CameraViewController()
+    
+    let emotions = [
+        "Enojado": "😠",
+        "Disgustado": "🤢",
+        "Asustado": "😨",
+        "Feliz": "😊",
+        "Neutral": "😐",
+        "Triste": "😢",
+        "Sorprendido": "😮"
+        
+    ]
 
     var body: some View {
         ZStack {
@@ -39,6 +52,10 @@ struct ModeloView: View {
                 primaryButton: .default(Text("Sí")){
                     // Enviar la emoción si es correcta
                     DispatchQueue.main.async {
+                        
+                        cameraViewModel.detectedEmotion = cameraViewModel.detectedEmotion
+                        cameraViewModel.shouldShowEmotionSelection = false
+                        
                         if let pictureID = cameraViewModel.uploadedPhotoID,
                            let emotionID = cameraViewModel.emotionIDs[cameraViewModel.detectedEmotion] {
                             cameraViewModel.sendEmotion(pictureID: pictureID, emotionID: emotionID)
