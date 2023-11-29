@@ -11,16 +11,15 @@ struct EmotionSelectionView: View {
     @StateObject var cameraViewModel: CameraViewController
 
     let emotions = [
-        "Enojado": "😠",
+        "Enojado": "😡",
         "Disgustado": "🤢",
         "Asustado": "😨",
-        "Feliz": "😊",
+        "Feliz": "😄",
         "Neutral": "😐",
         "Triste": "😢",
-        "Sorprendido": "😮"
+        "Sorprendido": "😲"
         
     ]
-
     var body: some View {
         List(emotions.keys.sorted(), id: \.self) { emotion in
             Button(action: {
