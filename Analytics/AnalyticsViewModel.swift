@@ -20,24 +20,23 @@ class AnalyticsViewModel : ObservableObject {
                 case .success(let fetchedEmotions):
                     self.emotions = fetchedEmotions
                     let topEmotions = self.topEmotions(emotions: self.emotions)
-                    promise(.success(fetchedEmotions))
+                    promise(.success(topEmotions))
                 case .failure(let error):
                     print(error)
                     promise(.failure(error))
                 }
             }
+            print(self.emotions.count)
         }
     }
 
-    func topEmotions(emotions: [AnalyticsModel]) -> [String] {
-        var emotionCounts = [String: Int]()
-        for emotion in emotions {
-            emotionCounts[emotion.emotion] = (emotionCounts[emotion.emotion] ?? 0) + 1
-        }
-        let sortedEmotions = emotionCounts.sorted { $0.value > $1.value }
+    func topEmotions(emotions: [AnalyticsModel]) -> [AnalyticsModel] {
+        let sortedEmotions = emotions.sorted { Double($0.emotionpercentage ?? "0") ?? 0 > Double($1.emotionpercentage ?? "0") ?? 0 }
         let topEmotions = Array(sortedEmotions.prefix(5)) // Limita la salida a las 5 emociones principales
-        return topEmotions.map { $0.key }
+        return topEmotions
     }
+
+    
 }
 
 

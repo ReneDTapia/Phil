@@ -46,7 +46,7 @@ struct EmotionData {
 let emotionArray: [EmotionData] = [
     EmotionData(emotion: "Angry", emoji: "😡", color: Color(hex: "FF6347")), // Enojado: Rojo
     EmotionData(emotion: "Disgusted", emoji: "🤢", color: Color(hex: "ABFCC7")), // Náuseas: Verde
-    EmotionData(emotion: "Fear", emoji: "😨", color: Color(hex: "A9A9A9")), // Miedo: Gris
+    EmotionData(emotion: "Fearful", emoji: "😨", color: Color(hex: "A9A9A9")), // Miedo: Gris
     EmotionData(emotion: "Happy", emoji: "😄", color: Color(hex: "FFCE85")), // Feliz: Amarillo
     EmotionData(emotion: "Neutral", emoji: "😐", color: Color(hex: "B0C4DE")), // Neutral: Azul claro
     EmotionData(emotion: "Sad", emoji: "😢", color: Color(hex: "4682B4")), // Triste: Azul oscuro
@@ -154,7 +154,8 @@ struct BarChart: View {
                         
                         HStack(spacing: geometry.size.width/10.8) {
                             
-                           ForEach(viewModel.emotions.prefix(5), id: \.emotion) { emotion in
+                           let sortedEmotions = viewModel.emotions.sorted { Double($0.emotionpercentage ?? "0") ?? 0 > Double($1.emotionpercentage ?? "0") ?? 0 }
+                            ForEach(sortedEmotions.prefix(5), id: \.emotion) { emotion in
                                 VStack {
                                     Spacer()
                                     if let matchedEmotion = emotionArray.first(where: { $0.emotion == emotion.emotion }),
@@ -167,11 +168,12 @@ struct BarChart: View {
                                 }
                             }
                         }
-                        .frame(width: geometry.size.width, height: geometry.size.height/4)
+                        .frame(width: geometry.size.width, height: geometry.size.height/4.01)
                         
                         HStack(spacing: geometry.size.width/20){
                             
-                            ForEach(viewModel.emotions, id: \.emotion) { emotion in
+                            let sortedEmotions = viewModel.emotions.sorted { Double($0.emotionpercentage ?? "0") ?? 0 > Double($1.emotionpercentage ?? "0") ?? 0 }
+                            ForEach(sortedEmotions.prefix(5), id: \.emotion) { emotion in
                                 VStack {
                                     Spacer()
                                     ZStack {
@@ -187,6 +189,7 @@ struct BarChart: View {
                                 }
                             }
                         }.frame(width: geometry.size.width, height: geometry.size.height/2.5)
+                        
                         
                     }
                 }
@@ -254,16 +257,16 @@ struct Objectives: View {
 
 
 
-struct AnalyticsView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabBarView(user: 1)
-    }
-}
-
-
-//#Preview{
-    //TabBarView(user: 1)
+//struct AnalyticsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TabBarView(user: 1)
+//    }
 //}
+
+
+#Preview{
+    AnalyticsView(user: 1)
+}
 
 
 
