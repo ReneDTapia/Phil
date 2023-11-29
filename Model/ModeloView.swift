@@ -1,8 +1,7 @@
 import SwiftUI
 import CoreML
-import Vision
-
 import UIKit
+import Vision
 
 struct ModeloView: View {
     @State private var image: UIImage? = nil
@@ -11,9 +10,9 @@ struct ModeloView: View {
     @StateObject private var cameraViewModel = CameraViewController()
 
     var body: some View {
-        ZStack{
-            Color.black
-                .ignoresSafeArea(.all)
+        ZStack {
+            Color.black.ignoresSafeArea(.all)
+
             VStack {
                 Text(classificationLabel)
                     .padding()
@@ -33,9 +32,32 @@ struct ModeloView: View {
                 ImagePicker(image: self.$image, classificationLabel: self.$classificationLabel, cameraViewModel: cameraViewModel)
             }
         }
-        
+        .alert(isPresented: $cameraViewModel.showEmotionAlert) {
+            Alert(
+                title: Text("Emoción Detectada"),
+                message: Text("¿Es correcta esta emoción?: \(cameraViewModel.detectedEmotion)"),
+                primaryButton: .default(Text("Sí")){
+                    // Enviar la emoción si es correcta
+                    DispatchQueue.main.async {
+                        if let pictureID = cameraViewModel.uploadedPhotoID,
+                           let emotionID = cameraViewModel.emotionIDs[cameraViewModel.detectedEmotion] {
+                            cameraViewModel.sendEmotion(pictureID: pictureID, emotionID: emotionID)
+                        }
+                    }
+                },
+                secondaryButton: .cancel(Text("No, elegir otra")) {
+                    cameraViewModel.shouldShowEmotionSelection = true
+                }
+            )
+        }
+        .sheet(isPresented: $cameraViewModel.shouldShowEmotionSelection) {
+            EmotionSelectionView(cameraViewModel: cameraViewModel)
+        }
     }
 }
+
+
+
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
@@ -70,8 +92,9 @@ struct ImagePicker: UIViewControllerRepresentable {
                 parent.image = uiImage
                 classifyImage(image: uiImage)
             }
-
+            
             parent.presentationMode.wrappedValue.dismiss()
+            
         }
 
         func classifyImage(image: UIImage) {
@@ -81,9 +104,14 @@ struct ImagePicker: UIViewControllerRepresentable {
             };do {
                 let model = try EmotionClassifier(configuration: MLModelConfiguration())
                 let prediction = try model.prediction(conv2d_input: buffer)
-                DispatchQueue.main.async {
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    print("Actualizando UI con la clasificación y mostrando alerta")
                     self.parent.classificationLabel = prediction.classLabel
+                    self.cameraViewModel.detectedEmotion = prediction.classLabel
+                    self.cameraViewModel.showEmotionAlert = true
                 }
+
 
                 // Aquí puedes llamar a la función addPicture del ViewModel
                 let dateFormatter = DateFormatter()
@@ -92,10 +120,7 @@ struct ImagePicker: UIViewControllerRepresentable {
                 
                 let imageData = image.jpegData(compressionQuality: 0.5)
                 let base64Image = imageData?.base64EncodedString()
-                print("pene1")
-                print(base64Image ?? "tilin")
-                print(1)
-                print(currentDateStr)
+               
 
                 cameraViewModel.addPicture(url: base64Image ?? "", user: 1, date: currentDateStr)
             } catch {

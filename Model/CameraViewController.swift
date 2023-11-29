@@ -13,6 +13,15 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     @Published var url : String = ""
     
+    @Published var detectedEmotion: String = ""
+    @Published var showEmotionAlert: Bool = false
+    @Published var shouldShowEmotionSelection: Bool = false
+    
+
+    @Published var uploadedPhotoID: Int?
+    
+    let emotionIDs = ["Enojado": 1, "Disgustado": 2, "Asustado": 3, "Feliz": 4, "Neutral": 5, "Triste": 6, "Sorprendido": 7]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         checkCameraAccess()
@@ -20,15 +29,15 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     func checkCameraAccess() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
-        case .authorized: // El usuario ya autorizó el acceso a la cámara
+        case .authorized:
             break
-        case .notDetermined: // No se ha solicitado el permiso aún
+        case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 if !granted {
-                    // El usuario no otorgó el permiso
+                  
                 }
             }
-        default: // El permiso fue negado
+        default:
             break
         }
     }
@@ -43,27 +52,62 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     // Función para añadir la imagen. Nota que ahora 'date' es de tipo 'String'.
     func addPicture(url: String, user: Int, date: String) {
-        // Preparamos el endpoint y los parámetros
-        let requestURL = "https://philbackend.onrender.com/api/auth/AddPicture" // Cambia esto a tu URL real
+        
+        //simon pa lo que digas (lol)
+        let requestURL = "https://philbackend.onrender.com/api/auth/AddPicture"
         let parameters: [String: Any] = [
             "url": url,
             "user": user,
-            "date": date // Ya no necesitas formatear 'date' ya que ya es un String.
+            "date": date
         ]
         
-        // Realizamos la solicitud POST
         AF.request(requestURL, method: .post, parameters: parameters, encoding: JSONEncoding.default)
             .validate(statusCode: 200..<300)
-            .responseJSON { [weak self] response in
+            .responseDecodable(of: PictureResponse.self) { [weak self] response in
                 switch response.result {
-                case .success:
-                    print("Imagen añadida con éxito.")
+                case .success(let pictureResponse):
+                    // Almacenar el ID de la imagen  en la variabl epublished
+                    self?.uploadedPhotoID = pictureResponse.id
+                    
+                    print(pictureResponse.message) // Solo para depuraciónxd
                 case .failure(let error):
                     print("Error al añadir la imagen: \(error.localizedDescription)")
                     self?.networkError = error.localizedDescription
                 }
             }
     }
+
+    
+    func sendEmotion(pictureID: Int, emotionID: Int) {
+      
+        print("Enviando emoción. Emotion ID: \(emotionID), Picture ID: \(pictureID)")
+
+        let requestURL = "https://philbackend.onrender.com/api/auth/AddPicturesEmotion" // Ajusta a tu URL
+        let parameters: [String: Any] = [
+            "emotion_id": emotionID,
+            "pictures_id": pictureID 
+        ]
+        
+        AF.request(requestURL, method: .post, parameters: parameters, encoding: JSONEncoding.default)
+            .validate()
+            .responseJSON { response in
+                switch response.result {
+                case .success:
+                    print("Emoción enviada con éxito.")
+                case .failure(let error):
+                    print("Error al enviar la emoción: \(error.localizedDescription)")
+                   
+                    if let data = response.data, let responseStr = String(data: data, encoding: .utf8) {
+                        print("Respuesta del servidor: \(responseStr)")
+                    }
+                }
+            }
+    }
+
+
+
+
+    
 }
     
 

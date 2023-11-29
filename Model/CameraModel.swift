@@ -14,8 +14,7 @@ struct Camera: Encodable, Decodable{
     let Date: String
 }
 
-struct PictureResponse: Codable {
-    var success: Bool
+struct PictureResponse: Decodable {
     var message: String
-    var picture: Camera
+    var id: Int
 }
