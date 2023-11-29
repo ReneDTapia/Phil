@@ -38,18 +38,19 @@ struct AnalyticsView: View{
 }
 
 struct EmotionData {
+    let emotion: String
     let emoji: String
     let color: Color
 }
 
 let emotionArray: [EmotionData] = [
-    EmotionData(emoji: "😡", color: Color(hex: "FF6347")), // Enojado: Rojo
-    EmotionData(emoji: "🤢", color: Color(hex: "ABFCC7")), // Náuseas: Verde
-    EmotionData(emoji: "😨", color: Color(hex: "A9A9A9")), // Miedo: Gris
-    EmotionData(emoji: "😄", color: Color(hex: "FFCE85")), // Feliz: Amarillo
-    EmotionData(emoji: "😐", color: Color(hex: "B0C4DE")), // Neutral: Azul claro
-    EmotionData(emoji: "😢", color: Color(hex: "4682B4")), // Triste: Azul oscuro
-    EmotionData(emoji: "😲", color: Color(hex: "9370DB"))  // Sorprendido: Morado
+    EmotionData(emotion: "Angry", emoji: "😡", color: Color(hex: "FF6347")), // Enojado: Rojo
+    EmotionData(emotion: "Disgusted", emoji: "🤢", color: Color(hex: "ABFCC7")), // Náuseas: Verde
+    EmotionData(emotion: "Fear", emoji: "😨", color: Color(hex: "A9A9A9")), // Miedo: Gris
+    EmotionData(emotion: "Happy", emoji: "😄", color: Color(hex: "FFCE85")), // Feliz: Amarillo
+    EmotionData(emotion: "Neutral", emoji: "😐", color: Color(hex: "B0C4DE")), // Neutral: Azul claro
+    EmotionData(emotion: "Sad", emoji: "😢", color: Color(hex: "4682B4")), // Triste: Azul oscuro
+    EmotionData(emotion: "Surprised", emoji: "😲", color: Color(hex: "9370DB"))  // Sorprendido: Morado
 ]
 
 
@@ -59,6 +60,7 @@ struct BarChart: View {
     let minimenu: [String] = ["10", "30", "all"]
     @State private var selectedValue: String = "10"
     @State private var selectedIndex: Int? = nil
+    @State private var isLoading = true
     let objectivesArray: [String] = [
             "Paputilin",
             "Hablar con Phil",
@@ -94,6 +96,8 @@ struct BarChart: View {
     //    var values: [CGFloat] = [80, 10, 10, 50, 70]
     var values: [CGFloat] {
     return viewModel.emotions.map { CGFloat(Double($0.emotionpercentage ?? "0") ?? 0.0) }
+    
+
 }
     var body: some View {
         GeometryReader { geometry in
@@ -150,13 +154,16 @@ struct BarChart: View {
                         
                         HStack(spacing: geometry.size.width/10.8) {
                             
-                            ForEach(0..<values.prefix(5).count, id:\.self) { index in
+                           ForEach(viewModel.emotions.prefix(5), id: \.emotion) { emotion in
                                 VStack {
                                     Spacer()
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(emotionArray[index].color)
-                                        .frame(width: geometry.size.width/20, height: values[index]*1.29)
-                                        .clipShape(Rectangle().offset(y: -10))
+                                    if let matchedEmotion = emotionArray.first(where: { $0.emotion == emotion.emotion }),
+                                    let emotionPercentage = Double(emotion.emotionpercentage ?? "0") {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(matchedEmotion.color)
+                                            .frame(width: geometry.size.width/20, height: CGFloat(emotionPercentage)*1.28)
+                                            .clipShape(Rectangle().offset(y: -10))
+                                    }
                                 }
                             }
                         }
@@ -170,9 +177,11 @@ struct BarChart: View {
                                     ZStack {
                                         RoundedRectangle(cornerRadius: 80)
                                             .fill(Color.white)
-                                        RoundedRectangle(cornerRadius: 80)
-                                            .strokeBorder(emotionArray[viewModel.emotions.firstIndex(where: {$0.emotion == emotion.emotion}) ?? 0].color, lineWidth: 4)
-                                        Text(emotionArray[viewModel.emotions.firstIndex(where: {$0.emotion == emotion.emotion}) ?? 0].emoji)
+                                        if let matchedEmotion = emotionArray.first(where: { $0.emotion == emotion.emotion }) {
+                                            RoundedRectangle(cornerRadius: 80)
+                                                .strokeBorder(matchedEmotion.color, lineWidth: 4)
+                                            Text(matchedEmotion.emoji)
+                                        }
                                     }
                                     .frame(width: geometry.size.width/11, height: geometry.size.width/11)
                                 }
@@ -198,7 +207,12 @@ struct BarChart: View {
             }
             
         }.onAppear() {
-            viewModel.getUserEmotions(userId: user, days: Int(selectedValue) ?? 10)
+            let days = selectedValue == "all" ? 0 : Int(selectedValue) ?? 10
+            _ = viewModel.getUserEmotions(userId: user, days: days)
+                .sink(receiveCompletion: { _ in },
+                    receiveValue: { _ in
+                        self.isLoading = false
+                    })
         }
         
     }

@@ -7,20 +7,24 @@
 
 import Foundation
 import Alamofire
+import Combine
 
 class AnalyticsViewModel : ObservableObject {
     @Published var emotions: [AnalyticsModel] = []
     
     
-    func getUserEmotions(userId: Int, days: Int) {
-        APIClient.getN(path: "getUserEmotions/\(userId)/\(days)") { (result: Result<[AnalyticsModel], AFError>) in
-            switch result {
-            case .success(let fetchedEmotions):
-                self.emotions = fetchedEmotions
-                let topEmotions = self.topEmotions(emotions: self.emotions)
-
-            case .failure(let error):
-                print(error)
+    func getUserEmotions(userId: Int, days: Int) -> Future<[AnalyticsModel], AFError> {
+        return Future { promise in
+            APIClient.getN(path: "getUserEmotions/\(userId)/\(days)") { (result: Result<[AnalyticsModel], AFError>) in
+                switch result {
+                case .success(let fetchedEmotions):
+                    self.emotions = fetchedEmotions
+                    let topEmotions = self.topEmotions(emotions: self.emotions)
+                    promise(.success(fetchedEmotions))
+                case .failure(let error):
+                    print(error)
+                    promise(.failure(error))
+                }
             }
         }
     }
