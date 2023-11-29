@@ -244,6 +244,7 @@ struct Objectives: View {
 
                 Text(text)
                     .font(.custom("Inter Bold", size: 18))
+                    .foregroundColor(.black)
             }
             .padding(.trailing, 20)
             .padding(.leading, 20)
