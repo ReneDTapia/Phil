@@ -11,6 +11,7 @@ struct InitialFormView: View {
     @State private var scrollOffset: CGFloat = 0
     @State private var contentHeight: CGFloat = 0
     @ObservedObject var viewModel = InitialFormViewModel()
+    @State private var showAlert = false
     @Environment(\.presentationMode) var presentationMode
     let userId: Int
     
@@ -88,6 +89,7 @@ struct InitialFormView: View {
                             } else {
                                 try await viewModel.updateAnswers(user_id: userId)
                             }
+                            showAlert = true
                         } catch {
                             print("Error al enviar las respuestas: \(error)")
                         }
@@ -104,6 +106,9 @@ struct InitialFormView: View {
                                 .stroke(Color(hex:"6B6EAB"), lineWidth: 0.8)
                                 .frame(width: 345)
                         )
+                }
+               .alert(isPresented: $showAlert){
+                    Alert(title: Text("Respuestas enviadas"), message: Text("Tus respuestas han sido enviadas correctamente"), dismissButton: .default(Text("Ok")))
                 }
                 .padding()
                 
