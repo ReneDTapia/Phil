@@ -7,9 +7,7 @@
 
 import Foundation
 
-struct AnalyticsModel: Decodable {
-    let idUsersEmotion: Int
-    let Users_id: Int
-    let Emotions_idEmotion: Int
-    let Percentage: Int
+struct AnalyticsModel: Codable {
+    let emotion: String
+    let emotionpercentage: String?
 }

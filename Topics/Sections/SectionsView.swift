@@ -43,14 +43,14 @@ struct SectionsView: View {
                         Text(topicTitle)
                             .font(.largeTitle)
                             .bold()
-                            .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 10))
+                            .padding(EdgeInsets(top: 10, leading: 20, bottom:  10, trailing: 10))
                             .foregroundColor(.white)
                         
                         if isLoading{
                             ProgressView(messageLoad)
                                 .foregroundColor(Color.white)
                                 .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .frame(width: geometry.size.width, height: geometry.size.height-200) 
+                                .frame(width: geometry.size.width, height: geometry.size.height-120)
                                 .scaleEffect(1.5)
                         }
                         
@@ -58,6 +58,7 @@ struct SectionsView: View {
                             
                             List {
                                 ForEach(SectionsVM.resultSections, id: \.id) { content in
+                                    
                                     Sections(text: content.text ?? "",
                                              video: content.video ?? "",
                                              image: content.image ?? "")
@@ -95,14 +96,13 @@ struct SectionsView: View {
                                                     .cornerRadius(10)
                                                     
                                             }
-                                            .padding(.top,-30)
+                                            .padding(.top,-10)
                                     Spacer()
                                 }
                                 .listRowBackground(Color.black)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .listRowSeparator(.hidden)
                             }
-
                             .background(.black)
                             
                             
@@ -175,14 +175,13 @@ struct Sections: View{
             ZStack(alignment: .center) {
                 Color.black
                 VStack{
-                    
                     if text != ""{
                         Text(text)
                             .foregroundColor(.white)
                             .multilineTextAlignment(.leading)
                             .padding(.leading)
                             .padding(.trailing)
-                            .padding(.top, -55)
+                            .padding(.top, -15)
                     }
                     
                     

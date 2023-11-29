@@ -7,25 +7,36 @@
 
 import Foundation
 import Alamofire
+import Combine
 
 class AnalyticsViewModel : ObservableObject {
     @Published var emotions: [AnalyticsModel] = []
     
-    func getAnal(userId: Int) {
-        APIClient.getN(path: "getUserAnal/\(userId)") { (result: Result<[AnalyticsModel], AFError>) in
-            switch result {
-            case .success(let fetchedEmotions):
-                self.emotions = fetchedEmotions
-            case .failure(let error):
-                print(error)
+    
+    func getUserEmotions(userId: Int, days: Int) -> Future<[AnalyticsModel], AFError> {
+        return Future { promise in
+            APIClient.getN(path: "getUserEmotions/\(userId)/\(days)") { (result: Result<[AnalyticsModel], AFError>) in
+                switch result {
+                case .success(let fetchedEmotions):
+                    self.emotions = fetchedEmotions
+                    let topEmotions = self.topEmotions(emotions: self.emotions)
+                    promise(.success(topEmotions))
+                case .failure(let error):
+                    print(error)
+                    promise(.failure(error))
+                }
             }
+            print(self.emotions.count)
         }
     }
 
-    
-    func topEmotions(count: Int) -> [AnalyticsModel] {
-        return Array(emotions.sorted(by: { $0.Percentage > $1.Percentage }).prefix(count))
+    func topEmotions(emotions: [AnalyticsModel]) -> [AnalyticsModel] {
+        let sortedEmotions = emotions.sorted { Double($0.emotionpercentage ?? "0") ?? 0 > Double($1.emotionpercentage ?? "0") ?? 0 }
+        let topEmotions = Array(sortedEmotions.prefix(5)) // Limita la salida a las 5 emociones principales
+        return topEmotions
     }
+
+    
 }
 
 
@@ -44,3 +55,24 @@ class AnalyticsViewModel : ObservableObject {
 //        }
 //    }
 //}
+
+// func getUserEmotions(userId: Int, days: Int, completion: @escaping ([AnalyticsModel]) -> Void) {
+    //     APIClient.getN(path: "getUserEmotions/\(userId)/\(days)") { (result: Result<[AnalyticsModel], AFError>) in
+    //         switch result {
+    //         case .success(let fetchedEmotions):
+    //             completion(fetchedEmotions)
+    //         case .failure(let error):
+    //             print(error)
+    //         }
+    //     }
+    // }
+// func getAnal(userId: Int) {
+    //     APIClient.getN(path: "getUserAnal/\(userId)") { (result: Result<[AnalyticsModel], AFError>) in
+    //         switch result {
+    //         case .success(let fetchedEmotions):
+    //             self.emotions = fetchedEmotions
+    //         case .failure(let error):
+    //             print(error)
+    //         }
+    //     }
+    // }

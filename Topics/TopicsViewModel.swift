@@ -1,6 +1,7 @@
 import SwiftUI
 import Foundation
 import Alamofire
+import KeychainSwift
 
 class TopicsViewModel: ObservableObject{
     @Published var resultTopics: [TopicsModel] = []
@@ -47,7 +48,11 @@ class TopicsViewModel: ObservableObject{
         ]
 
         // ejecutamos con alamofire
-        AF.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default).response { response in
+        var headers: HTTPHeaders = []
+        if let token = getToken() {
+            headers.add(name: "Authorization", value: "Bearer \(token)")
+        }
+        AF.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default,headers: headers).response { response in
             switch response.result {
             case .success:
                 print("Message registered successfully!")
@@ -55,6 +60,14 @@ class TopicsViewModel: ObservableObject{
                 print("Error registering message: \(error)")
             }
         }
+    }
+    
+    func getToken() -> String? {
+        let keychain = KeychainSwift()
+        if let token = keychain.get("userToken"), !TokenHelper.isTokenExpired(token: token) {
+            return token
+        }
+        return nil
     }
     
     func postTopic(user: Int, topic: Int) {
@@ -69,7 +82,14 @@ class TopicsViewModel: ObservableObject{
         ]
 
         // ejecutamos con alamofire
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default).response { response in
+        
+        var headers: HTTPHeaders = []
+        if let token = getToken() {
+            headers.add(name: "Authorization", value: "Bearer \(token)")
+        }
+        
+        
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default,headers: headers).response { response in
             switch response.result {
             case .success:
                 print("Message registered successfully!")
@@ -78,4 +98,6 @@ class TopicsViewModel: ObservableObject{
             }
         }
     }
+    
+    
 }
