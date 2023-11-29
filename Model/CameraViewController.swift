@@ -21,7 +21,7 @@ class CameraViewController: UIViewController, UIImagePickerControllerDelegate, U
     @Published var uploadedPhotoID: Int?
     
     let emotionIDs = ["Angry": 1, "Disgusted": 2, "Fearful": 3, "Happy": 4, "Neutral": 5, "Sad": 6, "Surprised": 7]
-    
+    let emotionsSpanish = ["Enojado": 1, "Disgustado": 2, "Asustado": 3, "Feliz": 4, "Neutral": 5, "Triste": 6, "Sorprendido": 7]
     override func viewDidLoad() {
         super.viewDidLoad()
         checkCameraAccess()

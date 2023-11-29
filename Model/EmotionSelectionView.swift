@@ -29,7 +29,7 @@ struct EmotionSelectionView: View {
 
                     // Enviar la emoción y el ID de la foto si es que los agarra el view model siuu (view controller por que luis no le sabe)
                     if let pictureID = cameraViewModel.uploadedPhotoID,
-                       let emotionID = cameraViewModel.emotionIDs[emotion] {
+                    let emotionID = cameraViewModel.emotionsSpanish[emotion] {
                         cameraViewModel.sendEmotion(pictureID: pictureID, emotionID: emotionID)
                     }
                 }
