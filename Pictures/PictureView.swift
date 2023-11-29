@@ -64,25 +64,21 @@ struct PictureView: View {
 
                           LazyVGrid(columns: columns) {
                               ForEach(photos, id: \.id) { photo in
-                                  if let url = URL(string: photo.url) {
-                                      AsyncImage(url: url) { phase in
-                                          if let image = phase.image {
-                                              image.resizable() // Redimensiona la imagen cargada
-                                                   .aspectRatio(contentMode: .fill)
-                                                   .frame(width: 82, height: 143)
-                                                   .cornerRadius(20)
-                                                   .clipped()
-                                          } else if phase.error != nil {
-                                              Color.red // Puede reemplazar esto con algún indicador de error
-                                                   .frame(width: 82, height: 143)
-                                                   .cornerRadius(20)
-                                          } else {
-                                              ProgressView() // Muestra un indicador de carga
-                                                   .frame(width: 82, height: 143)
-                                                   .background(Color.gray.opacity(0.3))
-                                                   .cornerRadius(20)
-                                          }
-                                      }
+                                  if let base64String = photo.url,
+                                     let data = Data(base64Encoded: base64String),
+                                     let uiImage = UIImage(data: data) {
+
+                                      Image(uiImage: uiImage)
+                                          .resizable()
+                                          .aspectRatio(contentMode: .fill)
+                                          .frame(width: 82, height: 143)
+                                          .cornerRadius(20)
+                                          .clipped()
+
+                                  } else {
+                                      Color.red
+                                          .frame(width: 82, height: 143)
+                                          .cornerRadius(20)
                                   }
                               }
                           }

@@ -264,9 +264,7 @@ struct Objectives: View {
 //}
 
 
-#Preview{
-    AnalyticsView(user: 1)
-}
+
 
 
 
