@@ -27,11 +27,11 @@ final class GPTViewModel : ObservableObject {
     ///Funcion SEND
     ///
     func send(message: String, isHidden: Bool = false, userContext: String, conversationId : Int, userId : Int) async {
-        let optionalParameters = ChatCompletionsOptionalParameters(temperature: 0.7, stream: true, maxTokens: 10000)
+        let optionalParameters = ChatCompletionsOptionalParameters(temperature: 0.7, stream: true, maxTokens: 1000)
         
         await MainActor.run {
             let userMessage = MessageChatGPT(text: message, role: .user, hidden: isHidden)
-            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: false)
+            let contextMessage = MessageChatGPT(text: userContext, role: .user, hidden: true)
             self.messages.append(contextMessage)
             self.messages.append(userMessage)
             
@@ -43,7 +43,7 @@ final class GPTViewModel : ObservableObject {
         
         do {
             let stream = try await openAI.createChatCompletionsStream(
-                model: .gpt3_5(.turbo),
+                model: .gpt4(.base),
                 messages: messages,
                 optionalParameters: optionalParameters
             )

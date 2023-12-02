@@ -114,6 +114,7 @@ struct BarChart: View {
                                 .multilineTextAlignment(.center)
                                 .bold()
                                 .padding(.top, 8)
+                                .foregroundColor(.black)
                             HStack{
                                 ForEach(0..<minimenu.count, id:\.self) {
                                     i in
