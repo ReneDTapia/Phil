@@ -14,7 +14,6 @@ struct TabBarView: View {
   
     @StateObject var VM = LoginViewModel()
     @State private var showMenu = false
-    @StateObject private var cameraViewModel = CameraViewController()
     
     let user : Int
     
@@ -83,41 +82,25 @@ struct TabBarView: View {
                         }
                         .tag(0) // Asignar un tag a cada pestaña
                         .background(Color.black)
-                    
-                    // Continue with other tabs...
-                    PictureView(userID : TokenHelper.getUserID() ?? 0 )
-                        .tabItem {
-                            Image(systemName: selectedTab == 1 ? "calendar" : "calendar")
-                                .environment(\.symbolVariants, .none)
-                        }
-                        .tag(1)
-                        .background(Color.black)
-                    
-                    // Special tab with a larger 'plus.circle' icon
-                    ModeloView(userId: TokenHelper.getUserID() ?? 0)
-                        .tabItem {
-                            Image(systemName: selectedTab == 2 ? "plus.circle.fill" : "plus.circle")
-                                .environment(\.symbolVariants, .none)
-                        }
-                        .tag(2)
-                        .background(Color.black)
+                   
                     
                     MyChatsView(userId: TokenHelper.getUserID() ?? 0)
                         .tabItem {
-                            Image(systemName: selectedTab == 3 ? "message.fill" : "message")
+                            Image(systemName: selectedTab == 1 ? "message.fill" : "message")
                                 .environment(\.symbolVariants, .none)
                         }
                         .tag(3)
                         .background(Color.black)
                     
-                    // Second tab view
-                    AnalyticsView(user: user)
+                    InitialFormView(userId: TokenHelper.getUserID() ?? 0)
                         .tabItem {
-                            Image(systemName: selectedTab == 4 ? "chart.bar.fill" : "chart.bar")
+                            Image(systemName: selectedTab == 2 ? "message.fill" : "message")
                                 .environment(\.symbolVariants, .none)
                         }
-                        .tag(4)
+                        .tag(3)
                         .background(Color.black)
+                    
+                   
                 }
                 .accentColor(Color(hex: "6b6eab"))
                 

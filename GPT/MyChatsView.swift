@@ -39,12 +39,9 @@ struct MyChatsView: View {
     }
 
     private var headerView: some View {
-        Text("Chatea con Phil")
-            .font(.largeTitle)
+        Text("Chats con Mr Phil")
+            .font(.title)
             .bold()
-            .padding(.top, 20)
-            .padding(.horizontal, 20)
-            .foregroundColor(.white)
     }
 
     private var addButton: some View {

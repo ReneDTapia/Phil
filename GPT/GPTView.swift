@@ -33,7 +33,7 @@ struct GPTView: View {
                 VStack(alignment: .leading) {
                     
                     Text("Chatea con Phil")
-                        .font(.largeTitle)
+                        .font(.title)
                         .bold()
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
                         .foregroundColor(.white)

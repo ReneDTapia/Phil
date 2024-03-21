@@ -47,7 +47,6 @@
 		52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC22ACE2C95004611A7 /* ViewState.swift */; };
 		52DB5AC52ACE347A004611A7 /* RegisteringUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */; };
 		BE1A98482AE0855200A01B1B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1A98472AE0855200A01B1B /* ChatView.swift */; };
-		BE3E369E2B16D5F00009E39D /* EmotionSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3E369D2B16D5F00009E39D /* EmotionSelectionView.swift */; };
 		BE426E2E2AEE64BD00C67198 /* TextMessageView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE426E2D2AEE64BD00C67198 /* TextMessageView2.swift */; };
 		BE8B015C2ADFB480003909BB /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8B015B2ADFB480003909BB /* ChatViewModel.swift */; };
 		BEA1B3DA2AE21D5900095A55 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = BEA1B3D92AE21D5900095A55 /* SwiftOpenAI */; };
@@ -66,12 +65,6 @@
 		BEC0FF702AE26B410005EDBF /* TopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF6F2AE26B410005EDBF /* TopicsView.swift */; };
 		BEC0FF722AE26BB50005EDBF /* TopicsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF712AE26BB50005EDBF /* TopicsModel.swift */; };
 		BEC0FF742AE26BC70005EDBF /* TopicsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC0FF732AE26BC70005EDBF /* TopicsViewModel.swift */; };
-		BEDB381B2AFE3C0D005D1FAC /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDB381A2AFE3C0D005D1FAC /* CameraViewController.swift */; };
-		BEDB381D2AFE3C2E005D1FAC /* ModeloView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDB381C2AFE3C2E005D1FAC /* ModeloView.swift */; };
-		BEDB381F2AFE3C4F005D1FAC /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEDB381E2AFE3C4F005D1FAC /* CameraModel.swift */; };
-		BEDB38212AFE3CEF005D1FAC /* EmotionClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BEDB38202AFE3CEF005D1FAC /* EmotionClassifier.mlmodel */; };
-		BEDB38222AFE3CEF005D1FAC /* EmotionClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BEDB38202AFE3CEF005D1FAC /* EmotionClassifier.mlmodel */; };
-		BEDB38232AFE3CEF005D1FAC /* EmotionClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = BEDB38202AFE3CEF005D1FAC /* EmotionClassifier.mlmodel */; };
 		BEFC1D462AE09864006F5644 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D452AE09864006F5644 /* Message.swift */; };
 		BEFC1D4A2AE0A6EA006F5644 /* SentMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D492AE0A6EA006F5644 /* SentMessageView.swift */; };
 		BEFC1D4C2AE0A797006F5644 /* ReceivedMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFC1D4B2AE0A797006F5644 /* ReceivedMessageView.swift */; };
@@ -142,7 +135,6 @@
 		52DB5AC22ACE2C95004611A7 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		52DB5AC42ACE347A004611A7 /* RegisteringUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisteringUser.swift; sourceTree = "<group>"; };
 		BE1A98472AE0855200A01B1B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
-		BE3E369D2B16D5F00009E39D /* EmotionSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmotionSelectionView.swift; sourceTree = "<group>"; };
 		BE426E2D2AEE64BD00C67198 /* TextMessageView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageView2.swift; sourceTree = "<group>"; };
 		BE8B015B2ADFB480003909BB /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		BEA1B3DB2AE2218000095A55 /* GPTViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTViewModel.swift; sourceTree = "<group>"; };
@@ -160,10 +152,6 @@
 		BEC0FF6F2AE26B410005EDBF /* TopicsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsView.swift; sourceTree = "<group>"; };
 		BEC0FF712AE26BB50005EDBF /* TopicsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsModel.swift; sourceTree = "<group>"; };
 		BEC0FF732AE26BC70005EDBF /* TopicsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsViewModel.swift; sourceTree = "<group>"; };
-		BEDB381A2AFE3C0D005D1FAC /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		BEDB381C2AFE3C2E005D1FAC /* ModeloView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeloView.swift; sourceTree = "<group>"; };
-		BEDB381E2AFE3C4F005D1FAC /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
-		BEDB38202AFE3CEF005D1FAC /* EmotionClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = EmotionClassifier.mlmodel; path = ../../../Downloads/EmotionClassifier.mlmodel; sourceTree = "<group>"; };
 		BEFC1D452AE09864006F5644 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		BEFC1D492AE0A6EA006F5644 /* SentMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentMessageView.swift; sourceTree = "<group>"; };
 		BEFC1D4B2AE0A797006F5644 /* ReceivedMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceivedMessageView.swift; sourceTree = "<group>"; };
@@ -278,7 +266,6 @@
 				FB2524B42B0F051A00A0224D /* Goals */,
 				FB5BC7652B0C73690091190C /* User */,
 				CBEC68BB2AFE9F190042A309 /* Analytics */,
-				BEDB38182AFE3BEB005D1FAC /* Model */,
 				523827992AF9962800937238 /* TabBar */,
 				523827972AF9763700937238 /* InitialForm */,
 				523827962AF9760D00937238 /* Topics */,
@@ -421,18 +408,6 @@
 				52DB5AB62ACD6889004611A7 /* User.swift */,
 			);
 			path = Login;
-			sourceTree = "<group>";
-		};
-		BEDB38182AFE3BEB005D1FAC /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				BEDB38202AFE3CEF005D1FAC /* EmotionClassifier.mlmodel */,
-				BEDB381A2AFE3C0D005D1FAC /* CameraViewController.swift */,
-				BEDB381C2AFE3C2E005D1FAC /* ModeloView.swift */,
-				BEDB381E2AFE3C4F005D1FAC /* CameraModel.swift */,
-				BE3E369D2B16D5F00009E39D /* EmotionSelectionView.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		BEFC1D482AE0A67A006F5644 /* Messages */ = {
@@ -664,21 +639,16 @@
 				52C6F66B2AFD882300216E2B /* APIClient.swift in Sources */,
 				52DB54192ACE9F860019B448 /* AuthService.swift in Sources */,
 				FB90C3702AF1B1F8006BF87B /* SectionsViewModel.swift in Sources */,
-				BE3E369E2B16D5F00009E39D /* EmotionSelectionView.swift in Sources */,
 				52DB5A7A2ACD236B004611A7 /* MainView.swift in Sources */,
 				BEA1B3E52AE2557000095A55 /* ConversationView.swift in Sources */,
 				BEFC1D522AE0EB3A006F5644 /* PicturesViewModel.swift in Sources */,
 				BEFC1D542AE0EB51006F5644 /* Picture.swift in Sources */,
-				BEDB38212AFE3CEF005D1FAC /* EmotionClassifier.mlmodel in Sources */,
 				52C6F66D2AFD885C00216E2B /* API.swift in Sources */,
 				52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */,
 				BEA333BD2AE2F1EC00001355 /* InitialFormModel.swift in Sources */,
-				BEDB381D2AFE3C2E005D1FAC /* ModeloView.swift in Sources */,
 				5238279B2AF9963800937238 /* TabBarView.swift in Sources */,
 				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
-				BEDB381F2AFE3C4F005D1FAC /* CameraModel.swift in Sources */,
 				52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
-				BEDB381B2AFE3C0D005D1FAC /* CameraViewController.swift in Sources */,
 				52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */,
 				BEC0FF702AE26B410005EDBF /* TopicsView.swift in Sources */,
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
@@ -695,7 +665,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				52711E6D2AD4E0850049DEE1 /* UserInputValidatorTests.swift in Sources */,
-				BEDB38222AFE3CEF005D1FAC /* EmotionClassifier.mlmodel in Sources */,
 				52DB5A892ACD2372004611A7 /* PhilTests.swift in Sources */,
 				52711E6B2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
 			);
@@ -705,7 +674,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEDB38232AFE3CEF005D1FAC /* EmotionClassifier.mlmodel in Sources */,
 				52DB5A932ACD2372004611A7 /* PhilUITests.swift in Sources */,
 				52DB5A952ACD2372004611A7 /* PhilUITestsLaunchTests.swift in Sources */,
 			);

@@ -12,5 +12,6 @@ enum ViewState {
     case password
     case signUp
     case ContentsView
+    case InitialFormView
 }
 
