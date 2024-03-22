@@ -88,37 +88,21 @@ struct PasswordView: View {
        
    
     func inputField(title: String, text: Binding<String>, isSecure: Bool = false) -> some View {
-            let placeholderColor = colorScheme == .dark ? Color.white : Color.gray
-            let textColor = colorScheme == .dark ? Color.white : Color(red: 0.42, green: 0.43, blue: 0.67)
-            let buttonColor = colorScheme == .dark ? Color.black : Color.white
-
-            return ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 57.29)
-                    .fill(buttonColor)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 57.29)
-                            .stroke(Color(red: 0.42, green: 0.43, blue: 0.67), lineWidth: 0.994)
-                    )
-                
+            let borderColor = Color(red: 0.42, green: 0.43, blue: 0.67)
+            
+            return Group {
                 if isSecure {
-                    SecureField("", text: text)
-                        .modifier(PlaceholderStyle(showPlaceHolder: text.wrappedValue.isEmpty,
-                                                   placeholder: title,
-                                                   color: placeholderColor))
-                        .font(.custom("Roboto-Light", size: 15))
-                        .foregroundColor(textColor)
-                        .padding(.leading, 25)
+                    SecureField(title, text: text)
                 } else {
-                    TextField("", text: text)
-                        .modifier(PlaceholderStyle(showPlaceHolder: text.wrappedValue.isEmpty,
-                                                   placeholder: title,
-                                                   color: placeholderColor))
-                        .font(.custom("Roboto-Light", size: 15))
-                        .foregroundColor(textColor)
-                        .padding(.leading, 25)
+                    TextField(title, text: text)
                 }
             }
-            .frame(width: 284, height: 47)
+            .padding()
+            .background(Color.white.cornerRadius(0))
+            .overlay(
+                RoundedRectangle(cornerRadius: 15).stroke(borderColor)
+            )
+            .padding(.horizontal, 20)
         }
     
 

@@ -17,7 +17,7 @@ class LoginViewModel: ObservableObject {
     @Published var viewState: ViewState = .username
     @Published var showAlert = false
     @Published var alertMessage = ""
-    @Published var userID : Int = 0
+    @Published var userID: Int = 0
     
     func login() {
         AuthService.shared.login(username: user.username, password: user.password) { result in

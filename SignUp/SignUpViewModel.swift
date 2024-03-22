@@ -12,11 +12,10 @@ class SignUpViewModel: ObservableObject {
     @Published var isDeaf: Bool = false
     @Published var showAlert = false
     @Published var alertMessage = ""
-    @Published var viewState: ViewState = .signUp
     @Published var isButtonPressed: Bool = false
 
-    
     var loginViewModel: LoginViewModel?
+    
     
     func register() {
             if let validationError = validateUserInputs() {

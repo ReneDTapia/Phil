@@ -5,184 +5,142 @@
 //  Created by Rene  on 04/10/23.
 //
 
-import Foundation
+//
+//  SignUpView.swift
+//  Phil
+//
+//  Created by Rene  on 04/10/23.
+//
+
 import SwiftUI
 
 struct SignUpView: View {
     @ObservedObject var viewModel: SignUpViewModel
     @Environment(\.colorScheme) var colorScheme
-    
-
+    @FocusState private var isFocused: Bool
 
     var body: some View {
-        
         let backgroundColor = colorScheme == .dark ? Color.black : Color.white
         let textColor = colorScheme == .dark ? Color.white : Color.black
         let buttonColor = Color(red: 0.42, green: 0.43, blue: 0.67)
+
         
-       
-        VStack(spacing: 20) {
-            
-            
-            
-            ZStack {
+        NavigationView {
+            VStack(spacing: 20) {
                 HStack {
-                    // The 'Go Back' button
                     Button(action: {
                         self.viewModel.loginViewModel?.viewState = .username
-                      
                     }) {
-                        Image(systemName: "chevron.left")
-                            .font(Font.system(size: 20, weight: .bold))
-                            .foregroundColor(textColor)
+                        HStack {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.indigo)
+                            
+                            Text("Regresar")
+                                .font(.caption)
+                                .foregroundColor(.indigo)
+                        
+                        }
                     }
                     .padding(.leading, 20)
-                    .padding(.top)
                     
-                    Spacer() // This ensures the button stays left-aligned
+                    Spacer()
                 }
-
-                // Phil text (centered by virtue of being in a ZStack)
-                Text("Phil")
-                    .font(.custom("Montserrat-Bold", size: 30))
-                    .padding(.top)
-                    .foregroundColor(textColor)
-            
-            }
-            .padding(.bottom, 30) // You can adjust this padding as necessary
-            
                 
-                VStack(spacing: 5) {
-                    Image("logo_placeholder")
-                        .resizable()
-                        .frame(width: 64, height: 64)
-                        .padding(.bottom, 20)
+                VStack {
+                    Text("Crea tu cuenta")
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(textColor)
                     
-                    Text("Create your account!")
-                                    .font(.custom("Montserrat Regular", size: 30))
-                                    .foregroundColor(textColor)
-                                    .multilineTextAlignment(.center)
+                    Text("Estas a un solo paso de empezar")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
                 }
-            
-            
-            // Input Fields
-                       inputField(title: "Email", text: $viewModel.user.email)
-                       inputField(title: "Username", text: $viewModel.user.username)
-                       inputField(title: "Password", text: $viewModel.user.password, isSecure: true)
-                       inputField(title: "Confirm Password", text: $viewModel.user.confirmPassword, isSecure: true)
-                     
-            
-            Toggle(isOn: $viewModel.isDeaf) {
-                Text("I am deaf")
-                    .font(.custom("Montserrat-Regular", size: 15))
-                    .foregroundColor(textColor)
-            }
-            .padding(.top, 20)
+                .padding(.top, 20)
 
-            // Sign Up Button
-            Button(action: {
-                // Acciones al presionar el botón
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    self.viewModel.isButtonPressed = true
+                TextField("Usuario", text: $viewModel.user.username)
+                    .padding()
+                    .background(Color.white.cornerRadius(0))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
+                    )
+                    .padding(.horizontal, 20)
+                    .focused($isFocused)
+
+                TextField("Correo electrónico", text: $viewModel.user.email)
+                    .padding()
+                    .background(Color.white.cornerRadius(0))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
+                    )
+                    .padding(.horizontal, 20)
+
+                SecureField("Contraseña", text: $viewModel.user.password)
+                    .padding()
+                    .background(Color.white.cornerRadius(0))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
+                    )
+                    .padding(.horizontal, 20)
+
+                SecureField("Confirmar Contraseña", text: $viewModel.user.confirmPassword)
+                    .padding()
+                    .background(Color.white.cornerRadius(0))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
+                    )
+                    .padding(.horizontal, 20)
+
+                Toggle(isOn: $viewModel.isDeaf) {
+                    Text("I am deaf")
+                        .font(.body)
+                        .foregroundColor(textColor)
                 }
+                .padding(.top, 20)
 
-                // Aquí es donde se maneja la lógica de registro
-                self.viewModel.register()
-
-                // Después de que la tarea se haya completado o después de un ligero retraso
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                Button(action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
-                        self.viewModel.isButtonPressed = false
+                        self.viewModel.isButtonPressed = true
                     }
-                }
-            }) {
-                Text("Sign Up")
-                    .font(Font.custom("Montserrat-Bold", size: 15).weight(.bold))
-                    .foregroundColor(.white)
-                    .frame(width: 284, height: 47)
-                    .background(viewModel.isButtonPressed ? buttonColor.opacity(0.7) : buttonColor) // Cambia el color de fondo cuando se presiona
-                    .cornerRadius(10)
-                    .scaleEffect(viewModel.isButtonPressed ? 0.9 : 1) // Hace que el botón se "contraiga" un poco cuando se presiona
-            }
-            .animation(.spring(response: 0.4, dampingFraction: 0.3), value: viewModel.isButtonPressed) // Aplica la animación basada en el cambio en `isButtonPressed`
 
-            
-            Spacer()
-        }
-        .padding(.horizontal, 20)
-        .background(backgroundColor)
-        .alert(isPresented: $viewModel.showAlert) { // Añade esto aquí
+                    self.viewModel.register()
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            self.viewModel.isButtonPressed = false
+                        }
+                    }
+                }) {
+                    Text("Crear Cuenta")
+                        .padding()
+                        .frame(minWidth: 300)
+                        .bold()
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .background(viewModel.isButtonPressed ? buttonColor.opacity(0.7) : buttonColor)
+                        .cornerRadius(100)
+                }
+                
+                Spacer()
+            }
+            .padding()
+            .background(backgroundColor)
+            .onAppear {
+                isFocused = true
+            }
+            .alert(isPresented: $viewModel.showAlert) {
                 Alert(title: Text("Error"),
                       message: Text(viewModel.alertMessage),
                       dismissButton: .default(Text("OK")))
             }
-    }
-
-    func inputField(title: String, text: Binding<String>, isSecure: Bool = false) -> some View {
-        let placeholderColor = colorScheme == .dark ? Color.white : Color.gray
-        let textColor = colorScheme == .dark ? Color.white : Color(red: 0.42, green: 0.43, blue: 0.67)
-        let buttonColor = colorScheme == .dark ? Color.black : Color.white
-        let borderColor = Color(red: 0.42, green: 0.43, blue: 0.67)
-        
-        return ZStack(alignment: .leading) {
-            RoundedRectangle(cornerRadius: 57.29)
-                .fill(buttonColor)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 57.29)
-                        .stroke(borderColor, lineWidth: 0.994)
-                )
-            if isSecure {
-                SecureField("", text: text)
-                    .modifier(PlaceholderStyle(showPlaceHolder: text.wrappedValue.isEmpty,
-                                               placeholder: title,
-                                               color: placeholderColor))
-                    .font(.custom("Roboto-Light", size: 15))
-                    .foregroundColor(textColor)
-                    .padding(.leading, 25)
-            } else {
-                TextField("", text: text)
-                    .modifier(PlaceholderStyle(showPlaceHolder: text.wrappedValue.isEmpty,
-                                               placeholder: title,
-                                               color: placeholderColor))
-                    .font(.custom("Roboto-Light", size: 15))
-                    .foregroundColor(textColor)
-                    .padding(.leading, 25)
-            }
-        }
-        .frame(width: 284, height: 47)
-    }
-
-
-
-}
-
-public struct PlaceholderStyle: ViewModifier {
-    var showPlaceHolder: Bool
-    var placeholder: String
-    var color: Color
-
-    public func body(content: Content) -> some View {
-        ZStack(alignment: .leading) {
-            if showPlaceHolder {
-                Text(placeholder)
-                    .foregroundColor(color)
-                    .padding(.leading, 0)
-            }
-            content
         }
     }
 }
-
 
 struct SignUpView_Previews: PreviewProvider {
     static var previews: some View {
         SignUpView(viewModel: SignUpViewModel())
     }
 }
-
-
-
-
-
 
 
