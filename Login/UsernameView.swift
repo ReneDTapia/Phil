@@ -16,31 +16,30 @@ struct UsernameView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            // Branding and Welcome Group
+            VStack{
+                Text("¡Bienvenido de nuevo!")
+                    .font(.title)
+                    .bold()
+                Text("Estamos emocionados de tenerte de vuelta")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
             VStack(spacing: 20) {
-                Text("Phil")
-                    .font(.custom("Montserrat-Bold", size: 30))
-                    .multilineTextAlignment(.center)
-                    .padding(.bottom, 30)
-                    .padding(.top)
-                
-                VStack(spacing: 5) {
-                    Image("logo_placeholder")
-                        .resizable()
-                        .frame(width: 64, height: 64)
-                        .padding(.bottom, 20)
-                    
-                    Text("Welcome back!")
-                        .font(.custom("Montserrat Regular", size: 30))
-                        .multilineTextAlignment(.center)
-                }
             }
             
-            let textColor = colorScheme == .dark ? Color.white : Color.black
-            let lineColor = colorScheme == .dark ? Color.white : Color.black
+            Image("chiriwilla")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
             
-            // Input Field
-            inputField(title: "Username", text: $viewModel.user.username)
+            
+            TextField("Usuario o correo electrónico", text: $viewModel.user.username)
+                                .padding()
+                                .background(Color.white.cornerRadius(0))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 15).stroke(style:StrokeStyle())
+
+                                )
+                                .padding()
           
             
             HStack {
@@ -50,50 +49,24 @@ struct UsernameView: View {
                     self.viewModel.viewState = .password // Cambia a la vista de contraseña
                         
                 }) {
-                    Text("Continue")
-                        .font(Font.custom("Montserrat-Bold", size: 15).weight(.bold))
-                        .foregroundColor(Color(red: 0.96, green: 0.96, blue: 1))
-                        // center horizontally without affecting the arrow
-                        .padding(.leading, 90)
+                    Text("Continuar")
+                        .font(.headline)
+                        .bold()
+                        .foregroundColor(Color.white)
+                        .frame(minWidth: 300)
+                        .cornerRadius(100)
                     
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .font(Font.custom("Montserrat-Regular", size: 20).weight(.bold))
-                        .foregroundColor(Color(red: 0.96, green: 0.96, blue: 1))
+                    
                 }
-                .padding(15)
-                .frame(width: 284, height: 47)
-                .background(Color(red: 0.42, green: 0.43, blue: 0.67))
-                .cornerRadius(10)
-//                .fullScreenCover(isPresented: $showUsernameView) {
-//                    PasswordView(viewModel: viewModel)
-//                }
+                .padding()
+                .background(Color.indigo)
+                .cornerRadius(100)
             }
           
             
             
             // Connect Using
-            HStack {
-                Spacer()
-                
-                Rectangle()
-                    .fill(lineColor) // Color de la línea
-                    .frame(width: 70, height: 0.5) // Controla el ancho de la línea aquí
-                
-        
-                Text("OR CONNECT USING:")
-                                    .font(Font.custom("Montserrat-Bold", size: 15).weight(.bold))
-                                    .foregroundColor(textColor)
-                                    .background(Color.clear)
-                                    .padding(.horizontal, 5)
-
-                                Rectangle()
-                                    .fill(lineColor)
-                                    .frame(width: 70, height: 0.5)
-                Spacer()
-            }
-            .padding(.top, 10)
-
+            
 
 
 
@@ -101,34 +74,58 @@ struct UsernameView: View {
 
 
             
-            // Social Media Icons
-            HStack(spacing: 15) {
-                socialIcon(name: "apple_logo")
-                socialIcon(name: "google_logo")
-                socialIcon(name: "facebook_logo")
-            }
-          
-            
-            // Account Details
-            VStack(spacing: 5) {
-                Text("Don’t have an account yet?")
-                                    .font(Font.custom("Montserrat-Regular", size: 15))
-                                    .foregroundColor(textColor)
-
-                                Button(action: {
-                                    self.viewModel.viewState = .signUp
-                                }) {
-                                    Text("Sign Up")
-                                        .font(Font.custom("Montserrat-Bold", size: 15).weight(.bold))
-                                        .underline()
-                                        .foregroundColor(textColor)
+            HStack{
+                                VStack{
+                                    Divider()
+                                }
+                                Text("O")
+                                VStack{
+                                    Divider()
                                 }
                             }
-                            .padding(.top, 70)
-
-                            Spacer()
+                            
+                            Button(action:{
+                                print("Botón presionado")
+                            }){
+                                Text("Continuar con Google")
+                                    .padding()
+                                    .frame(minWidth: 300)
+                                    .bold()
+                                    .font(.title3)
+                                    .foregroundColor(.gray)
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 3,x:0,y:3)
+                            }
+                            .padding(.bottom,10)
+                            
+                            Button(action:{
+                                print("Botón presionado")
+                            }){
+                                Text("Continuar con Apple")
+                                    .padding()
+                                    .frame(minWidth: 300)
+                                    .bold()
+                                    .font(.title3)
+                                    .foregroundColor(.white)
+                                    .background(Color.black)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 3,x:0,y:3)
+                            }
+                            HStack{
+                                Text("¿No tienes una cuenta?")
+                                    .font(.callout)
+                                Button(action:{ self.viewModel.viewState = .signUp}){
+                                    Text("Registrate Ahora")
+                                                                .foregroundColor(.indigo)
+                                                                .bold()
+                                                                .font(.callout)
+                                }
+                            }
+                            .padding()
                         }
                         .padding(.horizontal, 20)
+                        .padding(.top, 40)
 //                        .onAppear{
 //                            viewModel.logout() // god dice el BienAndroid
 //                        }
@@ -168,7 +165,7 @@ struct UsernameView: View {
                     .padding(.leading, 25)
             }
         }
-        .frame(width: 284, height: 47)
+        .frame(width: 300, height: 50)
     }
 
     
