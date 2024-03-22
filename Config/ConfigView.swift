@@ -19,6 +19,15 @@ struct Config: View {
                     Spacer()
                 }
                 .padding(25)
+                
+                
+                HStack{
+                    NavigationLink(destination: InitialFormView(userId: TokenHelper.getUserID() ?? 0)){
+                        Text("Cuestionario Inicial")
+                            .foregroundColor(.indigo)
+                    }
+                    Image(systemName: "Person")
+                }
             }
             
         }

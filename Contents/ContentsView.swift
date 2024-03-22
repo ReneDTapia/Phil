@@ -14,18 +14,15 @@ struct ContentsView: View {
         GeometryReader { geometry in
             NavigationStack {
                 ZStack(alignment: .leading) {
-                    Color.black
-                        .ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         
                         Text("Contenidos")
                             .font(.largeTitle)
                             .bold()
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
-                            .foregroundColor(.white)
                         if isLoading{                            ProgressView(messageLoad)
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                .foregroundColor(Color.white)
+                                .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                .foregroundColor(Color.black)
                                 .frame(width: geometry.size.width, height: geometry.size.height-100)
                             
                                 .scaleEffect(1.5)

@@ -18,7 +18,6 @@ struct MyChatsView: View {
         NavigationStack {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    Color.black.ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         headerView
                         addButton
@@ -42,6 +41,7 @@ struct MyChatsView: View {
         Text("Chats con Mr Phil")
             .font(.title)
             .bold()
+            .padding()
     }
 
     private var addButton: some View {
@@ -50,7 +50,7 @@ struct MyChatsView: View {
             Button(action: { showingAddConversation.toggle() }) {
                 Image(systemName: "plus")
                     .padding()
-                    .foregroundColor(.white)
+                    .foregroundColor(.indigo)
             }
         }
     }
@@ -88,8 +88,8 @@ struct MyChatsView: View {
 
     private func loadingView(geometry: GeometryProxy) -> some View {
         ProgressView(messageLoad)
-            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-            .foregroundColor(Color.white)
+            .progressViewStyle(CircularProgressViewStyle(tint: .black))
+            .foregroundColor(Color.black)
             .frame(width: geometry.size.width, height: geometry.size.height - 100)
             .scaleEffect(1.5)
     }
