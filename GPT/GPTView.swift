@@ -28,15 +28,12 @@ struct GPTView: View {
             geometry in
             
             ZStack(alignment: .leading) {
-                Color.black
-                    .ignoresSafeArea(.all)
                 VStack(alignment: .leading) {
                     
                     Text("Chatea con Phil")
                         .font(.title)
                         .bold()
                         .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
-                        .foregroundColor(.white)
                     
                     
                     ////
@@ -64,10 +61,10 @@ struct GPTView: View {
                                 }
                             } label: {
                                 Image(systemName: "paperplane.fill")
-                                    .foregroundColor(Color.white)
                                     .frame(width: 44, height: 44)
                                     .background(Color.purple)
                                     .cornerRadius(22)
+                                    .foregroundColor(.white)
                             }
                             .padding(.leading, 8)
                         }

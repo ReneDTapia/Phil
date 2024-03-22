@@ -72,23 +72,24 @@ struct TopicsView: View {
                            
                     
                 }
-            }
-            
-            .onAppear{
-                Task{
-                    do{
-                        try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
-                        
-                        if TopicsVM.resultTopics.isEmpty {
-                            messageLoad = "No hay datos"
+                .onAppear{
+                    Task{
+                        do{
+                            try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
+                            
+                            if TopicsVM.resultTopics.isEmpty {
+                                messageLoad = "No hay datos"
+                            }
+                            isLoading = TopicsVM.resultTopics.isEmpty // Verifica si la lista está vacía
                         }
-                        isLoading = TopicsVM.resultTopics.isEmpty // Verifica si la lista está vacía
-                    }
-                    catch{
-                        print("error")
+                        catch{
+                            print("error")
+                        }
                     }
                 }
             }
+            
+            
             .frame(height: geometry.size.height)
             .listStyle(PlainListStyle())
              
@@ -130,6 +131,7 @@ struct Topics: View{
                 VStack(alignment: .leading){
                     Text(title)
                         .font(.title2)
+                        .foregroundColor(.black)
                         .bold()
                         .multilineTextAlignment(.leading)
                      

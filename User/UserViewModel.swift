@@ -8,7 +8,7 @@ class UserViewModel: ObservableObject {
     init(userId: Int){
         self.userId = userId
     }
-    let baseURL = "https://philbackend.onrender.com/api/auth"
+    let baseURL = "http://44.219.217.34:3004/api/auth"
 
     func fetchUserInfo() {
         let endpoint = "\(baseURL)/GetUsersInfo/\(userId)"

@@ -32,6 +32,7 @@ struct Config: View {
                             Text("Perfil")
                                 .foregroundColor(.indigo)
                         }
+                        .navigationBarBackButtonHidden(true)
                     }
                     
                     Spacer()

@@ -115,17 +115,14 @@ struct MyChatsView: View {
             deleteButton(for: conversation)
             editButton(for: conversation)
         }
-        .listRowBackground(Color.black)
     }
 
     private func conversationNameView(_ conversation: Conversation) -> some View {
         Group {
             if isEditing && editingConversationId == conversation.id {
                 TextField("Nuevo nombre", text: $updatedConversationName)
-                    .foregroundColor(Color.white)
             } else {
                 Text("\(conversation.name)")
-                    .foregroundColor(Color.white)
             }
         }
     }

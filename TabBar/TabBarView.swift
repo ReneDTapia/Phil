@@ -57,7 +57,7 @@ struct TabBarView: View {
                         .tag(1)
                         .background(Color.black)
                     
-                    InitialFormView(userId: TokenHelper.getUserID() ?? 0)
+                    Config()
                         .tabItem {
                             Image(systemName: selectedTab == 2 ? "person.fill" : "person")
                                 .environment(\.symbolVariants, .none)

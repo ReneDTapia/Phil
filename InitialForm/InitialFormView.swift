@@ -16,91 +16,94 @@ struct InitialFormView: View {
     let userId: Int
     
     var body: some View {
-        ZStack{
-            VStack{
-                HStack{
-                    Button(action: {
-                        withAnimation {
-                            presentationMode.wrappedValue.dismiss()
-                        }
-                    }) {HStack{
-                        Image(systemName: "chevron.left")
-                        Text("Regresar")
-                            .font(.caption)
-                    }
-                }
-                
-                Spacer()
-            }
-                .padding()
-                ScrollView {
-                    VStack {
-                        Text("Cuestionario diario")
-                            .font(.title)
-                            .bold()
-                        Text("¿Del 0 al 10 cómo te identificas?")
-                            .font(.subheadline)
-                        
-                        QuestionBox(viewModel: viewModel)
-                            .padding(-4)
-                        
-                        //                        Spacer(minLength: 50)
-                        
-                    }
-                    .background(GeometryReader {
-                        Color.clear.preference(key: ViewOffsetKey.self,
-                                               value: -$0.frame(in: .named("scroll")).origin.y)
-                    })
-                    .background(GeometryReader {
-                        Color.clear.preference(key: ViewHeightKey.self,
-                                               value: $0.size.height)
-                    })
-                }
-                .coordinateSpace(name: "scroll")
-                .onPreferenceChange(ViewOffsetKey.self) { self.scrollOffset = $0 }
-                .onPreferenceChange(ViewHeightKey.self) { self.contentHeight = $0 }
-                .padding()
-                
-                Spacer()
-                
-                ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*1.26)
-                    .frame(height: 10)
-                    .padding()
-                
-                Button(action: {
-                    print("Botón presionado")
-                    Task {
-                        do {
-                            if viewModel.isFirstTime {
-                                try await viewModel.postAnswers(user_id: userId)
-                                viewModel.isFirstTime = false
-                            } else {
-                                try await viewModel.updateAnswers(user_id: userId)
+        NavigationStack{
+            ZStack{
+                VStack{
+                    HStack{
+                        Button(action: {
+                            withAnimation {
+                                presentationMode.wrappedValue.dismiss()
                             }
-                            showAlert = true
-                        } catch {
-                            print("Error al enviar las respuestas: \(error)")
+                        }) {HStack{
+                            Image(systemName: "chevron.left")
+                            Text("Regresar")
+                                .font(.caption)
                         }
+                        }
+                        
+                        Spacer()
                     }
-                }) {
-                    Text("Terminado 👋")
+                    .padding()
+                    ScrollView {
+                        VStack {
+                            Text("Cuestionario diario")
+                                .font(.title)
+                                .bold()
+                            Text("¿Del 0 al 10 cómo te identificas?")
+                                .font(.subheadline)
+                            
+                            QuestionBox(viewModel: viewModel)
+                                .padding(-4)
+                            
+                            //                        Spacer(minLength: 50)
+                            
+                        }
+                        .background(GeometryReader {
+                            Color.clear.preference(key: ViewOffsetKey.self,
+                                                   value: -$0.frame(in: .named("scroll")).origin.y)
+                        })
+                        .background(GeometryReader {
+                            Color.clear.preference(key: ViewHeightKey.self,
+                                                   value: $0.size.height)
+                        })
+                    }
+                    .coordinateSpace(name: "scroll")
+                    .onPreferenceChange(ViewOffsetKey.self) { self.scrollOffset = $0 }
+                    .onPreferenceChange(ViewHeightKey.self) { self.contentHeight = $0 }
+                    .padding()
+                    
+                    Spacer()
+                    
+                    ProgressBarView(viewModel: viewModel, progress: self.scrollOffset / self.contentHeight*1.26)
+                        .frame(height: 10)
                         .padding()
-                    //                        .background(Color(hex: "F9F9F9"))
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(hex:"6B6EAB"), lineWidth: 0.8)
-                                .frame(width: 345)
-                        )
+                    
+                    Button(action: {
+                        print("Botón presionado")
+                        Task {
+                            do {
+                                if viewModel.isFirstTime {
+                                    try await viewModel.postAnswers(user_id: userId)
+                                    viewModel.isFirstTime = false
+                                } else {
+                                    try await viewModel.updateAnswers(user_id: userId)
+                                }
+                                showAlert = true
+                            } catch {
+                                print("Error al enviar las respuestas: \(error)")
+                            }
+                        }
+                    }) {
+                        Text("Terminado 👋")
+                            .padding()
+                        //                        .background(Color(hex: "F9F9F9"))
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color(hex:"6B6EAB"), lineWidth: 0.8)
+                                    .frame(width: 345)
+                            )
+                    }
+                    .alert(isPresented: $showAlert){
+                        Alert(title: Text("Respuestas enviadas"), message: Text("Tus respuestas han sido enviadas correctamente"), dismissButton: .default(Text("Ok")))
+                    }
+                    .padding()
+                    
+                    
                 }
-               .alert(isPresented: $showAlert){
-                    Alert(title: Text("Respuestas enviadas"), message: Text("Tus respuestas han sido enviadas correctamente"), dismissButton: .default(Text("Ok")))
-                }
-                .padding()
-                
-                
             }
         }
+            .navigationBarBackButtonHidden(true)
     }
 }
 
