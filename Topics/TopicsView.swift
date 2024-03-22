@@ -15,8 +15,6 @@ struct TopicsView: View {
         GeometryReader { geometry in
             NavigationStack {
                 ZStack(alignment: .leading) {
-                    Color.black
-                        .ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         
                         HStack{
@@ -24,30 +22,29 @@ struct TopicsView: View {
                                 withAnimation {
                                     presentationMode.wrappedValue.dismiss()
                                 }
-                            }) {
-                                Image(systemName: "arrow.left")
-                                    .font(.title)
-                                    .foregroundColor(.white)
+                            }) {HStack{
+                                Image(systemName: "chevron.left")
+                                Text("Regresar")
+                                    .font(.caption)
                             }
-                            .padding(EdgeInsets(top: 50, leading: 15, bottom: 0, trailing: 0))
-                            
-                            Spacer()
                         }
+                        .padding(.leading, 20)
+                        
+                        Spacer()
+                    }
                         
                         Text("Temas del contenido")
                             .font(.largeTitle)
                             .bold()
                             .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 10))
-                            .foregroundColor(.white)
                         Text(contentTitle)
-                            .font(.title)
-                            .bold()
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
-                            .foregroundColor(.white)
+ 
                         if isLoading{
                             ProgressView(messageLoad)
-                                .foregroundColor(Color.white)
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .progressViewStyle(CircularProgressViewStyle())
                                 .frame(width: geometry.size.width, height: geometry.size.height-100)
                             
                             .scaleEffect(1.5)
@@ -60,15 +57,13 @@ struct TopicsView: View {
                                 
                                 NavigationLink(destination: SectionsView(topicID: content.topic, topicTitle: content.title, user: user, isChecked: content.done ?? false)){
                                     Topics(title: content.title, description: content.description, isChecked: content.done ?? false, user: user, topic: content.topic)
-                                        .listRowBackground(Color.black)
                                         .frame(maxWidth:.infinity, alignment:.center)
                                     .listRowSeparator(.hidden)}
-                                .listRowBackground(Color.black)
+                            
                                 .frame(maxWidth:.infinity, alignment:.center)
                                 .listRowSeparator(.hidden)
                                 
                             }
-                            .background(.black)
                             .frame(height: geometry.size.height-100)
                         }
                         Spacer()
@@ -136,7 +131,6 @@ struct Topics: View{
                     Text(title)
                         .font(.title2)
                         .bold()
-                        .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
                      
                     HStack{

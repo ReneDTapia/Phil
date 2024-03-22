@@ -88,8 +88,7 @@ struct MyChatsView: View {
 
     private func loadingView(geometry: GeometryProxy) -> some View {
         ProgressView(messageLoad)
-            .progressViewStyle(CircularProgressViewStyle(tint: .black))
-            .foregroundColor(Color.black)
+            .progressViewStyle(CircularProgressViewStyle())
             .frame(width: geometry.size.width, height: geometry.size.height - 100)
             .scaleEffect(1.5)
     }

@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 
 struct Config: View {
+    
+    @StateObject var LoginVM = LoginViewModel()
+    @State private var showUserView = false
     var body: some View {
         NavigationStack{
             VStack{
@@ -22,16 +25,52 @@ struct Config: View {
                 
                 
                 HStack{
-                    NavigationLink(destination: InitialFormView(userId: TokenHelper.getUserID() ?? 0)){
-                        Text("Cuestionario Inicial")
+                    HStack{
+                        Image(systemName: "person.fill")
                             .foregroundColor(.indigo)
+                        NavigationLink(destination: UserView(userId: TokenHelper.getUserID() ?? 0)){
+                            Text("Perfil")
+                                .foregroundColor(.indigo)
+                        }
                     }
-                    Image(systemName: "Person")
+                    
+                    Spacer()
                 }
+                .padding()
+                HStack{
+                    HStack{
+                        Image(systemName: "star.fill")
+                            .foregroundColor(.indigo)
+                        NavigationLink(destination: InitialFormView(userId: TokenHelper.getUserID() ?? 0)){
+                            Text("Cuestionario Inicial")
+                                .foregroundColor(.indigo)
+                        }
+                    }
+                    
+                    Spacer()
+                }
+                .padding()
+                Button(action: {
+                    LoginVM.logout()
+                    LoginVM.viewState = .username
+                    self.showUserView = true
+                    UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: MainView())
+                }) {
+                    HStack{
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .foregroundColor(.indigo)
+                        Text("Salir")
+                            .foregroundColor(.indigo)
+                        Spacer()
+                    }
+                    .foregroundColor(.black)
+                    .padding()
+                    
+                }
+                Spacer()
             }
             
         }
-        
     }
 }
 

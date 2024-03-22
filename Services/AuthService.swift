@@ -16,7 +16,7 @@ struct LoginResponse: Decodable {
 class AuthService {
     static let shared = AuthService()
     
-    private let baseURL = "http://44.219.217.34:3005/api/auth"
+    private let baseURL = "http://44.219.217.34:3004/api/auth"
     
     
     func register(email: String, username: String, password: String, confirmPassword: String, completion: @escaping (Result<LoginResponse, Error>) -> Void) {

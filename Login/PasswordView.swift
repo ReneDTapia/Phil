@@ -98,7 +98,7 @@ struct PasswordView: View {
                 }
             }
             .padding()
-            .background(Color.white.cornerRadius(0))
+            .background(Color(.systemBackground).cornerRadius(0))
             .overlay(
                 RoundedRectangle(cornerRadius: 15).stroke(borderColor)
             )

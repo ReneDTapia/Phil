@@ -21,8 +21,7 @@ struct ContentsView: View {
                             .bold()
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
                         if isLoading{                            ProgressView(messageLoad)
-                                .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                                .foregroundColor(Color.black)
+                                .progressViewStyle(CircularProgressViewStyle())
                                 .frame(width: geometry.size.width, height: geometry.size.height-100)
                             
                                 .scaleEffect(1.5)
@@ -33,7 +32,6 @@ struct ContentsView: View {
                             List(ContentVM.resultContents, id:\.id){content in
                                 NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: user)){
                                     Contents(title: content.title, description: content.description, progress: content.proporcion ?? 0)
-                                        .listRowBackground(Color.black)
                                         .frame(maxWidth:.infinity, alignment:.center)
                                         .listRowSeparator(.hidden)
                                         .navigationBarHidden(false)
@@ -54,13 +52,11 @@ struct ContentsView: View {
                                         }
                                     }
                                 }
-                                .listRowBackground(Color.black)
                                 .frame(maxWidth:.infinity, alignment:.center)
                                 .listRowSeparator(.hidden)
                                 .navigationBarHidden(false)
                                 .navigationBarBackButtonHidden(true)
                             }
-                            .background(.black)
                             .frame(height: geometry.size.height-100)
                             
                             Spacer()
@@ -315,7 +311,7 @@ struct Menu: View {
 
 struct Contents_Previews: PreviewProvider {
     static var previews: some View {
-        TabBarView( user: 37 )
+        MainView()
     }
 }
 

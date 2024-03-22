@@ -60,7 +60,7 @@ struct SignUpView: View {
 
                 TextField("Usuario", text: $viewModel.user.username)
                     .padding()
-                    .background(Color.white.cornerRadius(0))
+                    .background(Color(.systemBackground).cornerRadius(0))
                     .overlay(
                         RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
                     )
@@ -69,7 +69,7 @@ struct SignUpView: View {
 
                 TextField("Correo electrónico", text: $viewModel.user.email)
                     .padding()
-                    .background(Color.white.cornerRadius(0))
+                    .background(Color(.systemBackground).cornerRadius(0))
                     .overlay(
                         RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
                     )
@@ -77,7 +77,7 @@ struct SignUpView: View {
 
                 SecureField("Contraseña", text: $viewModel.user.password)
                     .padding()
-                    .background(Color.white.cornerRadius(0))
+                    .background(Color(.systemBackground).cornerRadius(0))
                     .overlay(
                         RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
                     )
@@ -85,7 +85,7 @@ struct SignUpView: View {
 
                 SecureField("Confirmar Contraseña", text: $viewModel.user.confirmPassword)
                     .padding()
-                    .background(Color.white.cornerRadius(0))
+                    .background(Color(.systemBackground).cornerRadius(0))
                     .overlay(
                         RoundedRectangle(cornerRadius: 15).stroke(Color.gray)
                     )

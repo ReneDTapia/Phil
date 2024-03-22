@@ -17,41 +17,29 @@ struct InitialFormView: View {
     
     var body: some View {
         ZStack{
-            Color(hex:"F6F6FE")
-                .ignoresSafeArea()
             VStack{
                 HStack{
                     Button(action: {
                         withAnimation {
                             presentationMode.wrappedValue.dismiss()
                         }
-                    }) {
-                        Image(systemName: "arrow.left")
-                            .font(.title)
-                            .foregroundColor(.black)
+                    }) {HStack{
+                        Image(systemName: "chevron.left")
+                        Text("Regresar")
+                            .font(.caption)
                     }
-                    .padding(EdgeInsets(top: 50, leading: 15, bottom: 0, trailing: 0))
-                    
-                    Spacer()
                 }
                 
+                Spacer()
+            }
+                .padding()
                 ScrollView {
                     VStack {
-                        Text("Phil")
-                            .foregroundColor(Color(hex:"3A3B42"))
-                            .font(Font.custom("Montserrat-ExtraBold", size: 30))
-                        Image("logo_placeholder")
-                            .resizable()
-                            .frame(width: 55, height: 46)
-                        Text("Hablanos de ti")
-                            .font(Font.custom("Montserrat-Regular", size: 30)).multilineTextAlignment(.center)
-                            .foregroundColor(.black)
-                            .padding(.bottom, -1)
+                        Text("Cuestionario diario")
+                            .font(.title)
+                            .bold()
                         Text("¿Del 0 al 10 cómo te identificas?")
-                            .font(Font.custom("Monsterrat-Regular", size: 14))
-                            .multilineTextAlignment(.center)
-                            .padding(.bottom, 10)
-                            .foregroundColor(.black)
+                            .font(.subheadline)
                         
                         QuestionBox(viewModel: viewModel)
                             .padding(-4)
@@ -95,9 +83,7 @@ struct InitialFormView: View {
                         }
                     }
                 }) {
-                    Text("Done 👋")
-                        .font(.custom("Montserrat-Bold", size: 15))
-                        .foregroundColor(.black)
+                    Text("Terminado 👋")
                         .padding()
                     //                        .background(Color(hex: "F9F9F9"))
                         .cornerRadius(10)

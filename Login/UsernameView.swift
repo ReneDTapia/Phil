@@ -34,7 +34,7 @@ struct UsernameView: View {
             
             TextField("Usuario o correo electrónico", text: $viewModel.user.username)
                                 .padding()
-                                .background(Color.white.cornerRadius(0))
+                                .background(Color(.systemBackground).cornerRadius(0))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 15).stroke(style:StrokeStyle())
 

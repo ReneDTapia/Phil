@@ -21,35 +21,31 @@ struct SectionsView: View {
         GeometryReader { geometry in
             NavigationStack {
                 ZStack(alignment: .leading) {
-                    Color.black
-                        .ignoresSafeArea(.all)
                     VStack(alignment: .leading) {
                         HStack{
                             Button(action: {
                                 withAnimation {
                                     presentationMode.wrappedValue.dismiss()
                                 }
-                            }) {
-                                Image(systemName: "arrow.left")
-                                    .font(.title)
-                                    .foregroundColor(.white)
+                            }) {HStack{
+                                Image(systemName: "chevron.left")
+                                Text("Regresar")
+                                    .font(.caption)
                             }
-                            .padding(EdgeInsets(top: -10, leading: -5, bottom: 0, trailing: 0))
-                            
-                            Spacer()
                         }
+                        
+                        Spacer()
+                    }
                         
                         .padding(EdgeInsets(top: 10, leading: 20, bottom: 0, trailing: 20))
                         Text(topicTitle)
                             .font(.largeTitle)
                             .bold()
                             .padding(EdgeInsets(top: 10, leading: 20, bottom:  10, trailing: 10))
-                            .foregroundColor(.white)
                         
                         if isLoading{
                             ProgressView(messageLoad)
-                                .foregroundColor(Color.white)
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .progressViewStyle(CircularProgressViewStyle())
                                 .frame(width: geometry.size.width, height: geometry.size.height-120)
                                 .scaleEffect(1.5)
                         }
@@ -62,7 +58,6 @@ struct SectionsView: View {
                                     Sections(text: content.text ?? "",
                                              video: content.video ?? "",
                                              image: content.image ?? "")
-                                        .listRowBackground(Color.black)
                                         .frame(maxWidth: .infinity, alignment: .center)
                                         .listRowSeparator(.hidden)
                                 }
@@ -91,7 +86,7 @@ struct SectionsView: View {
                                             ) {
                                                 Text(checkButton ? "Deshacer" : "Hecho")
                                                     .padding()
-                                                    .foregroundColor(.white)
+                                                    
                                                     .background(checkButton ? Color.red : Color.green)
                                                     .cornerRadius(10)
                                                     
@@ -99,11 +94,9 @@ struct SectionsView: View {
                                             .padding(.top,-10)
                                     Spacer()
                                 }
-                                .listRowBackground(Color.black)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .listRowSeparator(.hidden)
                             }
-                            .background(.black)
                             
                             
                         }
@@ -173,11 +166,9 @@ struct Sections: View{
     
     var body: some View{
             ZStack(alignment: .center) {
-                Color.black
                 VStack{
                     if text != ""{
                         Text(text)
-                            .foregroundColor(.white)
                             .multilineTextAlignment(.leading)
                             .padding(.leading)
                             .padding(.trailing)
@@ -210,7 +201,6 @@ struct Sections: View{
                     }
                     
                     Rectangle()
-                        .foregroundColor(Color.white)
                         .frame(width: 350,height: 3)
                     
                     
@@ -219,7 +209,6 @@ struct Sections: View{
                 
             }
             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-            .background(Color.black)
             .frame(maxWidth: 500)
         }
 }
