@@ -22,18 +22,10 @@ struct TabBarView: View {
         // Customize the appearance of the Tab Bar
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .black
-        
-        // Set the tab bar item appearance for both selected and unselected states
         
         
         
-        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        // Set the shadow image to a thin white line and the shadow color to transparent
-        appearance.shadowImage = UIImage() // Creates an empty image
-        appearance.shadowColor = .white
-        // Apply the appearance to the UITabBar
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance // For when the TabBar is scrolled
     }
@@ -45,34 +37,7 @@ struct TabBarView: View {
                 .ignoresSafeArea(.all)
             
             VStack(alignment: .leading) {
-                HStack {
-                    // Botón del menú
-                    Button(action: {
-                        withAnimation {
-                            self.showMenu.toggle()
-                        }
-                    }) {
-                        Image(systemName: "line.horizontal.3")
-                            .font(.title)
-                            .foregroundColor(.white)
-                    }
-                    
-                    Spacer()
-                    ZStack {
-                                    Circle()
-                                        .fill(Color.white)
-                                        .frame(width: 50, height: 50)
-
-                                    Image("God2")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                                        .frame(width: 50, height: 50)
-                                }
-                }
-                .padding(EdgeInsets(top: 0, leading: 10, bottom: 1, trailing: 10))
-                TabView(selection: $selectedTab) { // Usar el binding al estado para la selección
+                                TabView(selection: $selectedTab) { // Usar el binding al estado para la selección
                     // First tab view
                     ContentsView(user:TokenHelper.getUserID() ?? 0)
                         .tabItem {
@@ -89,16 +54,15 @@ struct TabBarView: View {
                             Image(systemName: selectedTab == 1 ? "message.fill" : "message")
                                 .environment(\.symbolVariants, .none)
                         }
-                        .tag(3)
+                        .tag(1)
                         .background(Color.black)
                     
                     InitialFormView(userId: TokenHelper.getUserID() ?? 0)
                         .tabItem {
-                            Image(systemName: selectedTab == 2 ? "message.fill" : "message")
+                            Image(systemName: selectedTab == 2 ? "person.fill" : "person")
                                 .environment(\.symbolVariants, .none)
                         }
-                        .tag(3)
-                        .background(Color.black)
+                        .tag(2)
                     
                    
                 }

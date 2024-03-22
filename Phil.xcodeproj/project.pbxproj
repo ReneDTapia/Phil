@@ -75,6 +75,7 @@
 		CBEC68BD2AFE9F350042A309 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC68BC2AFE9F350042A309 /* AnalyticsView.swift */; };
 		CBEC68BF2AFE9F610042A309 /* AnalyticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC68BE2AFE9F610042A309 /* AnalyticsViewModel.swift */; };
 		CBEC68C12AFE9F770042A309 /* AnalyticsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEC68C02AFE9F770042A309 /* AnalyticsModel.swift */; };
+		FB248C332BAD4C4C008FBFD1 /* ConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB248C322BAD4C4C008FBFD1 /* ConfigView.swift */; };
 		FB2524B72B0F054D00A0224D /* GoalsModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FB2524B52B0F054D00A0224D /* GoalsModel.xcdatamodeld */; };
 		FB2524B92B0F063600A0224D /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2524B82B0F063600A0224D /* DataController.swift */; };
 		FB5BC7692B0C89210091190C /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5BC7682B0C89210091190C /* UserViewModel.swift */; };
@@ -162,6 +163,7 @@
 		CBEC68BC2AFE9F350042A309 /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		CBEC68BE2AFE9F610042A309 /* AnalyticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViewModel.swift; sourceTree = "<group>"; };
 		CBEC68C02AFE9F770042A309 /* AnalyticsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsModel.swift; sourceTree = "<group>"; };
+		FB248C322BAD4C4C008FBFD1 /* ConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigView.swift; sourceTree = "<group>"; };
 		FB2524B62B0F054D00A0224D /* GoalsModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GoalsModel.xcdatamodel; sourceTree = "<group>"; };
 		FB2524B82B0F063600A0224D /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		FB5BC7682B0C89210091190C /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
@@ -269,14 +271,15 @@
 				523827992AF9962800937238 /* TabBar */,
 				523827972AF9763700937238 /* InitialForm */,
 				523827962AF9760D00937238 /* Topics */,
+				52F2B96D2AF4A7AC002792AA /* Contents */,
 				523827952AF975EF00937238 /* Pictures */,
 				BEA1B3DD2AE2279900095A55 /* GPT */,
-				52F2B96D2AF4A7AC002792AA /* Contents */,
 				BEA333C52AE2FCB800001355 /* Login */,
 				52F2B96C2AF4A748002792AA /* SignUp */,
 				52CC1B9E2ACF488700AD0029 /* Services */,
 				52DB5AC92ACE3968004611A7 /* Helpers */,
 				52DB5AC82ACE3918004611A7 /* Views */,
+				FB248C2F2BAD484C008FBFD1 /* Config */,
 				52DB5AA22ACD3470004611A7 /* Fonts */,
 				52DB5A762ACD236B004611A7 /* Phil */,
 				52DB5A872ACD2372004611A7 /* PhilTests */,
@@ -429,6 +432,14 @@
 				CBEC68C02AFE9F770042A309 /* AnalyticsModel.swift */,
 			);
 			path = Analytics;
+			sourceTree = "<group>";
+		};
+		FB248C2F2BAD484C008FBFD1 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				FB248C322BAD4C4C008FBFD1 /* ConfigView.swift */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		FB2524B42B0F051A00A0224D /* Goals */ = {
@@ -616,6 +627,7 @@
 				FB90C36C2AF1B0FB006BF87B /* SectionsView.swift in Sources */,
 				52DB5AC32ACE2C95004611A7 /* ViewState.swift in Sources */,
 				BE1A98482AE0855200A01B1B /* ChatView.swift in Sources */,
+				FB248C332BAD4C4C008FBFD1 /* ConfigView.swift in Sources */,
 				BEC0FF6C2AE26AD10005EDBF /* ContentsModel.swift in Sources */,
 				BEA333C72AE73CA900001355 /* UserForm.swift in Sources */,
 				CBEC68BD2AFE9F350042A309 /* AnalyticsView.swift in Sources */,
