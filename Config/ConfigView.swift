@@ -30,11 +30,9 @@ struct Config: View {
                     List{
                         HStack{
                             HStack{
-                                Image(systemName: "person.fill")
-                                    .foregroundColor(.indigo)
+                                Image(systemName: "person")
                                 NavigationLink(destination: UserView(userId: TokenHelper.getUserID() ?? 0)){
                                     Text("Perfil")
-                                        .foregroundColor(.indigo)
                                 }
                                 .navigationBarBackButtonHidden(true)
                             }
@@ -44,11 +42,10 @@ struct Config: View {
                         .padding(.vertical)
                         HStack{
                             HStack{
-                                Image(systemName: "star.fill")
-                                    .foregroundColor(.indigo)
+                                Image(systemName: "list.clipboard")
                                 NavigationLink(destination: InitialFormView(userId: TokenHelper.getUserID() ?? 0)){
                                     Text("Cuestionario Inicial")
-                                        .foregroundColor(.indigo)
+                                        
                                 }
                             }
                             
@@ -70,9 +67,9 @@ struct Config: View {
                         }) {
                             HStack{
                                 Image(systemName: "rectangle.portrait.and.arrow.right")
-                                    .foregroundColor(.indigo)
+                                    .foregroundColor(.red)
                                 Text("Salir")
-                                    .foregroundColor(.indigo)
+                                    .foregroundColor(.red)
                                 Spacer()
                             }
                             .padding(.vertical)

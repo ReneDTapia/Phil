@@ -111,10 +111,21 @@ struct UserView: View {
                             .foregroundColor(.white)
                             .font(.caption)
                     }
+                        Spacer()
+                        
+                        Button(action: {
+                            withAnimation {
+                                presentationMode.wrappedValue.dismiss()
+                            }}){
+                                    Image(systemName: "star")
+                                        .foregroundColor(.white)
+                            }
+                        
                 }
                 .padding(.leading, 20)
-                
-                Spacer()
+                    
+                .padding(.trailing, 20)
+                    
             }
                 
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
