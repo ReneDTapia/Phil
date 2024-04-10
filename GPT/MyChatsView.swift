@@ -11,6 +11,8 @@ struct MyChatsView: View {
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
     @State private var showingAddConversation = false
+    
+    @State private var showModal = false
 
     var userId: Int
 
@@ -39,7 +41,7 @@ struct MyChatsView: View {
 
     private var headerView: some View {
         Text("Chats con Mr Phil")
-            .font(.title)
+            .font(.largeTitle)
             .bold()
             .padding()
     }
@@ -47,11 +49,17 @@ struct MyChatsView: View {
     private var addButton: some View {
         HStack {
             Spacer()
-            Button(action: { showingAddConversation.toggle() }) {
+            Button(action: { self.showModal = true
+            }) {
                 Image(systemName: "plus")
                     .padding()
                     .foregroundColor(.indigo)
             }
+            .sheet(isPresented: $showModal) {
+                ModalView(newConversationName: $newConversationName, addNewConversation: addNewConversation)
+                    .presentationDetents([.fraction(0.3)])
+            }
+
         }
     }
 
@@ -63,10 +71,45 @@ struct MyChatsView: View {
                     .padding()
                 Button("Agregar") { addNewConversation() }
                     .buttonStyle(BorderlessButtonStyle())
+                    .foregroundColor(.indigo)
+                    .padding(.horizontal)
             }
         }
     }
 
+    struct ModalView: View {
+        @Environment(\.presentationMode) var presentationMode
+        @Binding var newConversationName: String
+        var addNewConversation: () -> Void
+        
+        var body: some View {
+            VStack {
+                HStack{
+                    Text("Nueva conversación")
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                    Spacer()
+                }
+                TextField("Nombre de la conversación", text: $newConversationName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                HStack{
+                    Button("Agregar") {
+                        addNewConversation()
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .foregroundColor(.indigo)
+                    .padding(.horizontal)
+                    Spacer()
+                }
+            }
+            .padding()
+        }
+    }
+
+    
     private func addNewConversation() {
         Task {
             let success = await viewModel.registerConversationWithAlamofire(name: newConversationName, userId: userId)
@@ -82,17 +125,27 @@ struct MyChatsView: View {
         Task {
             await viewModel.fetchConversations(userId: userId)
             isLoading = viewModel.conversations.isEmpty
-            messageLoad = viewModel.conversations.isEmpty ? "No hay datos" : "Cargando..."
+            messageLoad = viewModel.conversations.isEmpty ? "Inicia una nueva conversación" : "Cargando..."
         }
     }
 
     private func loadingView(geometry: GeometryProxy) -> some View {
-        ProgressView(messageLoad)
-            .progressViewStyle(CircularProgressViewStyle())
-            .frame(width: geometry.size.width, height: geometry.size.height - 100)
-            .scaleEffect(1.5)
+        if messageLoad == "Cargando..." {
+            return ProgressView(messageLoad)
+                .progressViewStyle(CircularProgressViewStyle())
+                .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                .scaleEffect(1.5)
+        } else {
+            // Devuelve algo como un Text vacío o un Spacer
+            return Text(messageLoad)
+                .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                .scaleEffect(1.5)
+                .foregroundColor(.gray)
+            
+        }
     }
 
+    
     private var conversationsList: some View {
         List {
             ForEach(viewModel.conversations, id: \.id) { conversation in

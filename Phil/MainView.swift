@@ -35,6 +35,7 @@ struct MainView: View {
             if loginViewModel.isLoggedIn {
                 // Si el usuario está loggeado, muestra la TabBarView
                 TabBarView(user: TokenHelper.getUserID() ?? 0)
+                    
             } else {
                 // Si no está loggeado, muestra la vista de login o registro
                 switch loginViewModel.viewState {

@@ -24,8 +24,11 @@ struct TopicsView: View {
                                 }
                             }) {HStack{
                                 Image(systemName: "chevron.left")
+                                .foregroundColor(.indigo)
+                                
                                 Text("Regresar")
                                     .font(.caption)
+                                    .foregroundColor(.indigo)
                             }
                         }
                         .padding(.leading, 20)
@@ -43,11 +46,21 @@ struct TopicsView: View {
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
  
                         if isLoading{
-                            ProgressView(messageLoad)
-                                .progressViewStyle(CircularProgressViewStyle())
-                                .frame(width: geometry.size.width, height: geometry.size.height-100)
+                            if messageLoad == "Cargando..." {
+                                ProgressView(messageLoad)
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                    .scaleEffect(1.5)
+                            } else {
+                                // Devuelve algo como un Text vacío o un Spacer
+                                Text(messageLoad)
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                    .scaleEffect(1.5)
+                                    .foregroundColor(.gray)
+                                
+                            }
                             
-                            .scaleEffect(1.5)
+                            
                         }
                         else{
                             
@@ -69,7 +82,8 @@ struct TopicsView: View {
                         Spacer()
                         
                     }
-                           
+    
+                    
                     
                 }
                 .onAppear{
@@ -114,7 +128,7 @@ struct Topics: View{
         ZStack(alignment: .center) {
             Rectangle()
                 .foregroundColor(.clear)
-                .background(Color(red: 0.96, green: 0.76, blue: 0.30))
+                .background(.yellow)
                 .cornerRadius(24)
                 .offset(x: 4, y: 2.50)
             Rectangle()
@@ -124,7 +138,7 @@ struct Topics: View{
                 .overlay(
                     RoundedRectangle(cornerRadius: 24)
                         .inset(by: 2)
-                        .stroke(Color(red: 0.96, green: 0.76, blue: 0.30), lineWidth: 5)
+                        .stroke(.yellow, lineWidth: 5)
                 )
                 .offset(x: -4, y: -2.50)
             HStack(){
@@ -151,15 +165,16 @@ struct Topics: View{
                 .frame(maxWidth:.infinity, alignment: .leading)
                  
                  
-                ZStack{
+                ZStack {
                     Image(systemName: isChecked ? "checkmark.square" : "square")
-                        .foregroundColor(Color(red: 0.42, green: 0.43, blue: 0.67))
+                        .foregroundColor(.indigo)
                         .bold()
                         .font(.title)
                         .offset(x: -20)
                         .padding(.leading, 10)
-                                                
-                      
+                        .onTapGesture {
+                            TopicsVM.UpdateDone(user: user, topic: topic, done: !isChecked)
+                        }
                 }
             }
             
@@ -174,6 +189,6 @@ struct Topics: View{
 
 struct Topics_Previews: PreviewProvider {
     static var previews: some View {
-        TopicsView(contentID: 1, contentTitle: "adsad", user: 37 )
+        MainView()
     }
 }

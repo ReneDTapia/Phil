@@ -25,8 +25,10 @@ struct PasswordView: View {
                     }) {
                         HStack{
                             Image(systemName: "chevron.left")
+                            .foregroundColor(.indigo)
                             Text("Regresar")
                                 .font(.caption)
+                                .foregroundColor(.indigo)
                         }
                     }
                     .padding(.leading, 20)
@@ -50,7 +52,7 @@ struct PasswordView: View {
             
             SecureField("Contraseña", text: $viewModel.user.password)
                 .padding()
-                .background(Color.white.cornerRadius(0))
+                .background(Color(.systemBackground).cornerRadius(0))
                 .overlay(RoundedRectangle(cornerRadius: 15).stroke())
                 .padding()
                 .padding(.horizontal,20)

@@ -29,8 +29,11 @@ struct SectionsView: View {
                                 }
                             }) {HStack{
                                 Image(systemName: "chevron.left")
+                                    .foregroundColor(.indigo)
+                                
                                 Text("Regresar")
                                     .font(.caption)
+                                    .foregroundColor(.indigo)
                             }
                         }
                         
@@ -44,11 +47,23 @@ struct SectionsView: View {
                             .padding(EdgeInsets(top: 10, leading: 20, bottom:  10, trailing: 10))
                         
                         if isLoading{
-                            ProgressView(messageLoad)
-                                .progressViewStyle(CircularProgressViewStyle())
-                                .frame(width: geometry.size.width, height: geometry.size.height-120)
-                                .scaleEffect(1.5)
+                            if messageLoad == "Cargando..." {
+                                ProgressView(messageLoad)
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                    .scaleEffect(1.5)
+                            } else {
+                                // Devuelve algo como un Text vacío o un Spacer
+                                Text(messageLoad)
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                    .scaleEffect(1.5)
+                                    .foregroundColor(.gray)
+                                
+                            }
+                            
+                            
                         }
+                        
                         
                         else{
                             
@@ -86,7 +101,9 @@ struct SectionsView: View {
                                             ) {
                                                 Text(checkButton ? "Deshacer" : "Hecho")
                                                     .padding()
-                                                    
+                                                    .bold()
+                                                    .font(.title3)
+                                                    .foregroundColor(.white)
                                                     .background(checkButton ? Color.red : Color.green)
                                                     .cornerRadius(10)
                                                     

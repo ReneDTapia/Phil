@@ -92,8 +92,8 @@ struct UsernameView: View {
                                     .frame(minWidth: 300)
                                     .bold()
                                     .font(.title3)
-                                    .foregroundColor(.gray)
-                                    .background(Color.white)
+                                    .foregroundColor(colorScheme == .dark ? .white : .gray)
+                                    .background(colorScheme == .dark ? .gray.opacity(0.3) : .white)
                                     .cornerRadius(10)
                                     .shadow(radius: 3,x:0,y:3)
                             }
@@ -107,8 +107,8 @@ struct UsernameView: View {
                                     .frame(minWidth: 300)
                                     .bold()
                                     .font(.title3)
-                                    .foregroundColor(.white)
-                                    .background(Color.black)
+                                    .foregroundColor(colorScheme == .dark ? .black : .white)
+                                    .background(colorScheme == .dark ? .white : .black)
                                     .cornerRadius(10)
                                     .shadow(radius: 3,x:0,y:3)
                             }

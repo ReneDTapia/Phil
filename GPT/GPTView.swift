@@ -14,9 +14,10 @@ struct GPTView: View {
     var userId : Int
     
     @StateObject var viewModel = GPTViewModel()
-    @State var prompt : String = "Que onda, cómo te llamas puedes ayudarme a identificar mis emociones?"
+    @State var prompt : String = "Hola, ¿cómo te llamas? ¿puedes ayudarme a identificar mis emociones?"
     @State private var showMenu = false
     @StateObject var chatViewModel = ChatViewModel()
+    @Environment(\.presentationMode) var presentationMode
 
     
     
@@ -27,64 +28,87 @@ struct GPTView: View {
             
             geometry in
             
-            ZStack(alignment: .leading) {
-                VStack(alignment: .leading) {
-                    
-                    Text("Chatea con Phil")
-                        .font(.title)
-                        .bold()
-                        .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
-                    
-                    
-                    ////
-                    //seccionchatgpt(?)
-                    
-                    Spacer()
-                    
-                    VStack {
-                        ConversationView(chatViewModel: chatViewModel)
-                            .environmentObject(viewModel)
-                            .padding(.horizontal, 12)
-                            .frame(maxWidth: .infinity)
+            NavigationStack{
+                
+                ZStack(alignment: .leading) {
+                    VStack(alignment: .leading) {
                         HStack{
-                            TextField("Chatea con Phil", text: $prompt, axis: .vertical)
-                                .padding(12)
-                                .background(Color(.systemGray6))
-                                .cornerRadius(25)
-                                .lineLimit(6)
-                            Button {
-                                Task {
-                                    
-                                    await sendMessageWithUserContext()
-                                    prompt = ""
-                                 
+                            Button(action: {
+                                withAnimation {
+                                    presentationMode.wrappedValue.dismiss()
                                 }
-                            } label: {
-                                Image(systemName: "paperplane.fill")
-                                    .frame(width: 44, height: 44)
-                                    .background(Color.purple)
-                                    .cornerRadius(22)
-                                    .foregroundColor(.white)
+                            }) {HStack{
+                                Image(systemName: "chevron.left")
+                                .foregroundColor(.indigo)
+                                
+                                Text("Regresar")
+                                    .font(.caption)
+                                    .foregroundColor(.indigo)
                             }
-                            .padding(.leading, 8)
                         }
+                        .padding(.leading, 20)
                         
-                    }.padding()
+                        Spacer()
+                    }
+                        
+                        
+                        Text("Chatea con Phil")
+                            .font(.largeTitle)
+                            .bold()
+                            .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 10))
+                        
+                        
+                        ////
+                        //seccionchatgpt(?)
+                        
+                        Spacer()
+                        
+                        VStack {
+                            ConversationView(chatViewModel: chatViewModel)
+                                .environmentObject(viewModel)
+                                .padding(.horizontal, 12)
+                                .frame(maxWidth: .infinity)
+                            HStack{
+                                TextField("Chatea con Phil", text: $prompt, axis: .vertical)
+                                    .padding(12)
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(25)
+                                    .lineLimit(6)
+                                Button {
+                                    Task {
+                                        
+                                        await sendMessageWithUserContext()
+                                        prompt = ""
+                                        
+                                    }
+                                } label: {
+                                    Image(systemName: "paperplane.fill")
+                                        .frame(width: 44, height: 44)
+                                        .background(Color.indigo)
+                                        .cornerRadius(22)
+                                        .foregroundColor(.white)
+                                }
+                                .padding(.leading, 8)
+                            }
+                            
+                        }.padding()
+                        
+                        
+                        //AQUI TERMINA LA SECCION DE GPT
+                        
+                    }
                     
                     
-                    //AQUI TERMINA LA SECCION DE GPT
+                }.onAppear {
+                    
+                    viewModel.fetchUserForm(Users_id: userId)
+                    chatViewModel.fetchMessages(conversationId: conversationId) //
                     
                 }
                 
-                
-            }.onAppear {
-            
-                viewModel.fetchUserForm(Users_id: userId)
-                chatViewModel.fetchMessages(conversationId: conversationId) //
-                
             }
-
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     

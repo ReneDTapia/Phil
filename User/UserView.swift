@@ -27,18 +27,16 @@ struct UserView: View {
                             path.addQuadCurve(to: CGPoint(x: 0, y: height),
                                               control: CGPoint(x: width / 2, y: height + 60))
                         }
-                        .fill(Color(hex: "6B6EAB"))
+                        .fill(.indigo)
                         .edgesIgnoringSafeArea(.top)
                         
                         
                         // Círculo Blanco en la Parte Morada
                         
                         ZStack {
-                            Ellipse()
-                                .fill(Color(.sRGB, red: 0.8509804010391235, green: 0.8509804010391235, blue: 0.8509804010391235))
                             
                             Ellipse()
-                                .strokeBorder(Color.white, lineWidth: 4)
+                                .strokeBorder(Color.white, lineWidth: 10)
                             
                             
                         }
@@ -54,6 +52,7 @@ struct UserView: View {
                             .position(x: geometry.size.width / 2, y: geometry.size.height * 0.35)
                         
                         Text(viewModel.user?.username ?? "")
+                            .font(.largeTitle)
                         
                             .fontWeight(.bold)
                             .position(x: geometry.size.width / 2, y: geometry.size.height * 0.5)
@@ -87,17 +86,14 @@ struct UserView: View {
                     Text("Guardar")
                     
                         .foregroundColor(.white)
+                        .font(.title2)
+                        .bold()
                         .frame(width: 130)
                         .padding()
-                        .padding(.vertical,10)
-                        .background(Color(hex: "6B6EAB"))
+                        .padding(.vertical,5)
+                        .background(.indigo)
                         .cornerRadius(130)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 130)
-                                .stroke(Color(hex: "58315A"), lineWidth: 1)
-                        )
-                        .shadow(color: .gray, radius: 5, x: 0, y: 0)
-                }
+                        }
                 .padding()
             }
             .overlay(
@@ -157,7 +153,7 @@ struct UserInfoRow: View {
                         isEditing.toggle()
                     }) {
                         Image(systemName: "pencil.circle")
-                            .foregroundColor(.gray)
+                            .foregroundColor(.indigo)
                             .font(.system(size: 35))
                     }
                     .offset(y: 36)

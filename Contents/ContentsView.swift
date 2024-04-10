@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 struct ContentsView: View {
     
@@ -20,11 +21,20 @@ struct ContentsView: View {
                             .font(.largeTitle)
                             .bold()
                             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
-                        if isLoading{                            ProgressView(messageLoad)
-                                .progressViewStyle(CircularProgressViewStyle())
-                                .frame(width: geometry.size.width, height: geometry.size.height-100)
-                            
-                                .scaleEffect(1.5)
+                        if isLoading{
+                            if messageLoad == "Cargando..." {
+                                ProgressView(messageLoad)
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                    .scaleEffect(1.5)
+                            } else {
+                                // Devuelve algo como un Text vacío o un Spacer
+                                Text(messageLoad)
+                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                    .scaleEffect(1.5)
+                                    .foregroundColor(.gray)
+                                
+                            }
                             
                             
                         }
@@ -104,14 +114,14 @@ struct ProgressBar: View {
                     .frame(width: geometry.size.width, height: 12)
                     .cornerRadius(4)
                     .foregroundColor(.clear)
-                    .background(Color(red: 0.42, green: 0.43, blue: 0.67))
+                    .background(.indigo)
                     .cornerRadius(24)
                     .opacity(0.3)
                 
                 Rectangle()
                     .frame(width: min(CGFloat(self.progress) * geometry.size.width-5, geometry.size.width), height: 7)
                     .foregroundColor(.clear)
-                    .background(Color(red: 0.42, green: 0.43, blue: 0.67))
+                    .background(.indigo)
                     .cornerRadius(4)
                     .padding(2)
             }
@@ -132,23 +142,23 @@ struct Contents: View{
         ZStack(alignment: .center) {
             Rectangle()
                 .foregroundColor(.clear)
-                .background(Color(red: 0.42, green: 0.43, blue: 0.67))
+                .background(.indigo)
                 .cornerRadius(24)
                 .offset(x: 4, y: 2.50)
             Rectangle()
                 .foregroundColor(.clear)
-                .background(.white)
+                .background(.white.opacity(0.95))
                 .cornerRadius(24)
                 .overlay(
                     RoundedRectangle(cornerRadius: 24)
                         .inset(by: 2)
-                        .stroke(Color(red: 0.42, green: 0.43, blue: 0.67), lineWidth: 5)
+                        .stroke(.indigo, lineWidth: 5)
                 )
                 .offset(x: -4, y: -2.50)
             
             VStack(alignment: .leading){
                 Text(title)
-                    .font(.title)
+                    .font(.title2)
                     .bold()
                     .foregroundColor(.black)
                     .multilineTextAlignment(.leading)

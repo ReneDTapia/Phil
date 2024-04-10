@@ -26,8 +26,10 @@ struct InitialFormView: View {
                             }
                         }) {HStack{
                             Image(systemName: "chevron.left")
+                            .foregroundColor(.indigo)
                             Text("Regresar")
                                 .font(.caption)
+                                .foregroundColor(.indigo)
                         }
                         }
                         
@@ -86,11 +88,12 @@ struct InitialFormView: View {
                     }) {
                         Text("Terminado 👋")
                             .padding()
+                            .foregroundColor(.indigo)
                         //                        .background(Color(hex: "F9F9F9"))
                             .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color(hex:"6B6EAB"), lineWidth: 0.8)
+                                    .stroke(.indigo, lineWidth: 0.8)
                                     .frame(width: 345)
                             )
                     }

@@ -8,5 +8,5 @@
 import Foundation
 
 struct API {
-    static let baseURL = "http://44.219.217.34:3004/api/auth/"
+    static let baseURL = "http://44.219.217.34:3005/api/auth/"
 }

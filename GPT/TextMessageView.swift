@@ -23,7 +23,7 @@ struct TextMessageView: View {
                     .padding(.all,  10)
                     .background(
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(.purple)
+                            .fill(.indigo)
                     )
                     .frame(maxWidth: 240, alignment: .trailing)
             } else {
