@@ -23,10 +23,31 @@ struct MyChatsView: View {
                     VStack(alignment: .leading) {
                         headerView
                         addButton
-                        newConversationField
                         Spacer()
-                        if isLoading {
-                            loadingView(geometry: geometry)
+                        if isLoading{
+                            Spacer()
+                            if messageLoad == "Cargando..." {
+                                ProgressView(messageLoad)
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(width: geometry.size.width)
+                                    .scaleEffect(1.5)
+                                    .padding(.top,-100)
+                            Spacer()
+                            Spacer()
+                            } else {
+                                Spacer()
+                                // Devuelve algo como un Text vacío o un Spacer
+                                Text(messageLoad)
+                                    .frame(width: geometry.size.width)
+                                    .scaleEffect(1.5)
+                                    .foregroundColor(.gray)
+                                    .padding(.top,-100)
+                                Spacer()
+                                Spacer()
+                                 
+                            }
+                            
+                            
                         } else {
                             conversationsList
                         }
@@ -129,16 +150,15 @@ struct MyChatsView: View {
         }
     }
 
-    private func loadingView(geometry: GeometryProxy) -> some View {
+    private func loadingView() -> some View {
         if messageLoad == "Cargando..." {
             return ProgressView(messageLoad)
                 .progressViewStyle(CircularProgressViewStyle())
-                .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                
                 .scaleEffect(1.5)
         } else {
             // Devuelve algo como un Text vacío o un Spacer
             return Text(messageLoad)
-                .frame(width: geometry.size.width, height: geometry.size.height - 100)
                 .scaleEffect(1.5)
                 .foregroundColor(.gray)
             
@@ -232,6 +252,6 @@ struct MyChatsView: View {
 
 struct MyChatsView_Previews: PreviewProvider {
     static var previews: some View {
-        MyChatsView(userId: 1)
+        MainView()
     }
 }

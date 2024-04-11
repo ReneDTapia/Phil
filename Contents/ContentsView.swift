@@ -16,70 +16,69 @@ struct ContentsView: View {
             NavigationStack {
                 ZStack(alignment: .leading) {
                     VStack(alignment: .leading) {
-                        
-                        Text("Contenidos")
-                            .font(.largeTitle)
-                            .bold()
-                            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 10))
+                        HStack{
+                            Text("Contenidos")
+                                .font(.largeTitle)
+                                .bold()
+                            Spacer() 
+                        }
+                        .padding()
                         if isLoading{
+                            Spacer()
                             if messageLoad == "Cargando..." {
                                 ProgressView(messageLoad)
                                     .progressViewStyle(CircularProgressViewStyle())
-                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
-                                    .scaleEffect(1.5)
+                                    .frame(width: geometry.size.width)
+                                    .scaleEffect(1.5) 
+                            Spacer()
                             } else {
+                                Spacer()
                                 // Devuelve algo como un Text vacío o un Spacer
                                 Text(messageLoad)
-                                    .frame(width: geometry.size.width, height: geometry.size.height - 100)
+                                    .frame(width: geometry.size.width)
                                     .scaleEffect(1.5)
                                     .foregroundColor(.gray)
-                                
+                                Spacer()
+                                Spacer()
+                                 
                             }
                             
                             
                         }
                         else{
-                            List(ContentVM.resultContents, id:\.id){content in
-                                NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: user)){
-                                    Contents(title: content.title, description: content.description, progress: content.proporcion ?? 0)
-                                        .frame(maxWidth:.infinity, alignment:.center)
-                                        .listRowSeparator(.hidden)
-                                        .navigationBarHidden(false)
-                                        .navigationBarBackButtonHidden(true)
-                                }
-                                .onAppear{
-                                    Task{
-                                        do{
-                                            try await ContentVM.getContents(userIDVM: user)
-                                            if ContentVM.resultContents.isEmpty {
-                                                messageLoad = "No hay datos"
-                                                
+                            VStack{ 
+                                List(ContentVM.resultContents, id:\.id){content in
+                                    NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: user)){
+                                        Contents(title: content.title, description: content.description, progress: content.proporcion ?? 0)
+                                            .frame(maxWidth:.infinity, alignment:.center)
+                                            .listRowSeparator(.hidden)
+                                    }
+                                    .onAppear{
+                                        Task{
+                                            do{
+                                                try await ContentVM.getContents(userIDVM: user)
+                                                if ContentVM.resultContents.isEmpty {
+                                                    messageLoad = "No hay datos"
+                                                    
+                                                }
+                                                isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
                                             }
-                                            isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
-                                        }
-                                        catch{
-                                            print("error")
+                                            catch{
+                                                print("error")
+                                            }
                                         }
                                     }
+                                    .listRowSeparator(.hidden)
+                                    
                                 }
-                                .frame(maxWidth:.infinity, alignment:.center)
-                                .listRowSeparator(.hidden)
-                                .navigationBarHidden(false)
-                                .navigationBarBackButtonHidden(true)
                             }
-                            .frame(height: geometry.size.height-100)
-                            
-                            Spacer()
                         }
                         
-                        
-                        
-                        
-                        
+                    
                     }
                     
+                    
                 }
-                .navigationBarHidden(false)
             }
             .onAppear{
                 Task{

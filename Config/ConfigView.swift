@@ -25,7 +25,7 @@ struct Config: View {
                             .bold()
                         Spacer()
                     }
-                    .padding(25)
+                    .padding()
                     
                     List{
                         HStack{

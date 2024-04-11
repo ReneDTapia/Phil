@@ -113,13 +113,10 @@ struct UserView: View {
                     }
                         Spacer()
                         
-                        Button(action: {
-                            withAnimation {
-                                presentationMode.wrappedValue.dismiss()
-                            }}){
-                                    Image(systemName: "star")
-                                        .foregroundColor(.white)
-                            }
+                        NavigationLink(destination: MoreOptions()){
+                            Image(systemName:"star")
+                                .foregroundColor(.white)
+                        }
                         
                 }
                 .padding(.leading, 20)
