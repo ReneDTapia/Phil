@@ -22,7 +22,7 @@ struct SignUpView: View {
     var body: some View {
         let backgroundColor = colorScheme == .dark ? Color.black : Color.white
         let textColor = colorScheme == .dark ? Color.white : Color.black
-        let buttonColor = Color(red: 0.42, green: 0.43, blue: 0.67)
+        let buttonColor = Color(.systemIndigo)
 
         
         NavigationView {
@@ -111,7 +111,7 @@ struct SignUpView: View {
                         }
                     }
                 }) {
-                    Text("Crear Cuenta")
+                    Text("Crear cuenta")
                         .padding()
                         .frame(minWidth: 300)
                         .bold()

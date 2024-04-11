@@ -13,7 +13,7 @@ struct ContentsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            NavigationStack {
+            NavigationStack { 
                 ZStack(alignment: .leading) {
                     VStack(alignment: .leading) {
                         HStack{
@@ -29,7 +29,7 @@ struct ContentsView: View {
                                 ProgressView(messageLoad)
                                     .progressViewStyle(CircularProgressViewStyle())
                                     .frame(width: geometry.size.width)
-                                    .scaleEffect(1.5) 
+                                    .scaleEffect(1.5)
                             Spacer()
                             } else {
                                 Spacer()

@@ -1,5 +1,6 @@
 import Foundation
 import Alamofire
+import KeychainSwift
 
 class UserViewModel: ObservableObject {
     @Published var user: User2?
@@ -12,6 +13,13 @@ class UserViewModel: ObservableObject {
 
     func fetchUserInfo() {
         let endpoint = "\(baseURL)/GetUsersInfo/\(userId)"
+        
+        let keychain = KeychainSwift()
+        
+        // Define el encabezado con el token Bearer
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(keychain.get("userToken") ?? "notoken")"
+        ]
         
         AF.request(endpoint, method: .get).responseData { response in
             DispatchQueue.main.async {
@@ -29,10 +37,43 @@ class UserViewModel: ObservableObject {
             }
         }
     }
+    
+    func deleteUser() {
+        let endpoint = "\(baseURL)/deleteUser/\(userId)"
+        
+        let keychain = KeychainSwift()
+        
+        // Define el encabezado con el token Bearer
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(keychain.get("userToken") ?? "notoken")"
+        ]
+        
+        AF.request(endpoint, method: .delete, headers: headers).response { response in
+            DispatchQueue.main.async {
+                switch response.result {
+                case .success:
+                    // Eliminación exitosa, puedes realizar cualquier acción adicional si es necesario
+                    print("Usuario eliminado correctamente")
+                case .failure(let error):
+                    // Error al eliminar el usuario
+                    print("Error al eliminar el usuario: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+
 
     func updateUsername(newUsername: String) {
         let endpoint = "\(baseURL)/PutUsername/\(userId)"
         let parameters = ["newUsername": newUsername]
+        
+        let keychain = KeychainSwift()
+        
+        // Define el encabezado con el token Bearer
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(keychain.get("userToken") ?? "notoken")"
+        ]
 
         AF.request(endpoint, method: .put, parameters: parameters, encoder: JSONParameterEncoder.default).response { response in
             DispatchQueue.main.async {

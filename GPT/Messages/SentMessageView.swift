@@ -8,7 +8,7 @@ struct SentMessageView: View {
             Spacer()
             Text(message.text)
                 .padding(10)
-                .background(Color(UIColor.systemPurple))
+                .background(Color(UIColor.systemIndigo))
                 .foregroundColor(.white)
                 .cornerRadius(8)
                 .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)

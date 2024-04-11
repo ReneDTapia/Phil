@@ -32,5 +32,9 @@ struct ConversationView: View {
                 }
             }
         }
+        .onAppear {
+            gptViewModel.messages = []
+            chatViewModel.messages = []
+        }
     }
 }

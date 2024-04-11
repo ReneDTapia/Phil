@@ -14,7 +14,7 @@ struct GPTView: View {
     var userId : Int
     
     @StateObject var viewModel = GPTViewModel()
-    @State var prompt : String = "Hola, ¿cómo te llamas? ¿puedes ayudarme a identificar mis emociones?"
+    @State var prompt : String = ""
     @State private var showMenu = false
     @StateObject var chatViewModel = ChatViewModel()
     @Environment(\.presentationMode) var presentationMode
@@ -37,7 +37,7 @@ struct GPTView: View {
                                 withAnimation {
                                     presentationMode.wrappedValue.dismiss()
                                 }
-                            }) {HStack{
+                            }) {HStack{ 
                                 Image(systemName: "chevron.left")
                                 .foregroundColor(.indigo)
                                 
@@ -64,11 +64,17 @@ struct GPTView: View {
                         Spacer()
                         
                         VStack {
+                            if chatViewModel.messages.isEmpty && viewModel.messages.isEmpty{
+                                Text("Haz una pregunta para comenzar una conversación")
+                                    .bold()
+                                    .multilineTextAlignment(.center)
+                            }
                             ConversationView(chatViewModel: chatViewModel)
                                 .environmentObject(viewModel)
                                 .padding(.horizontal, 12)
                                 .frame(maxWidth: .infinity)
                             HStack{
+                                
                                 TextField("Chatea con Phil", text: $prompt, axis: .vertical)
                                     .padding(12)
                                     .background(Color(.systemGray6))
@@ -104,11 +110,13 @@ struct GPTView: View {
                     viewModel.fetchUserForm(Users_id: userId)
                     chatViewModel.fetchMessages(conversationId: conversationId) //
                     
+                    
                 }
                 
             }
         }
         .navigationBarBackButtonHidden(true)
+        
     }
     
     
@@ -137,7 +145,6 @@ struct GPTView_Previews: PreviewProvider {
         let chatViewModel = ChatViewModel()
         
         // Pasas las instancias al inicializador de GPTView
-        GPTView(conversationId:3, userId : 1, viewModel: gptViewModel, chatViewModel: chatViewModel)
-            .environmentObject(gptViewModel) // Si GPTView depende de un EnvironmentObject
+        MainView() // Si GPTView depende de un EnvironmentObject
     }
 }

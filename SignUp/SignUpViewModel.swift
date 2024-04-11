@@ -37,7 +37,7 @@ class SignUpViewModel: ObservableObject {
                     
                 case .failure(let error):
                     print("Error registering: \(error)")
-                    self.alertMessage = "Failed to register. Please try again."
+                    self.alertMessage = "No se pudo registrar. Por favor, intenta de nuevo."
                     self.showAlert = true
                 }
             }
@@ -45,11 +45,11 @@ class SignUpViewModel: ObservableObject {
 
     private func validateUserInputs() -> String? {
         guard !user.email.isEmpty, !user.username.isEmpty, !user.password.isEmpty, !user.confirmPassword.isEmpty else {
-            return "Please fill in all the fields."
+            return "Por favor, llena todos los campos"
         }
         
         guard UserInputValidator.isValidEmail(user.email) else {
-            return "Invalid email format."
+            return "Formato de email inválido"
         }
         
         if let passwordError = UserInputValidator.passwordValidationError(user.password) {
@@ -57,7 +57,7 @@ class SignUpViewModel: ObservableObject {
         }
         
         guard user.password == user.confirmPassword else {
-            return "Passwords do not match."
+            return "Las contraseñas no coinciden"
         }
         
         return nil

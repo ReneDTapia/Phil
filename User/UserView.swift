@@ -113,7 +113,7 @@ struct UserView: View {
                     }
                         Spacer()
                         
-                        NavigationLink(destination: MoreOptions()){
+                        NavigationLink(destination: MoreOptions(userId: userId)){
                             Image(systemName:"star")
                                 .foregroundColor(.white)
                         }

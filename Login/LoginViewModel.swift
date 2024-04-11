@@ -28,7 +28,7 @@ class LoginViewModel: ObservableObject {
                 if !TokenHelper.isTokenExpired(token: data.token) {
                     self.viewState = .ContentsView
                 } else {
-                    self.alertMessage = "Login session has expired. Please log in again."
+                    self.alertMessage = "La sesión ha expirado. Por favor, vuelve a ingresar"
                     self.showAlert = true
                 }
             case .failure(let error):
@@ -36,12 +36,12 @@ class LoginViewModel: ObservableObject {
                 if let customError = error as? CustomError {
                     switch customError {
                     case .unauthorized:
-                        self.alertMessage = "Incorrect username or password. Please try again."
+                        self.alertMessage = "Usuario o contraseña incorrectos. Por favor, intenta de nuevo."
                     case .forbidden:
-                        self.alertMessage = "You do not have permission to perform this action."
+                        self.alertMessage = "No tienes permiso de realizar esta acción"
                     }
                 } else {
-                    self.alertMessage = "Failed to log in. Please try again."
+                    self.alertMessage = "No se pudo iniciar sesión. Por favor, intenta de nuevo."
                 }
                 self.showAlert = true
             }

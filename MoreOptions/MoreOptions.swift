@@ -11,6 +11,16 @@ import SwiftUI
 
 
 struct MoreOptions: View {
+    @State private var showingAlert = false
+    @ObservedObject var userVM = UserViewModel(userId: 0)
+    @StateObject var LoginVM = LoginViewModel()
+    @State private var showUserView = false
+    
+    let userId: Int
+    init(userId: Int) {
+        self.userId = userId
+        self.userVM = UserViewModel(userId: userId)
+    }
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -60,9 +70,10 @@ struct MoreOptions: View {
                     HStack{
                         Button(action: {
                             print("Hola")
+                            self.showingAlert=true
                         }) {
                             
-                            
+                             
                             HStack{
                                 Text("Eliminar cuenta")
                                     .font(.title3)
@@ -70,6 +81,20 @@ struct MoreOptions: View {
                                     .padding(.top)
                                 Spacer()
                             }
+                        }
+                        .alert(isPresented: $showingAlert){
+                            Alert(
+                                title: Text("¿Estás seguro de querer eliminar tu cuenta?"), message: Text("Esta acción no se puede deshacer."),
+                                primaryButton:.destructive(Text("Eliminar")){
+                                    print("Cuenta eliminada")
+                                    userVM.deleteUser()
+                                    LoginVM.logout()
+                                    LoginVM.viewState = .username
+                                    self.showUserView = true
+                                    UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: MainView())
+                                },
+                                secondaryButton: .cancel(Text("Cancelar"))
+                            )
                         }
                     }
                 }
@@ -85,6 +110,6 @@ struct MoreOptions: View {
 
 struct MoreOptions_Previews: PreviewProvider {
     static var previews: some View {
-        MoreOptions()
+        MoreOptions(userId: 0)
     }
 }
