@@ -161,7 +161,7 @@ struct Contents: View{
                     .bold()
                     .foregroundColor(.black)
                     .multilineTextAlignment(.leading)
-                Text(description)
+                Text(description) 
                     .foregroundColor(.gray)
                     .padding(.trailing,5)
                 ProgressBar(progress: progress)

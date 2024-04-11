@@ -92,7 +92,7 @@ struct SignUpView: View {
                     .padding(.horizontal, 20)
 
                 Toggle(isOn: $viewModel.isDeaf) {
-                    Text("I am deaf")
+                    Text("¿Tengo discapacidades auditivas?")
                         .font(.body)
                         .foregroundColor(textColor)
                 }
@@ -131,7 +131,7 @@ struct SignUpView: View {
             .alert(isPresented: $viewModel.showAlert) {
                 Alert(title: Text("Error"),
                       message: Text(viewModel.alertMessage),
-                      dismissButton: .default(Text("OK")))
+                      dismissButton: .default(Text("Acepto")))
             }
         }
     }
