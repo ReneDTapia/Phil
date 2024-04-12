@@ -74,44 +74,44 @@ struct UsernameView: View {
 
 
             
-            HStack{
-                                VStack{
-                                    Divider()
-                                }
-                                Text("O")
-                                VStack{
-                                    Divider()
-                                }
-                            }
-                            
-                            Button(action:{
-                                print("Botón presionado")
-                            }){
-                                Text("Continuar con Google")
-                                    .padding()
-                                    .frame(minWidth: 300)
-                                    .bold()
-                                    .font(.title3)
-                                    .foregroundColor(colorScheme == .dark ? .white : .gray)
-                                    .background(colorScheme == .dark ? .gray.opacity(0.3) : .white)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 3,x:0,y:3)
-                            }
-                            .padding(.bottom,10)
-                            
-                            Button(action:{
-                                print("Botón presionado")
-                            }){
-                                Text("Continuar con Apple")
-                                    .padding()
-                                    .frame(minWidth: 300)
-                                    .bold()
-                                    .font(.title3)
-                                    .foregroundColor(colorScheme == .dark ? .black : .white)
-                                    .background(colorScheme == .dark ? .white : .black)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 3,x:0,y:3)
-                            }
+//            HStack{
+//                                VStack{
+//                                    Divider()
+//                                }
+//                                Text("Próximamente")
+//                                VStack{
+//                                    Divider()
+//                                }
+//                            }
+//
+//                            Button(action:{
+//                                print("Botón presionado")
+//                            }){
+//                                Text("Continuar con Google")
+//                                    .padding()
+//                                    .frame(minWidth: 300)
+//                                    .bold()
+//                                    .font(.title3)
+//                                    .foregroundColor(colorScheme == .dark ? .white : .gray)
+//                                    .background(colorScheme == .dark ? .gray.opacity(0.3) : .white)
+//                                    .cornerRadius(10)
+//                                    .shadow(radius: 3,x:0,y:3)
+//                            }
+//                            .padding(.bottom,10)
+//
+//                            Button(action:{
+//                                print("Botón presionado")
+//                            }){
+//                                Text("Continuar con Apple")
+//                                    .padding()
+//                                    .frame(minWidth: 300)
+//                                    .bold()
+//                                    .font(.title3)
+//                                    .foregroundColor(colorScheme == .dark ? .black : .white)
+//                                    .background(colorScheme == .dark ? .white : .black)
+//                                    .cornerRadius(10)
+//                                    .shadow(radius: 3,x:0,y:3)
+//                            }
                             HStack{
                                 Text("¿No tienes una cuenta?")
                                     .font(.callout)

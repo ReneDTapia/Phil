@@ -150,21 +150,7 @@ struct MyChatsView: View {
         }
     }
 
-    private func loadingView() -> some View {
-        if messageLoad == "Cargando..." {
-            return ProgressView(messageLoad)
-                .progressViewStyle(CircularProgressViewStyle())
-                
-                .scaleEffect(1.5)
-        } else {
-            // Devuelve algo como un Text vacío o un Spacer
-            return Text(messageLoad)
-                .scaleEffect(1.5)
-                .foregroundColor(.gray)
-            
-        }
-    }
-
+    
     
     private var conversationsList: some View {
         List {

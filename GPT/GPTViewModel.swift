@@ -15,7 +15,7 @@ final class GPTViewModel : ObservableObject {
     @Published var userForm : [UserForm] = []
     
     @Published var messages : [MessageChatGPT] = [
-        .init(text: "Actúa como un psicologo llamado Phil y en todos mis mensajes ten en cuenta la siguiente informacion que te mandaré como contexto y si te pregunto algo con relación a lo siguiente ayudame a entenderlo como psicólogo" , role: .system, hidden: true)
+        .init(text: "Actúa como un psicologo llamado Phil y en todos mis mensajes ten en cuenta la siguiente informacion que te mandaré como contexto y si te pregunto algo con relación a lo siguiente ayudame a entenderlo como psicólogo. Si después de este mensaje te envio algo que no este relacionado con salud mental o psicología entonces contesta que solo me puedes responder preguntas de estos temas" , role: .system, hidden: true)
     ]
     
     @Published var currentMessage : MessageChatGPT = .init(text: "", role: .assistant)

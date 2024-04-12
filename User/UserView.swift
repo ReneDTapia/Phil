@@ -42,7 +42,7 @@ struct UserView: View {
                         }
                         .frame(width: 167, height: 165)
                         .position(x: geometry.size.width / 2, y: geometry.size.height * 0.35)
-                        Image("God2")
+                        Image("person-placeholder")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 150, height: 150) // ajusta el tamaño de la imagen según sea necesario
@@ -114,7 +114,7 @@ struct UserView: View {
                         Spacer()
                         
                         NavigationLink(destination: MoreOptions(userId: userId)){
-                            Image(systemName:"star")
+                            Image(systemName:"doc")
                                 .foregroundColor(.white)
                         }
                         
