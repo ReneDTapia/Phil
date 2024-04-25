@@ -61,7 +61,7 @@ struct MyChatsView: View {
     }
 
     private var headerView: some View {
-        Text("Chats con Mr Phil")
+        Text("Chats con Phil")
             .font(.largeTitle)
             .bold()
             .padding()

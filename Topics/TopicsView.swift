@@ -81,7 +81,16 @@ struct TopicsView: View {
                         }
                         Spacer()
                         
-                    }
+                    }.gesture(
+                        DragGesture()
+                            .onEnded { value in
+                                if value.translation.width > 100 {  // Comprobar deslizamiento hacia la izquierda
+                                    withAnimation {
+                                        presentationMode.wrappedValue.dismiss()  // Cerrar la vista
+                                    }
+                                }
+                            }
+                    )
     
                     
                     

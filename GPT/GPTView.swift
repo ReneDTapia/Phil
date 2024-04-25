@@ -15,6 +15,7 @@ struct GPTView: View {
     
     @StateObject var viewModel = GPTViewModel()
     @State var prompt : String = ""
+    @State var pregunta : String = ""
     @State private var showMenu = false
     @StateObject var chatViewModel = ChatViewModel()
     @Environment(\.presentationMode) var presentationMode
@@ -45,6 +46,16 @@ struct GPTView: View {
                                     .font(.caption)
                                     .foregroundColor(.indigo)
                             }
+                            .gesture(
+                                    DragGesture()
+                                        .onEnded { value in
+                                            if value.translation.width > 100 {  // Comprobar el arrastre hacia la derecha
+                                                withAnimation {
+                                                    presentationMode.wrappedValue.dismiss()  // Cerrar la vista
+                                                }
+                                            }
+                                        }
+                                )
                         }
                         .padding(.leading, 20)
                         
@@ -75,16 +86,17 @@ struct GPTView: View {
                                 .frame(maxWidth: .infinity)
                             HStack{
                                 
-                                TextField("Chatea con Phil", text: $prompt, axis: .vertical)
+                                TextField("Chatea con Phil", text: $pregunta, axis: .vertical)
                                     .padding(12)
                                     .background(Color(.systemGray6))
                                     .cornerRadius(25)
                                     .lineLimit(6)
                                 Button {
                                     Task {
-                                        
+                                        prompt = pregunta
+                                        pregunta = ""
                                         await sendMessageWithUserContext()
-                                        prompt = ""
+                                        
                                         
                                     }
                                 } label: {
@@ -102,7 +114,16 @@ struct GPTView: View {
                         
                         //AQUI TERMINA LA SECCION DE GPT
                         
-                    }
+                    } .gesture(
+                        DragGesture()
+                            .onEnded { value in
+                                if value.translation.width > 100 {  // Comprobar deslizamiento hacia la izquierda
+                                    withAnimation {
+                                        presentationMode.wrappedValue.dismiss()  // Cerrar la vista
+                                    }
+                                }
+                            }
+                    )
                     
                     
                 }.onAppear {
@@ -122,7 +143,7 @@ struct GPTView: View {
     
     
     private func sendMessageWithUserContext() async {
-        let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Preguntas de salud mental del usuario: \($0.texto), el usuario se identifica con la pregunta con este porcentaje: \($0.Percentage)0%, guia al usuario con toda esta información según que tanto porcentaje se identificó con esa pregunta, entre más porcentaje más se siente identificado." }.joined(separator: "\n")
+        let userContextMessage = "Contexto del usuario (Responde todo lo que te pregunte en base a esta información):\n" + viewModel.userForm.map { "Preguntas de salud mental del usuario: \($0.texto), el usuario se identifica con la pregunta con este porcentaje: \($0.Percentage)0%, guia al usuario con toda esta información según que tanto porcentaje se identificó con esa pregunta, entre más porcentaje más se siente identificado. No contestes cosas no relacionadas o fuera del contexto de asistente de psicólogo." }.joined(separator: "\n")
         await viewModel.send(message: prompt, userContext: userContextMessage, conversationId: conversationId, userId: userId)
        }
     
