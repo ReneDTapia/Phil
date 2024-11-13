@@ -38,7 +38,7 @@ class TopicsViewModel: ObservableObject{
     
     func UpdateDone(user: Int, topic: Int, done: Bool) {
         
-        let url = "http://44.219.217.34:3005/api/auth/UpdateDone"
+        let url = "https://phill-api.diloensenas.org/api/auth/UpdateDone"
 
         // Define el cuerpo de la petición
         let parameters: [String: Any] = [
@@ -72,7 +72,7 @@ class TopicsViewModel: ObservableObject{
     
     func postTopic(user: Int, topic: Int) {
         
-        let url = "http://44.219.217.34:3005/api/auth/CheckTopic"
+        let url = "https://phill-api.diloensenas.org/api/auth/CheckTopic"
 
         // Define el cuerpo de la petición
         let parameters: [String: Any] = [
