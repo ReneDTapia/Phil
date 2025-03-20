@@ -13,10 +13,7 @@ class SignUpViewModel: ObservableObject {
     @Published var showAlert = false
     @Published var alertMessage = ""
     @Published var isButtonPressed: Bool = false
-
     var loginViewModel: LoginViewModel?
-    
-    
     func register() {
             if let validationError = validateUserInputs() {
                 alertMessage = validationError

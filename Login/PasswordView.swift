@@ -85,7 +85,16 @@ struct PasswordView: View {
                    )
                }
                .padding(.horizontal, 20)
+               .gesture(
+                   DragGesture()
+                       .onEnded { gesture in
+                           if gesture.translation.width > 100 {
+                               self.viewModel.viewState = .username
+                           }
+                       }
+               )
            }
+    
             
        
    

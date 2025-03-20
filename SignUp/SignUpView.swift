@@ -5,24 +5,19 @@
 //  Created by Rene  on 04/10/23.
 //
 
-//
-//  SignUpView.swift
-//  Phil
-//
-//  Created by Rene  on 04/10/23.
-//
-
 import SwiftUI
 
 struct SignUpView: View {
     @ObservedObject var viewModel: SignUpViewModel
     @Environment(\.colorScheme) var colorScheme
     @FocusState private var isFocused: Bool
+    
 
     var body: some View {
         let backgroundColor = colorScheme == .dark ? Color.black : Color.white
         let textColor = colorScheme == .dark ? Color.white : Color.black
         let buttonColor = Color(.systemIndigo)
+        
 
         
         NavigationView {
@@ -125,6 +120,14 @@ struct SignUpView: View {
             }
             .padding()
             .background(backgroundColor)
+            .gesture(
+                DragGesture()
+                    .onEnded { gesture in
+                        if gesture.translation.width > 100 {
+                            self.viewModel.loginViewModel?.viewState = .username
+                        }
+                    }
+            )
             .onAppear {
                 isFocused = true
             }
@@ -133,6 +136,7 @@ struct SignUpView: View {
                       message: Text(viewModel.alertMessage),
                       dismissButton: .default(Text("Acepto")))
             }
+            
         }
     }
 }
