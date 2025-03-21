@@ -16,8 +16,8 @@ struct LoginResponse: Decodable {
 class AuthService {
     static let shared = AuthService()
     
-    private let baseURL = "https://phill-api.diloensenas.org/api/auth/"
-    
+    //private let baseURL = "https://phill-api.diloensenas.org/api/auth/"
+    private let baseURL = "http://localhost:3004/api/auth/"
     
     func register(email: String, username: String, password: String, confirmPassword: String, completion: @escaping (Result<LoginResponse, Error>) -> Void) {
         let url = "\(baseURL)/register"
@@ -58,15 +58,32 @@ class AuthService {
             "password": password
         ]
         
-        AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default).responseDecodable(of: LoginResponse.self) { response in  print("Response: \(response)")
+        // Print login credentials for debugging
+        print("==== LOGIN REQUEST DETAILS ====")
+        print("URL: \(url)")
+        print("Username/Email: \(username)")
+        print("Password: \(password)")
+        print("Full parameters being sent: \(parameters)")
+        print("===============================")
+        
+        AF.request(url, method: .post, parameters: parameters, encoder: JSONParameterEncoder.default).responseDecodable(of: LoginResponse.self) { response in  
+            print("Response: \(response)")
+            
+            // Print raw response data for debugging
+            if let data = response.data, let rawResponse = String(data: data, encoding: .utf8) {
+                print("Raw response data: \(rawResponse)")
+            }
+            
             switch response.result {
             case .success(let data):
-                print(data.userID)
-                print(data.token)
+                print("Login successful - User ID: \(data.userID)")
+                print("Token received: \(data.token.prefix(15))...")  // Only print first part of token for security
                 LoginViewModel().userID = data.userID
                 completion(.success(data))
             case .failure(let error):
+                print("Login failed with error: \(error.localizedDescription)")
                 if let statusCode = response.response?.statusCode {
+                    print("Status code: \(statusCode)")
                     switch statusCode {
                     case 401:
                         // Token no autorizado o token expirado

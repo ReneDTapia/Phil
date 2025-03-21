@@ -60,7 +60,11 @@ struct PasswordView: View {
             
                 
             // Sign In Button
-            Button(action: {self.viewModel.login()}) {
+            Button(action: {
+                // Print password for debugging
+                print("Password entered by user: \(viewModel.user.password)")
+                self.viewModel.login()
+            }) {
                 Text("Iniciar Sesión")
                     .padding()
                     .frame(minWidth: 300)

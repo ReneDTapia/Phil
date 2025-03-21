@@ -49,6 +49,21 @@
 		BE1A98482AE0855200A01B1B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE1A98472AE0855200A01B1B /* ChatView.swift */; };
 		BE426E2E2AEE64BD00C67198 /* TextMessageView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE426E2D2AEE64BD00C67198 /* TextMessageView2.swift */; };
 		BE8B015C2ADFB480003909BB /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8B015B2ADFB480003909BB /* ChatViewModel.swift */; };
+		BEA048FE2D89170E0022242A /* AllCoursesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048F62D89170E0022242A /* AllCoursesView.swift */; };
+		BEA048FF2D89170E0022242A /* ExploreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048FC2D89170E0022242A /* ExploreViewModel.swift */; };
+		BEA049002D89170E0022242A /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048FB2D89170E0022242A /* ExploreView.swift */; };
+		BEA049012D89170E0022242A /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048FA2D89170E0022242A /* ColorExtension.swift */; };
+		BEA049022D89170E0022242A /* CategoriesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048F12D89170E0022242A /* CategoriesSection.swift */; };
+		BEA049032D89170E0022242A /* CourseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048F82D89170E0022242A /* CourseDetailView.swift */; };
+		BEA049042D89170E0022242A /* CategoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048F32D89170E0022242A /* CategoryDetailView.swift */; };
+		BEA049052D89170E0022242A /* CourseCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048F72D89170E0022242A /* CourseCard.swift */; };
+		BEA049062D89170E0022242A /* SearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048F42D89170E0022242A /* SearchResultsView.swift */; };
+		BEA049072D89170E0022242A /* CategoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA048F22D89170E0022242A /* CategoryCard.swift */; };
+		BEA0490A2D8A3F7F0022242A /* DoctorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA049092D8A3F7F0022242A /* DoctorsView.swift */; };
+		BEA0490C2D8A3F940022242A /* DoctorsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA0490B2D8A3F930022242A /* DoctorsViewModel.swift */; };
+		BEA0490E2D8A3FA10022242A /* DoctorsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA0490D2D8A3FA10022242A /* DoctorsModel.swift */; };
+		BEA049102D8A40B90022242A /* DoctorsMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA0490F2D8A40B90022242A /* DoctorsMainView.swift */; };
+		BEA049142D8A44760022242A /* DoctorsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA049132D8A44760022242A /* DoctorsDetailView.swift */; };
 		BEA1B3DA2AE21D5900095A55 /* SwiftOpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = BEA1B3D92AE21D5900095A55 /* SwiftOpenAI */; };
 		BEA1B3DC2AE2218000095A55 /* GPTViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA1B3DB2AE2218000095A55 /* GPTViewModel.swift */; };
 		BEA1B3DF2AE227A700095A55 /* GPTView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA1B3DE2AE227A700095A55 /* GPTView.swift */; };
@@ -139,6 +154,21 @@
 		BE1A98472AE0855200A01B1B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		BE426E2D2AEE64BD00C67198 /* TextMessageView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageView2.swift; sourceTree = "<group>"; };
 		BE8B015B2ADFB480003909BB /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		BEA048F12D89170E0022242A /* CategoriesSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesSection.swift; sourceTree = "<group>"; };
+		BEA048F22D89170E0022242A /* CategoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCard.swift; sourceTree = "<group>"; };
+		BEA048F32D89170E0022242A /* CategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailView.swift; sourceTree = "<group>"; };
+		BEA048F42D89170E0022242A /* SearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsView.swift; sourceTree = "<group>"; };
+		BEA048F62D89170E0022242A /* AllCoursesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCoursesView.swift; sourceTree = "<group>"; };
+		BEA048F72D89170E0022242A /* CourseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseCard.swift; sourceTree = "<group>"; };
+		BEA048F82D89170E0022242A /* CourseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailView.swift; sourceTree = "<group>"; };
+		BEA048FA2D89170E0022242A /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		BEA048FB2D89170E0022242A /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		BEA048FC2D89170E0022242A /* ExploreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewModel.swift; sourceTree = "<group>"; };
+		BEA049092D8A3F7F0022242A /* DoctorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorsView.swift; sourceTree = "<group>"; };
+		BEA0490B2D8A3F930022242A /* DoctorsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorsViewModel.swift; sourceTree = "<group>"; };
+		BEA0490D2D8A3FA10022242A /* DoctorsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorsModel.swift; sourceTree = "<group>"; };
+		BEA0490F2D8A40B90022242A /* DoctorsMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorsMainView.swift; sourceTree = "<group>"; };
+		BEA049132D8A44760022242A /* DoctorsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorsDetailView.swift; sourceTree = "<group>"; };
 		BEA1B3DB2AE2218000095A55 /* GPTViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTViewModel.swift; sourceTree = "<group>"; };
 		BEA1B3DE2AE227A700095A55 /* GPTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPTView.swift; sourceTree = "<group>"; };
 		BEA1B3E02AE228A500095A55 /* TextMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageView.swift; sourceTree = "<group>"; };
@@ -267,6 +297,8 @@
 		52DB5A6B2ACD236B004611A7 = {
 			isa = PBXGroup;
 			children = (
+				BEA049082D8A3F610022242A /* Doctors */,
+				BEA048FD2D89170E0022242A /* Explore */,
 				FB6B60DE2BC7A44900A3006F /* MoreOptions */,
 				FB2524B42B0F051A00A0224D /* Goals */,
 				FB5BC7652B0C73690091190C /* User */,
@@ -387,6 +419,51 @@
 				BEC0FF6B2AE26AD10005EDBF /* ContentsModel.swift */,
 			);
 			path = Contents;
+			sourceTree = "<group>";
+		};
+		BEA048F52D89170E0022242A /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				BEA048F12D89170E0022242A /* CategoriesSection.swift */,
+				BEA048F22D89170E0022242A /* CategoryCard.swift */,
+				BEA048F32D89170E0022242A /* CategoryDetailView.swift */,
+				BEA048F42D89170E0022242A /* SearchResultsView.swift */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		BEA048F92D89170E0022242A /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				BEA048F62D89170E0022242A /* AllCoursesView.swift */,
+				BEA048F72D89170E0022242A /* CourseCard.swift */,
+				BEA048F82D89170E0022242A /* CourseDetailView.swift */,
+			);
+			path = Courses;
+			sourceTree = "<group>";
+		};
+		BEA048FD2D89170E0022242A /* Explore */ = {
+			isa = PBXGroup;
+			children = (
+				BEA048F52D89170E0022242A /* Categories */,
+				BEA048F92D89170E0022242A /* Courses */,
+				BEA048FA2D89170E0022242A /* ColorExtension.swift */,
+				BEA048FB2D89170E0022242A /* ExploreView.swift */,
+				BEA048FC2D89170E0022242A /* ExploreViewModel.swift */,
+			);
+			path = Explore;
+			sourceTree = "<group>";
+		};
+		BEA049082D8A3F610022242A /* Doctors */ = {
+			isa = PBXGroup;
+			children = (
+				BEA049092D8A3F7F0022242A /* DoctorsView.swift */,
+				BEA0490B2D8A3F930022242A /* DoctorsViewModel.swift */,
+				BEA0490D2D8A3FA10022242A /* DoctorsModel.swift */,
+				BEA0490F2D8A40B90022242A /* DoctorsMainView.swift */,
+				BEA049132D8A44760022242A /* DoctorsDetailView.swift */,
+			);
+			path = Doctors;
 			sourceTree = "<group>";
 		};
 		BEA1B3DD2AE2279900095A55 /* GPT */ = {
@@ -642,6 +719,7 @@
 				FB248C332BAD4C4C008FBFD1 /* ConfigView.swift in Sources */,
 				BEC0FF6C2AE26AD10005EDBF /* ContentsModel.swift in Sources */,
 				BEA333C72AE73CA900001355 /* UserForm.swift in Sources */,
+				BEA049102D8A40B90022242A /* DoctorsMainView.swift in Sources */,
 				CBEC68BD2AFE9F350042A309 /* AnalyticsView.swift in Sources */,
 				BEA333C12AE2F21A00001355 /* Color.swift in Sources */,
 				BEFC1D4A2AE0A6EA006F5644 /* SentMessageView.swift in Sources */,
@@ -664,16 +742,30 @@
 				52DB54192ACE9F860019B448 /* AuthService.swift in Sources */,
 				FB90C3702AF1B1F8006BF87B /* SectionsViewModel.swift in Sources */,
 				52DB5A7A2ACD236B004611A7 /* MainView.swift in Sources */,
+				BEA0490C2D8A3F940022242A /* DoctorsViewModel.swift in Sources */,
 				BEA1B3E52AE2557000095A55 /* ConversationView.swift in Sources */,
 				BEFC1D522AE0EB3A006F5644 /* PicturesViewModel.swift in Sources */,
+				BEA048FE2D89170E0022242A /* AllCoursesView.swift in Sources */,
+				BEA048FF2D89170E0022242A /* ExploreViewModel.swift in Sources */,
+				BEA049002D89170E0022242A /* ExploreView.swift in Sources */,
+				BEA049012D89170E0022242A /* ColorExtension.swift in Sources */,
+				BEA049022D89170E0022242A /* CategoriesSection.swift in Sources */,
+				BEA049032D89170E0022242A /* CourseDetailView.swift in Sources */,
+				BEA049042D89170E0022242A /* CategoryDetailView.swift in Sources */,
+				BEA049052D89170E0022242A /* CourseCard.swift in Sources */,
+				BEA049062D89170E0022242A /* SearchResultsView.swift in Sources */,
+				BEA049072D89170E0022242A /* CategoryCard.swift in Sources */,
 				BEFC1D542AE0EB51006F5644 /* Picture.swift in Sources */,
 				52C6F66D2AFD885C00216E2B /* API.swift in Sources */,
 				52DB5AC12ACE22C3004611A7 /* SignUpView.swift in Sources */,
 				BEA333BD2AE2F1EC00001355 /* InitialFormModel.swift in Sources */,
 				5238279B2AF9963800937238 /* TabBarView.swift in Sources */,
+				BEA049142D8A44760022242A /* DoctorsDetailView.swift in Sources */,
 				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
 				52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
+				BEA0490A2D8A3F7F0022242A /* DoctorsView.swift in Sources */,
 				52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */,
+				BEA0490E2D8A3FA10022242A /* DoctorsModel.swift in Sources */,
 				BEC0FF702AE26B410005EDBF /* TopicsView.swift in Sources */,
 				52DB5A782ACD236B004611A7 /* PhilApp.swift in Sources */,
 				BE8B015C2ADFB480003909BB /* ChatViewModel.swift in Sources */,

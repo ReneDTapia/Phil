@@ -2,8 +2,7 @@ import SwiftUI
 import Foundation
 
 struct ContentsView: View {
-    
-    let user : Int
+    let user: Int
     
     @State private var progress: Double = 1
     @State private var showMenu = false
@@ -15,14 +14,23 @@ struct ContentsView: View {
         GeometryReader { geometry in
             NavigationStack { 
                 ZStack(alignment: .leading) {
+                    Color.white.edgesIgnoringSafeArea(.all)
+                    
                     VStack(alignment: .leading) {
                         HStack{
-                            Text("Contenidos")
+                            Text("Phil")
                                 .font(.largeTitle)
                                 .bold()
+                                .foregroundColor(.black)
                             Spacer() 
+                            ZStack {
+                                Circle()
+                                    .fill(Color.gray.opacity(0.2))
+                                    .frame(width: 40, height: 40)
+                            }
                         }
                         .padding()
+                        
                         if isLoading{
                             Spacer()
                             if messageLoad == "Cargando..." {
@@ -30,55 +38,55 @@ struct ContentsView: View {
                                     .progressViewStyle(CircularProgressViewStyle())
                                     .frame(width: geometry.size.width)
                                     .scaleEffect(1.5)
-                            Spacer()
+                                Spacer()
                             } else {
                                 Spacer()
-                                // Devuelve algo como un Text vacío o un Spacer
                                 Text(messageLoad)
                                     .frame(width: geometry.size.width)
                                     .scaleEffect(1.5)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.secondary)
                                 Spacer()
                                 Spacer()
-                                 
                             }
-                            
-                            
                         }
                         else{
-                            VStack{ 
-                                List(ContentVM.resultContents, id:\.id){content in
-                                    NavigationLink(destination: TopicsView(contentID: content.id, contentTitle: content.title, user: user)){
-                                        Contents(title: content.title, description: content.description, progress: content.proporcion ?? 0)
-                                            .frame(maxWidth:.infinity, alignment:.center)
-                                            .listRowSeparator(.hidden)
-                                    }
-                                    .onAppear{
-                                        Task{
-                                            do{
-                                                try await ContentVM.getContents(userIDVM: user)
-                                                if ContentVM.resultContents.isEmpty {
-                                                    messageLoad = "No hay datos"
-                                                    
-                                                }
-                                                isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
+                            // Content view when loaded
+                            VStack(alignment: .leading, spacing: 8){ 
+                                Text("Continue Learning")
+                                    .font(.title2)
+                                    .bold()
+                                    .padding(.horizontal, 16)
+                                    .padding(.top, 8)
+                                    .foregroundColor(.primary)
+                                
+                                ScrollView {
+                                    LazyVStack(spacing: 8) {
+                                        ForEach(ContentVM.resultContents, id:\.id) { content in
+                                            NavigationLink(destination: TopicsView(
+                                                contentID: content.id,
+                                                contentTitle: content.title,
+                                                user: user,
+                                                contentImageURL: APIClient.getFullImageURL(content.thumbnail_url)
+                                            )) {
+                                                Contents(
+                                                    title: content.title,
+                                                    description: content.description,
+                                                    progress: content.proporcion ?? 0,
+                                                    thumbnail_url: content.thumbnail_url
+                                                )
                                             }
-                                            catch{
-                                                print("error")
-                                            }
+                                            .buttonStyle(PlainButtonStyle())
                                         }
                                     }
-                                    .listRowSeparator(.hidden)
-                                    
+                                    .padding(.bottom, 16)
                                 }
+                                .background(Color.white)
                             }
+                            .background(Color.white)
                         }
-                        
-                    
                     }
-                    
-                    
                 }
+                .background(Color.white)
             }
             .onAppear{
                 Task{
@@ -86,19 +94,17 @@ struct ContentsView: View {
                         try await ContentVM.getContents(userIDVM: user)
                         if ContentVM.resultContents.isEmpty {
                             messageLoad = "No hay datos"
-                            
                         }
-                        isLoading = ContentVM.resultContents.isEmpty // Verifica si la lista está vacía
+                        isLoading = ContentVM.resultContents.isEmpty
                     }
                     catch{
-                        print("error")
+                        print("Error: \(error)")
                     }
                 }
             }
-            .listStyle(PlainListStyle())
-            
+            .background(Color.white)
         }
-        
+        .background(Color.white.edgesIgnoringSafeArea(.all))
     }
 }
 
@@ -108,21 +114,15 @@ struct ProgressBar: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .leading) {
+                Rectangle()
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .cornerRadius(geometry.size.height / 2)
+                    .foregroundColor(Color(.systemGray5))
                 
                 Rectangle()
-                    .frame(width: geometry.size.width, height: 12)
-                    .cornerRadius(4)
-                    .foregroundColor(.clear)
-                    .background(.indigo)
-                    .cornerRadius(24)
-                    .opacity(0.3)
-                
-                Rectangle()
-                    .frame(width: min(CGFloat(self.progress) * geometry.size.width-5, geometry.size.width), height: 7)
-                    .foregroundColor(.clear)
-                    .background(.indigo)
-                    .cornerRadius(4)
-                    .padding(2)
+                    .frame(width: min(CGFloat(self.progress) * geometry.size.width, geometry.size.width), height: geometry.size.height)
+                    .cornerRadius(geometry.size.height / 2)
+                    .foregroundColor(Color.indigo)
             }
         }
     }
@@ -130,74 +130,119 @@ struct ProgressBar: View {
 
 struct Contents: View{  
     
-    //@Binding var progress: Float
-    
     let title : String
     let description: String
     let progress: Double
+    let thumbnail_url: String
     
     var body: some View{
-        
-        ZStack(alignment: .center) {
-            Rectangle()
-                .foregroundColor(.clear)
-                .background(.indigo)
-                .cornerRadius(24)
-                .offset(x: 4, y: 2.50)
-            Rectangle()
-                .foregroundColor(.clear)
-                .background(.white.opacity(0.95))
-                .cornerRadius(24)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .inset(by: 2)
-                        .stroke(.indigo, lineWidth: 5)
-                )
-                .offset(x: -4, y: -2.50)
-            
-            VStack(alignment: .leading){
+        VStack(alignment: .leading, spacing: 0) {
+            // Image with title overlay
+            ZStack(alignment: .bottomLeading) {
+                // Image placeholder with gradient overlay
+                Rectangle()
+                    .foregroundColor(Color(.systemGray5))
+                    .frame(height: 180)
+                    .overlay(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.5)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                    )
+                    .overlay(
+                        AsyncImage(url: URL(string: APIClient.getFullImageURL(thumbnail_url))) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 180)
+                                    .clipped()
+                            } placeholder: {
+                                Color.gray
+                                    .frame(height: 180)
+                            }
+                    )
+                
+                // Title overlay on image
                 Text(title)
-                    .font(.title2)
-                    .bold()
-                    .foregroundColor(.black)
-                    .multilineTextAlignment(.leading)
-                Text(description) 
-                    .foregroundColor(.gray)
-                    .padding(.trailing,5)
-                ProgressBar(progress: progress)
-                    .frame(height: 10)
-                    .padding(.trailing, 10)
-                HStack{
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 16)
+                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+            }
+            
+            VStack(alignment: .leading, spacing: 12) {
+                // Description
+                Text(description)
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .padding(.top, 16)
+                
+                // Progress section
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Progress")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                     
-                    if progress == 1{
-                        Text("Completado!")
-                            .foregroundColor(.gray)
-                    } else if progress == 0{
-                        Text("No haz comenzado!")
-                            .foregroundColor(.gray)
-                    }else if progress == 0.5{
-                        Text("Ya estas por la mitad!")
-                            .foregroundColor(.gray)
-                    }
-                    else if progress > 0 && progress < 0.5{
-                        Text("Sigue asi!")
-                            .foregroundColor(.gray)
-                    }
-                    else if progress > 0.5 && progress < 1{
-                        Text("Ya casi llegas!")
-                            .foregroundColor(.gray)
-                    }
+                    ProgressBar(progress: progress)
+                        .frame(height: 8)
+                    
+                    Text("\(Int(progress * 100))%")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                
+                // Bottom row
+                HStack {
+                    Text("3 lessons")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                     
                     Spacer()
-                    Text("\(String(format:"%.0f",progress*100))%")
-                        .foregroundColor(.gray)
+                    
+                    HStack(spacing: 4) {
+                        Text("Continue")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.indigo)
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundColor(Color.indigo)
+                    }
                 }
+                .padding(.vertical, 8)
             }
-            .padding()
+            .padding(.horizontal, 20)
+            .padding(.bottom, 16)
         }
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 5, trailing: 20))
-        
-        .frame(maxWidth: 500)
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+    }
+}
+
+// Add extension for rounded specific corners
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape(RoundedCorner(radius: radius, corners: corners))
+    }
+}
+
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
     }
 }
 
@@ -291,10 +336,6 @@ struct Menu: View {
                             .fullScreenCover(isPresented: $showUserView) {
                                 UsernameView(viewModel: loginViewModel)
                             }
-                            
-                            
-                        
-                        
                     }
                     .navigationBarHidden(false)
                     .navigationBarBackButtonHidden(true)
@@ -312,18 +353,9 @@ struct Menu: View {
     }
 }
 
-
-//    .frame(width: 250)
-//    .frame(maxWidth: 250)
-
-    
-
 struct Contents_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
     }
 }
 
-//#Preview{
-   // TabBarView(user: 1)
-//}

@@ -45,7 +45,8 @@ struct UsernameView: View {
             HStack {
                 // Continue Button
                 Button(action: {
-//                    self.showUsernameView = true
+                    // Print username for debugging
+                    print("Username/Email entered by user: \(viewModel.user.username)")
                     self.viewModel.viewState = .password // Cambia a la vista de contraseña
                         
                 }) {

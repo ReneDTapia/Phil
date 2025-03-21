@@ -5,8 +5,22 @@ import KeychainSwift
 
 class APIClient {
     
-    static let baseURL = "https://phill-api.diloensenas.org/api/auth/"
-//     static let baseURL = "http://localhost:5005/api/auth/"
+    //static let baseURL = "https://phill-api.diloensenas.org/api/auth/"
+    static let baseURL = "http://localhost:3004/api/auth/"
+    static let imageBaseURL = "http://localhost:3004/"
+    
+    static func getFullImageURL(_ urlString: String) -> String {
+        let trimmedURL = urlString.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmedURL.isEmpty {
+            return ""
+        }
+        
+        if trimmedURL.hasPrefix("http://") || trimmedURL.hasPrefix("https://") {
+            return trimmedURL
+        }
+        
+        return imageBaseURL + trimmedURL
+    }
     
     static func getToken() -> String? {
         let keychain = KeychainSwift()
