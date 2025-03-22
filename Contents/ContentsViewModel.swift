@@ -23,6 +23,14 @@ class ContentsViewModel: ObservableObject {
                         print("Valid URL: \(url)")
                     } else {
                         print("Invalid URL created from: \(processedURL)")
+                        
+                        // Try with percent encoding
+                        if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                           let url = URL(string: escapedURL) {
+                            print("Valid URL after escaping: \(url)")
+                        } else {
+                            print("Still invalid URL even after escaping: \(processedURL)")
+                        }
                     }
                 }
             }

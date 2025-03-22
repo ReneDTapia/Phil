@@ -1,20 +1,26 @@
 import SwiftUI
+import Foundation
+import Combine
 
 struct TopicsView: View {
-    let contentID : Int
+    let contentID: Int
     let contentTitle: String
+    @State var contentDescription: String = "Aprende y estudia a tu ritmo"
     let user: Int
-    let contentImageURL: String? // Nuevo parámetro para la URL de la imagen del contenido
+    let contentImageURL: String
     @State private var showMenu = false
     @StateObject var TopicsVM: TopicsViewModel
     @Environment(\.presentationMode) var presentationMode
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
     @State private var overallProgress: Double = 0.65 // Progreso general (se puede calcular basado en temas completados)
-    @State private var contentDescription: String = "Learn about this topic and explore its key concepts."
+    @State private var selectedLesson: TopicsModel? = nil
+    @State private var selectedLessonUpdating: Int? = nil
+    @State private var webViewPresented = false
+    @State private var showingWebView = false
     
     // Inicializador que permite pasar un TopicsViewModel preconfigurado
-    init(contentID: Int, contentTitle: String, user: Int, contentImageURL: String? = nil, TopicsVM: TopicsViewModel = TopicsViewModel()) {
+    init(contentID: Int, contentTitle: String, user: Int, contentImageURL: String, TopicsVM: TopicsViewModel = TopicsViewModel()) {
         self.contentID = contentID
         self.contentTitle = contentTitle
         self.user = user
@@ -41,7 +47,7 @@ struct TopicsView: View {
     
     // Extraer el contenido principal a una función para reducir la complejidad
     private func topicsContent(geometry: GeometryProxy) -> some View {
-        NavigationStack {
+            NavigationStack {
             ZStack(alignment: .top) {
                 // Fondo general
                 Color.white.edgesIgnoringSafeArea(.all)
@@ -64,21 +70,21 @@ struct TopicsView: View {
     private var backButtonOverlay: some View {
         VStack {
             HStack {
-                Button(action: {
-                    withAnimation {
-                        presentationMode.wrappedValue.dismiss()
-                    }
+                            Button(action: {
+                                withAnimation {
+                                    presentationMode.wrappedValue.dismiss()
+                                }
                 }) {
-                    Image(systemName: "chevron.left")
+                                Image(systemName: "chevron.left")
                         .font(.title2)
                         .foregroundColor(.white)
                         .padding(12)
                         .background(Circle().fill(Color.black.opacity(0.3)))
                 }
                 .padding(.top, 0) // Ajustado para la nueva altura del header
-                .padding(.leading, 20)
-                
-                Spacer()
+                        .padding(.leading, 20)
+                        
+                        Spacer()
             }
             Spacer()
         }
@@ -109,40 +115,23 @@ struct TopicsView: View {
             // Imagen de fondo o placeholder
             Group {
                 // Usar la imagen del contenido si está disponible
-                if let contentImageURL = contentImageURL, !contentImageURL.isEmpty {
-                    if let url = URL(string: contentImageURL.trimmingCharacters(in: .whitespacesAndNewlines)) {
-                        GeometryReader { geo in
-                            AsyncImage(url: url) { phase in
-                                if let image = phase.image {
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: geo.size.width, height: 250)
-                                        .clipped()
-                                        .edgesIgnoringSafeArea(.top)
-                                } else if phase.error != nil {
-                                    // Si hay error al cargar, mostrar placeholder e imprimir error
-                                    Rectangle()
-                                        .foregroundColor(Color(.systemGray5))
-                                        .overlay(placeholderImage)
-                                        .frame(height: 250)
-                                        .onAppear {
-                                            print("Error loading content image: \(url)")
-                                        }
-                                } else {
-                                    // Mientras carga
-                                    Rectangle()
-                                        .foregroundColor(Color(.systemGray5))
-                                        .overlay(ProgressView())
-                                        .frame(height: 250)
-                                }
-                            }
+                if !contentImageURL.isEmpty {
+                    let processedURL = APIClient.getFullImageURL(contentImageURL)
+                    
+                    // Primero intentar con la URL normal
+                    if let url = URL(string: processedURL) {
+                        headerImageView(url: url)
+                    }
+                    // Si falla, intentar con URL codificada
+                    else if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                            let url = URL(string: escapedURL) {
+                        headerImageView(url: url)
                             .onAppear {
-                                print("Attempting to load content image from URL: \(url)")
+                                print("Header using escaped URL: \(escapedURL)")
                             }
-                        }
-                        .frame(height: 250)
-                    } else {
+                    }
+                    // Si ambos fallan, mostrar error
+                    else {
                         // URL inválida
                         Rectangle()
                             .foregroundColor(Color(.systemGray5))
@@ -150,7 +139,7 @@ struct TopicsView: View {
                             .frame(height: 250)
                             .edgesIgnoringSafeArea(.top)
                             .onAppear {
-                                print("Invalid content image URL: \(contentImageURL)")
+                                print("Invalid content image URL even after escaping: \(processedURL)")
                             }
                     }
                 } else {
@@ -193,6 +182,43 @@ struct TopicsView: View {
         .frame(height: 250)
     }
     
+    // Helper to create header image view
+    @ViewBuilder
+    private func headerImageView(url: URL) -> some View {
+        GeometryReader { geo in
+            AsyncImage(url: url) { phase in
+                if let image = phase.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geo.size.width, height: 250)
+                        .clipped()
+                        .edgesIgnoringSafeArea(.top)
+                } else if phase.error != nil {
+                    // Si hay error al cargar, mostrar placeholder e imprimir error
+                    Rectangle()
+                        .foregroundColor(Color(.systemGray5))
+                        .overlay(placeholderImage)
+                        .frame(height: 250)
+                        .onAppear {
+                            print("Error loading content image: \(url)")
+                            print("Error details: \(String(describing: phase.error))")
+                        }
+                } else {
+                    // Mientras carga
+                    Rectangle()
+                        .foregroundColor(Color(.systemGray5))
+                        .overlay(ProgressView())
+                        .frame(height: 250)
+                }
+            }
+            .onAppear {
+                print("Attempting to load header image from URL: \(url)")
+            }
+        }
+        .frame(height: 250)
+    }
+    
     // Imagen placeholder reutilizable
     private var placeholderImage: some View {
         Image(systemName: "photo")
@@ -214,10 +240,10 @@ struct TopicsView: View {
             }
         }
         .gesture(
-            DragGesture()
-                .onEnded { value in
+                        DragGesture()
+                            .onEnded { value in
                     if value.translation.width > 100 {
-                        withAnimation {
+                                    withAnimation {
                             presentationMode.wrappedValue.dismiss()
                         }
                     }
@@ -290,7 +316,14 @@ struct TopicsView: View {
     private var lessonsList: some View {
         VStack(spacing: 8) {
             ForEach(TopicsVM.resultTopics) { topic in
-                NavigationLink(destination: SectionsView(topicID: topic.topic, topicTitle: topic.title, user: user, isChecked: topic.done ?? false)) {
+                NavigationLink(destination: SectionsView(
+                    topicID: topic.topic,
+                    topicTitle: topic.title,
+                    user: user,
+                    isChecked: topic.done ?? false,
+                    thumbnail_url: topic.thumbnail_url,
+                    contentTitle: contentTitle
+                )) {
                     LessonRow(
                         number: topic.topic,
                         title: topic.title,
@@ -322,25 +355,40 @@ struct TopicsView: View {
         
         Task {
             do {
-                try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
-                
-                if TopicsVM.resultTopics.isEmpty {
-                    messageLoad = "No hay datos"
+                            try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
+                            
+                            if TopicsVM.resultTopics.isEmpty {
+                                messageLoad = "No hay datos"
                 } else {
                     // Si hay al menos un tema, usar su descripción como descripción del contenido
                     if let firstTopic = TopicsVM.resultTopics.first {
                         contentDescription = firstTopic.description
                         
-                        // Imprimir la URL para depuración
-                        print("Thumbnail URL: \"\(firstTopic.thumbnail_url)\"")
-                        print("Thumbnail URL length: \(firstTopic.thumbnail_url.count)")
-                        print("Is URL empty: \(firstTopic.thumbnail_url.isEmpty)")
-                        if !firstTopic.thumbnail_url.isEmpty {
-                            if let url = URL(string: firstTopic.thumbnail_url.trimmingCharacters(in: .whitespacesAndNewlines)) {
+                        // Imprimir detalladamente la URL para depuración
+                        print("--------- DETALLE DE IMÁGENES ---------")
+                        for topic in TopicsVM.resultTopics {
+                            print("Topic ID: \(topic.topic), Title: \(topic.title)")
+                            print("Thumbnail URL original: \"\(topic.thumbnail_url)\"")
+                            print("URL contains facebook? \(topic.thumbnail_url.contains("facebook"))")
+                            print("URL contains fbcdn? \(topic.thumbnail_url.contains("fbcdn"))")
+                            
+                            let processedURL = APIClient.getFullImageURL(topic.thumbnail_url)
+                            print("Processed URL: \(processedURL)")
+                            
+                            if let url = URL(string: processedURL) {
                                 print("Valid URL created: \(url)")
                             } else {
-                                print("Could not create URL from string: \"\(firstTopic.thumbnail_url)\"")
+                                print("⚠️ ERROR: Could not create URL from string")
+                                
+                                // Intentar escapar la URL
+                                if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                                   let url = URL(string: escapedURL) {
+                                    print("After escaping, valid URL created: \(url)")
+                                } else {
+                                    print("⚠️ ERROR: Even with escaping, could not create URL")
+                                }
                             }
+                            print("---------------------------------")
                         }
                     }
                 }
@@ -385,9 +433,7 @@ struct LessonRow: View {
     let isChecked: Bool
     let user: Int
     let topicId: Int
-    var thumbnail_url: String = "" // Valor por defecto vacío (corregido el nombre)
-    
-    @StateObject private var topicsVM = TopicsViewModel()
+    var thumbnail_url: String = ""
     
     var body: some View {
         HStack(spacing: 0) {
@@ -399,45 +445,31 @@ struct LessonRow: View {
                     .frame(width: 90, height: 90)
                     .cornerRadius(12)
                 
-                // Mostrar imagen si hay thumbnail disponible
-                if !thumbnail_url.isEmpty {
-                    if let url = URL(string: thumbnail_url.trimmingCharacters(in: .whitespacesAndNewlines)) {
-                        AsyncImage(url: url) { phase in
-                            if let image = phase.image {
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 90, height: 90)
-                                    .cornerRadius(12)
-                                    .clipped()
-                            } else if phase.error != nil {
-                                lessonPlaceholder
-                                    .onAppear {
-                                        print("Error loading lesson image: \(url)")
-                                    }
-                            } else {
-                                // Mientras carga
-                                ProgressView()
-                                    .frame(width: 30, height: 30)
-                            }
-                        }
-                        .onAppear {
-                            print("Attempting to load lesson image from URL: \(thumbnail_url)")
+                // Imagen del tema
+                Group {
+                    if !thumbnail_url.isEmpty {
+                        let processedURL = APIClient.getFullImageURL(thumbnail_url)
+                        
+                        if let url = URL(string: processedURL) {
+                            loadImageFromURL(url)
+                        } else if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                                let url = URL(string: escapedURL) {
+                            loadImageFromURL(url)
+                                .onAppear {
+                                    print("LessonRow using escaped URL: \(escapedURL)")
+                                }
+                        } else {
+                            lessonPlaceholder
+                                .onAppear {
+                                    print("Invalid thumbnail URL in LessonRow: \(processedURL)")
+                                }
                         }
                     } else {
                         lessonPlaceholder
-                            .onAppear {
-                                print("Invalid lesson URL: \(thumbnail_url)")
-                            }
                     }
-                } else {
-                    lessonPlaceholder
-                        .onAppear {
-                            print("Empty lesson thumbnail_url")
-                        }
                 }
             }
-            .frame(width: 90, height: 90) // Fija el tamaño para evitar cambios en el layout
+            .frame(width: 90, height: 90)
             
             // Parte derecha - contenido con número, título y descripción
             HStack {
@@ -446,13 +478,19 @@ struct LessonRow: View {
                         // Círculo con número
                         ZStack {
                             Circle()
-                                .fill(Color.indigo)
+                                .fill(isChecked ? Color.green : Color.indigo)
                                 .frame(width: 28, height: 28)
                             
-                            Text("\(number)")
-                                .font(.footnote)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
+                            if isChecked {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 12, weight: .bold))
+                                    .foregroundColor(.white)
+                            } else {
+                                Text("\(number)")
+                                    .font(.footnote)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                            }
                         }
                         
                         Text(title)
@@ -469,7 +507,6 @@ struct LessonRow: View {
                 
                 Spacer()
                 
-                // Flecha a la derecha
                 Image(systemName: "chevron.right")
                     .foregroundColor(.gray)
                     .font(.caption)
@@ -481,13 +518,30 @@ struct LessonRow: View {
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.gray.opacity(0.1), lineWidth: 1)
+                .stroke(isChecked ? Color.green.opacity(0.3) : Color.gray.opacity(0.1), lineWidth: isChecked ? 2 : 1)
         )
         .padding(.horizontal, 16)
         .padding(.bottom, 4)
     }
     
-    // Placeholder de imagen para lecciones
+    // Helper function to load images
+    @ViewBuilder
+    private func loadImageFromURL(_ url: URL) -> some View {
+        AsyncImage(url: url) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 90, height: 90)
+                .cornerRadius(12)
+                .clipped()
+        } placeholder: {
+            ProgressView()
+        }
+        .onAppear {
+            print("Loading lesson image from URL: \(url)")
+        }
+    }
+    
     private var lessonPlaceholder: some View {
         Image(systemName: "book.fill")
             .resizable()
@@ -496,8 +550,7 @@ struct LessonRow: View {
             .foregroundColor(.gray)
     }
 }
-
-// Renombramos el componente ProgressBar 
+// Renombramos el componente ProgressBar
 struct TopicsProgressBar: View {
     let progress: Double
     

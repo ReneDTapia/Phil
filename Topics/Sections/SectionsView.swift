@@ -7,6 +7,8 @@ struct SectionsView: View {
     let topicTitle: String
     let user: Int
     let isChecked: Bool
+    let thumbnail_url: String
+    let contentTitle: String?
     @State private var progress: Float = 0.6
     @State private var showMenu = false
     @StateObject var SectionsVM = SectionsViewModel()
@@ -16,7 +18,20 @@ struct SectionsView: View {
     @State private var messageLoad = "Cargando..."
     @State private var checkButton = false
     @State private var exist = false
-    @State private var mainContentTitle: String = "Understanding Anxiety" // Título del curso principal (variable)
+    @State private var mainContentTitle: String = "Understanding Anxiety" // Default value
+    
+    init(topicID: Int, topicTitle: String, user: Int, isChecked: Bool, thumbnail_url: String, contentTitle: String? = nil) {
+        self.topicID = topicID
+        self.topicTitle = topicTitle
+        self.user = user
+        self.isChecked = isChecked
+        self.thumbnail_url = thumbnail_url
+        self.contentTitle = contentTitle
+        
+        if let title = contentTitle {
+            self._mainContentTitle = State(initialValue: title)
+        }
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -28,44 +43,7 @@ struct SectionsView: View {
                     // Contenido principal
                     VStack(spacing: 0) {
                         // Header con imagen - extendido hasta arriba
-                        ZStack(alignment: .bottomLeading) {
-                            // Imagen de fondo con gradiente
-                            Rectangle()
-                                .foregroundColor(Color(.systemGray5))
-                                .frame(height: 180)
-                                .edgesIgnoringSafeArea(.top)
-                                .overlay(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.7)]),
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                                .overlay(
-                                    Image(systemName: "photo")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(.gray)
-                                )
-                            
-                            // Títulos superpuestos
-                            VStack(alignment: .leading, spacing: 6) {
-                                // Título del curso principal
-                                Text(mainContentTitle)
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.white.opacity(0.9))
-                                
-                                // Título de la sección actual
-                                Text(topicTitle)
-                                    .font(.largeTitle)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.white)
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, 20)
-                        }
+                        headerView
                         
                         if isLoading {
                             VStack {
@@ -156,7 +134,7 @@ struct SectionsView: View {
                             }
                             isLoading = SectionsVM.resultSections.isEmpty
                         } catch {
-                            print("error")
+                            print("Error fetching sections: \(error)")
                         }
                     }
                     
@@ -189,6 +167,121 @@ struct SectionsView: View {
             }
         }
         .background(Color.white)
+    }
+    
+    // Header con imagen - extendido hasta arriba
+    var headerView: some View {
+        ZStack(alignment: .bottomLeading) {
+            // Imagen de fondo con gradiente
+            Rectangle()
+                .foregroundColor(.clear)
+                .frame(height: 180)
+                .edgesIgnoringSafeArea(.all)
+                .overlay(
+                    Group {
+                        if !thumbnail_url.isEmpty {
+                            let processedURL = APIClient.getFullImageURL(thumbnail_url)
+                            
+                            if let url = URL(string: processedURL) {
+                                headerImageView(url: url)
+                            } else if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                                      let url = URL(string: escapedURL) {
+                                headerImageView(url: url)
+                                    .onAppear {
+                                        print("SectionsView header using escaped URL: \(escapedURL)")
+                                    }
+                            } else {
+                                Color.clear
+                                    .overlay(
+                                        Image(systemName: "photo")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(.gray)
+                                    )
+                                    .onAppear {
+                                        print("Invalid URL in SectionsView header: \(processedURL)")
+                                    }
+                            }
+                        } else {
+                            Color.clear
+                                .overlay(
+                                    Image(systemName: "photo")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 40, height: 40)
+                                        .foregroundColor(.gray)
+                                )
+                        }
+                    }
+                )
+                .overlay(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.7)]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            
+            // Títulos superpuestos
+            VStack(alignment: .leading, spacing: 6) {
+                // Título del curso principal
+                Text(mainContentTitle)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white.opacity(0.9))
+                
+                // Título de la sección actual
+                Text(topicTitle)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 20)
+        }
+        .frame(height: 180)
+    }
+    
+    // Helper to create header image view
+    @ViewBuilder
+    private func headerImageView(url: URL) -> some View {
+        GeometryReader { geo in
+            AsyncImage(url: url) { phase in
+                if let image = phase.image {
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geo.size.width, height: 180)
+                        .clipped()
+                        .edgesIgnoringSafeArea(.all)
+                } else if phase.error != nil {
+                    // Si hay error al cargar, mostrar placeholder
+                    Color.clear
+                        .overlay(
+                            Image(systemName: "photo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.gray)
+                        )
+                        .onAppear {
+                            print("Error loading header image: \(url)")
+                            print("Error details: \(String(describing: phase.error))")
+                        }
+                } else {
+                    // Mientras carga
+                    Color.clear
+                        .overlay(
+                            ProgressView()
+                        )
+                }
+            }
+            .onAppear {
+                print("Attempting to load SectionsView header image from URL: \(url)")
+            }
+        }
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
@@ -500,7 +593,7 @@ func extractYouTubeVideoID(from url: String) -> String? {
 
 struct Sections_Previews: PreviewProvider {
  static var previews: some View {
- SectionsView(topicID: 1, topicTitle: "Titulo del topico", user: 1, isChecked: false)
+ SectionsView(topicID: 1, topicTitle: "Titulo del topico", user: 1, isChecked: false, thumbnail_url: "", contentTitle: nil)
  }
  }
  

@@ -8,69 +8,78 @@ class TopicsViewModel: ObservableObject {
     @Published var topicStatus: [TopicsStatusModel] = []
      
     // Método que coincide con la nueva firma utilizada en TopicsView
-    func getTopics(userID: Int, contentID: Int) async {
-        await getTopics(contentIDVM: contentID, userIDVM: userID)
+    func getTopics(userID: Int, contentID: Int) async throws {
+        try await getTopics(contentIDVM: contentID, userIDVM: userID)
     }
 
-    func getTopics(contentIDVM: Int, userIDVM: Int) async {
-        do {
-            let topics: [TopicsModel] = try await APIClient.get(path: "getTopics/\(userIDVM)/\(contentIDVM)")
-            DispatchQueue.main.async {
-                self.resultTopics = topics
-                
-                print("Number of topics fetched: \(topics.count)")
-                for topic in topics {
-                    print("Topic: \(topic.title)")
-                    print("Thumbnail URL: \(topic.thumbnail_url)")
-                    
-                    let processedURL = APIClient.getFullImageURL(topic.thumbnail_url)
-                    print("Processed URL: \(processedURL)")
-                    
-                    if let url = URL(string: processedURL) {
-                        print("Valid URL: \(url)")
-                    } else {
-                        print("Invalid URL created from: \(processedURL)")
-                    }
-                }
+    func getTopics(contentIDVM: Int, userIDVM: Int) async throws {
+        let topics: [TopicsModel] = try await APIClient.get(path: "getTopics/\(userIDVM)/\(contentIDVM)")
+        
+        print("Raw API Response for topics:")
+        
+        for topic in topics {
+            print("""
+            Topic: \(topic.topic)
+            Title: \(topic.title)
+            Raw thumbnail_url: '\(topic.thumbnail_url)'
+            """)
+        }
+        
+        DispatchQueue.main.async {
+            self.resultTopics = topics
+            
+            print("----------- Topics Fetched -----------")
+            print("Number of topics: \(topics.count)")
+            for topic in topics {
+                print("""
+                    Topic ID: \(topic.topic)
+                    Title: \(topic.title)
+                    Thumbnail URL: \(topic.thumbnail_url)
+                    Is Done: \(topic.done ?? false)
+                    ------------------------------------
+                    """)
             }
-        } catch {
-            print("Error fetching topics: \(error)")
         }
     }
 
-    func getTopicsStatus(topicIDVM: Int, userIDVM: Int) async {
-        do {
-            let topicsStatus: [TopicsStatusModel] = try await APIClient.get(path: "getUserResult/\(userIDVM)/\(topicIDVM)")
-            DispatchQueue.main.async {
-                self.topicStatus = topicsStatus
-            }
-        } catch {
-            print("Error fetching topics status: \(error)")
+    func getTopicsStatus(topicIDVM: Int, userIDVM: Int) async throws {
+        let topicsStatus: [TopicsStatusModel] = try await APIClient.get(path: "getUserResult/\(userIDVM)/\(topicIDVM)")
+        DispatchQueue.main.async {
+            self.topicStatus = topicsStatus
         }
     }
 
     func UpdateDone(user: Int, topic: Int, done: Bool) {
         let url = "https://phill-api.diloensenas.org/api/auth/UpdateDone"
-
-        // Define el cuerpo de la petición
+        
         let parameters: [String: Any] = [
             "user": user,
             "topic": topic,
             "done": done
         ]
 
-        // ejecutamos con alamofire
         var headers: HTTPHeaders = []
         if let token = getToken() {
             headers.add(name: "Authorization", value: "Bearer \(token)")
         }
         
-        AF.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default, headers: headers).response { response in
+        AF.request(url,
+                  method: .put,
+                  parameters: parameters,
+                  encoding: JSONEncoding.default,
+                  headers: headers)
+        .validate()
+        .responseData { response in
             switch response.result {
             case .success:
-                print("Message registered successfully!")
+                print("Topic status updated successfully!")
+                if let index = self.resultTopics.firstIndex(where: { $0.topic == topic }) {
+                    DispatchQueue.main.async {
+                        self.resultTopics[index].done = done
+                    }
+                }
             case .failure(let error):
-                print("Error registering message: \(error)")
+                print("Error updating topic status: \(error)")
             }
         }
     }
@@ -86,25 +95,34 @@ class TopicsViewModel: ObservableObject {
     func postTopic(user: Int, topic: Int) {
         let url = "https://phill-api.diloensenas.org/api/auth/CheckTopic"
 
-        // Define el cuerpo de la petición
         let parameters: [String: Any] = [
             "user": user,
             "topic": topic,
             "done": true
         ]
 
-        // ejecutamos con alamofire
         var headers: HTTPHeaders = []
         if let token = getToken() {
             headers.add(name: "Authorization", value: "Bearer \(token)")
         }
         
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).response { response in
+        AF.request(url,
+                  method: .post,
+                  parameters: parameters,
+                  encoding: JSONEncoding.default,
+                  headers: headers)
+        .validate()
+        .responseData { response in
             switch response.result {
             case .success:
-                print("Message registered successfully!")
+                print("Topic checked successfully!")
+                if let index = self.resultTopics.firstIndex(where: { $0.topic == topic }) {
+                    DispatchQueue.main.async {
+                        self.resultTopics[index].done = true
+                    }
+                }
             case .failure(let error):
-                print("Error registering message: \(error)")
+                print("Error checking topic: \(error)")
             }
         }
     }

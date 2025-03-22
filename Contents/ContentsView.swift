@@ -66,7 +66,7 @@ struct ContentsView: View {
                                                 contentID: content.id,
                                                 contentTitle: content.title,
                                                 user: user,
-                                                contentImageURL: APIClient.getFullImageURL(content.thumbnail_url)
+                                                contentImageURL: content.thumbnail_url
                                             )) {
                                                 Contents(
                                                     title: content.title,
@@ -151,17 +151,7 @@ struct Contents: View{
                         )
                     )
                     .overlay(
-                        AsyncImage(url: URL(string: APIClient.getFullImageURL(thumbnail_url))) { image in
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 180)
-                                    .clipped()
-                            } placeholder: {
-                                Color.gray
-                                    .frame(height: 180)
-                            }
+                        contentImage
                     )
                 
                 // Title overlay on image
@@ -226,6 +216,53 @@ struct Contents: View{
         .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 1)
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
+    }
+    
+    // Helper computed property for the content image
+    private var contentImage: some View {
+        Group {
+            let processedURL = APIClient.getFullImageURL(thumbnail_url)
+            
+            if let url = URL(string: processedURL) {
+                loadImageFromURL(url)
+            } else if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                      let url = URL(string: escapedURL) {
+                loadImageFromURL(url)
+                    .onAppear {
+                        print("Contents card using escaped URL: \(escapedURL)")
+                    }
+            } else {
+                Color.gray
+                    .frame(height: 180)
+                    .onAppear {
+                        print("Invalid URL even after escaping in Contents card: \(processedURL)")
+                    }
+            }
+        }
+    }
+    
+    // Helper function to load images
+    @ViewBuilder
+    private func loadImageFromURL(_ url: URL) -> some View {
+        AsyncImage(url: url) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(maxWidth: .infinity)
+                .frame(height: 180)
+                .clipped()
+        } placeholder: {
+            Color.gray
+                .frame(height: 180)
+                .overlay(
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .tint(.white)
+                )
+        }
+        .onAppear {
+            print("Contents card loading image from URL: \(url)")
+        }
     }
 }
 

@@ -8,9 +8,8 @@ struct TopicsModel: Decodable, Identifiable {
     var title: String
     var description: String
     var content : Int
-    var thumbnail_url: String = ""
+    var thumbnail_url: String
     
-    // Propiedad id para conformar al protocolo Identifiable
     var id: Int {
         return user_topic_id ?? topic
     }
@@ -37,7 +36,14 @@ struct TopicsModel: Decodable, Identifiable {
         description = try container.decode(String.self, forKey: .description)
         content = try container.decode(Int.self, forKey: .content)
         
-        thumbnail_url = try container.decodeIfPresent(String.self, forKey: .thumbnail_url) ?? ""
+        // Agregar log para ver qué está llegando exactamente
+        if let thumbURL = try container.decodeIfPresent(String.self, forKey: .thumbnail_url) {
+            print("Decoded thumbnail_url: \(thumbURL)")
+            thumbnail_url = thumbURL
+        } else {
+            print("No thumbnail_url found in JSON")
+            thumbnail_url = ""
+        }
     }
     
     init(user_topic_id: Int? = nil, done: Bool? = nil, user: Int? = nil, topic: Int, title: String, description: String, content: Int, thumbnail_url: String = "") {
@@ -51,8 +57,6 @@ struct TopicsModel: Decodable, Identifiable {
         self.thumbnail_url = thumbnail_url
     }
 }
-
-
 
 struct TopicsStatusModel: Decodable{
     var userresult: Int
