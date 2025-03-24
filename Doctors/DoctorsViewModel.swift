@@ -1,9 +1,7 @@
-//
 //  DoctorsViewModel.swift
 //  Phil
 //
 //  Created by Jesús Daniel Martínez García on 18/03/25.
-//
 
 import Foundation
 import SwiftUI
@@ -17,71 +15,65 @@ class DoctorsViewModel: ObservableObject {
     @Published var selectedModes: Set<ConsultationMode> = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
-    
+
     private var cancellables = Set<AnyCancellable>()
-    
+
     init() {
-        // Observar cambios en el texto de búsqueda para filtrar los resultados
+        // Observar cambios en el texto de búsqueda
         $searchText
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates()
-            .sink { [weak self] searchText in
+            .sink { [weak self] _ in
                 self?.filterDoctors()
             }
             .store(in: &cancellables)
-        
+
         // Observar cambios en filtros de especialidad
         $selectedSpecialties
             .sink { [weak self] _ in
                 self?.filterDoctors()
             }
             .store(in: &cancellables)
-        
+
         // Observar cambios en filtros de modo de consulta
         $selectedModes
             .sink { [weak self] _ in
                 self?.filterDoctors()
             }
             .store(in: &cancellables)
-        
-        // Cargar datos de ejemplo inicialmente
-        loadSampleData()
+
+        // Cargar doctores desde la API al iniciar
+        fetchDoctors()
     }
-    
-    // En un entorno real, esto sería reemplazado por una llamada a API
-    func loadSampleData() {
-        isLoading = true
-        
-        // Simular carga de red
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            guard let self = self else { return }
-            
-            self.doctors = Doctor.sampleDoctors
-            self.filteredDoctors = self.doctors
-            self.isLoading = false
-        }
-    }
-    
-    // En un entorno real, esto sería una llamada API con parámetros de búsqueda
+
     func fetchDoctors() {
+        print("Calling fetchDoctors...")
         isLoading = true
         errorMessage = nil
-        
-        // Simular carga de red
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            
-            // En un caso real, esta sería una respuesta de API
-            self.doctors = Doctor.sampleDoctors
-            self.filterDoctors()
-            self.isLoading = false
+
+        Task {
+            do {
+                let apiDoctors: [Doctor] = try await APIClient.get(path: "getAllDoctors")
+                DispatchQueue.main.async {
+                    print("Doctors received: \(apiDoctors.count)")
+                    self.doctors = apiDoctors
+                    self.filterDoctors()
+                    self.isLoading = false
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = "Error loading doctors: \(error.localizedDescription)"
+                    self.isLoading = false
+                    print("Fetch error: \(error)")
+                }
+            }
         }
     }
-    
+
     // Aplicar todos los filtros actuales
     func filterDoctors() {
         var filtered = doctors
-        
+
         // Filtrar por texto de búsqueda
         if !searchText.isEmpty {
             filtered = filtered.filter { doctor in
@@ -89,7 +81,7 @@ class DoctorsViewModel: ObservableObject {
                 doctor.specialties.lowercased().contains(searchText.lowercased())
             }
         }
-        
+
         // Filtrar por especialidades seleccionadas
         if !selectedSpecialties.isEmpty {
             filtered = filtered.filter { doctor in
@@ -98,7 +90,7 @@ class DoctorsViewModel: ObservableObject {
                 }
             }
         }
-        
+
         // Filtrar por modos de consulta
         if !selectedModes.isEmpty {
             filtered = filtered.filter { doctor in
@@ -107,10 +99,10 @@ class DoctorsViewModel: ObservableObject {
                 }
             }
         }
-        
+
         filteredDoctors = filtered
     }
-    
+
     // Aplicar o quitar un filtro por especialidad
     func toggleSpecialtyFilter(_ specialty: String) {
         if selectedSpecialties.contains(specialty) {
@@ -119,7 +111,7 @@ class DoctorsViewModel: ObservableObject {
             selectedSpecialties.insert(specialty)
         }
     }
-    
+
     // Aplicar o quitar un filtro por modo de consulta
     func toggleModeFilter(_ mode: ConsultationMode) {
         if selectedModes.contains(mode) {
@@ -128,7 +120,7 @@ class DoctorsViewModel: ObservableObject {
             selectedModes.insert(mode)
         }
     }
-    
+
     // Limpiar todos los filtros
     func clearAllFilters() {
         searchText = ""

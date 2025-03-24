@@ -47,15 +47,15 @@ struct SectionsView: View {
                         
                         if isLoading {
                             VStack {
-                                if messageLoad == "Cargando..." {
-                                    ProgressView(messageLoad)
-                                        .progressViewStyle(CircularProgressViewStyle())
-                                        .scaleEffect(1.5)
+                            if messageLoad == "Cargando..." {
+                                ProgressView(messageLoad)
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .scaleEffect(1.5)
                                         .padding(.top, 100)
-                                } else {
-                                    Text(messageLoad)
+                            } else {
+                                Text(messageLoad)
                                         .font(.body)
-                                        .foregroundColor(.gray)
+                                    .foregroundColor(.gray)
                                         .padding(.top, 100)
                                 }
                             }
@@ -64,37 +64,37 @@ struct SectionsView: View {
                             ScrollView {
                                 VStack(alignment: .leading, spacing: 0) {
                                     // Contenido principal
-                                    ForEach(SectionsVM.resultSections, id: \.id) { content in
+                                ForEach(SectionsVM.resultSections, id: \.id) { content in
                                         SectionContentView(
                                             text: content.text ?? "",
-                                            video: content.video ?? "",
+                                             video: content.video ?? "",
                                             image: content.image ?? ""
                                         )
-                                    }
+                                }
                                     
                                     // Botón de Hecho/Deshacer
                                     HStack {
                                         Spacer()
-                                        Button(action: {
+                                    Button(action: {
                                             if exist {
-                                                checkButton.toggle()
-                                                TopicsVM.UpdateDone(user: user, topic: topicID, done: checkButton)
+                                            checkButton.toggle()
+                                            TopicsVM.UpdateDone(user: user, topic: topicID, done: checkButton)
                                             } else {
-                                                exist = true
-                                                checkButton.toggle()
-                                                TopicsVM.postTopic(user: user, topic: topicID)
-                                            }
-                                        }) {
-                                            Text(checkButton ? "Deshacer" : "Hecho")
-                                                .padding()
-                                                .bold()
-                                                .font(.title3)
-                                                .foregroundColor(.white)
-                                                .background(checkButton ? Color.red : Color.green)
-                                                .cornerRadius(10)
+                                            exist = true
+                                            checkButton.toggle()
+                                            TopicsVM.postTopic(user: user, topic: topicID)
                                         }
+                                        }) {
+                                                Text(checkButton ? "Deshacer" : "Hecho")
+                                                    .padding()
+                                                    .bold()
+                                                    .font(.title3)
+                                                    .foregroundColor(.white)
+                                                    .background(checkButton ? Color.red : Color.green)
+                                                    .cornerRadius(10)
+                                            }
                                         .padding(.vertical, 20)
-                                        Spacer()
+                                    Spacer()
                                     }
                                 }
                                 .padding(.bottom, 30)
@@ -109,7 +109,7 @@ struct SectionsView: View {
                     VStack {
                         HStack {
                             Button(action: {
-                                withAnimation {
+                                    withAnimation {
                                     presentationMode.wrappedValue.dismiss()
                                 }
                             }) {
@@ -131,9 +131,9 @@ struct SectionsView: View {
                 .onAppear {
                     Task {
                         do {
-                            try await SectionsVM.getSections(topicIDVM: topicID)
-                            if SectionsVM.resultSections.isEmpty {
-                                messageLoad = "No hay datos"
+                        try await SectionsVM.getSections(topicIDVM: topicID)
+                        if SectionsVM.resultSections.isEmpty {
+                            messageLoad = "No hay datos"
                             }
                             isLoading = SectionsVM.resultSections.isEmpty
                         } catch {
@@ -312,7 +312,7 @@ struct SectionContentView: View {
                         .font(.body)
                         .fontWeight(.medium) // Aumentado de regular a medium para mejor contraste
                         .foregroundColor(.black)
-                        .multilineTextAlignment(.leading)
+                            .multilineTextAlignment(.leading)
                         .padding(.horizontal, 20)
                         .padding(.top, 20)
                     
@@ -378,17 +378,17 @@ struct SectionContentView: View {
                             .padding(.bottom, 8)
                     }
                     
-                    AsyncImage(url: URL(string: image)) { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
+                        AsyncImage(url: URL(string: image)) { phase in
+                            if let image = phase.image {
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
                                 .cornerRadius(12)
-                        } else if phase.error != nil {
-                            Text("Error loading image")
+                            } else if phase.error != nil {
+                                Text("Error loading image")
                                 .foregroundColor(.red)
-                        } else {
-                            ProgressView()
+                            } else {
+                                ProgressView()
                         }
                     }
                     .frame(maxWidth: .infinity)
