@@ -138,7 +138,7 @@ struct CourseDetailView_Previews: PreviewProvider {
                     lessons: 12,
                     duration: "4 hours",
                     imageUrl: nil,
-                    categoryId: "1"
+                    categoryId: 1
                 )
             )
         }

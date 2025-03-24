@@ -9,6 +9,10 @@ import SwiftUI
 
 struct CategoriesSection: View {
     var categories: [Category]
+
+    @StateObject var categoryVM = CategoryViewModel()
+    
+    
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -19,12 +23,12 @@ struct CategoriesSection: View {
             
             // Grid of categories
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                ForEach(categories) { category in
-                    NavigationLink(destination: CategoryDetailView(categoryId: category.id, categoryTitle: category.title)) {
+                ForEach(categoryVM.resultCategories) { category in
+                    NavigationLink(destination: CategoryDetailView(categoryId: category.id, categoryTitle: category.name)) {
                         CategoryCard(
-                            title: category.title,
-                            emoji: category.emoji,
-                            backgroundColor: category.color
+                            title: category.name,
+                            emoji: category.emoji ?? "📚",
+                            backgroundColor: Color(category.color ?? "#FFFFFF")
                         )
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -39,9 +43,9 @@ struct CategoriesSection_Previews: PreviewProvider {
     static var previews: some View {
         CategoriesSection(
             categories: [
-                Category(id: "anxiety", title: "Anxiety", emoji: "🧠", color: Color.pink.opacity(0.3)),
-                Category(id: "depression", title: "Depression", emoji: "💙", color: Color.blue.opacity(0.3)),
-                Category(id: "sleep", title: "Sleep", emoji: "😴", color: Color.cyan.opacity(0.3))
+                Category(id: 1, title: "Anxiety", emoji: "🧠", color: Color.pink.opacity(0.3)),
+                Category(id: 2, title: "Depression", emoji: "💙", color: Color.blue.opacity(0.3)),
+                Category(id: 3, title: "Sleep", emoji: "😴", color: Color.cyan.opacity(0.3))
             ]
         )
         .previewLayout(.sizeThatFits)

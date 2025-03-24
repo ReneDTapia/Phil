@@ -76,7 +76,7 @@ struct SearchResultsView_Previews: PreviewProvider {
         SearchResultsView(
             searchText: "anxiety",
             results: [
-                Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, duration: "3 weeks", imageUrl: nil, categoryId: "anxiety")
+                Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, duration: "3 weeks", imageUrl: nil, categoryId: 1)
             ],
             isLoading: false
         )

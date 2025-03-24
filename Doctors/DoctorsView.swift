@@ -98,24 +98,32 @@ struct DoctorsView: View {
                                         .font(.title2)
                                         .fontWeight(.bold)
                                     
-                                    // Lista de recursos
-                                    ResourceCardView(
-                                        title: "Crisis Helpline",
-                                        description: "Immediate support during emotional crisis",
-                                        iconName: "phone.fill"
-                                    )
+                                    // Crisis Helpline
+                                    NavigationLink(destination: CrisisHelplineView()) {
+                                        ResourceCardView(
+                                            title: "Crisis Helpline",
+                                            description: "Immediate support during emotional crisis",
+                                            iconName: "phone.fill"
+                                        )
+                                    }
                                     
-                                    ResourceCardView(
-                                        title: "Support Groups",
-                                        description: "Connect with others facing similar challenges",
-                                        iconName: "person.3.fill"
-                                    )
+                                    // Support Groups - Now using the internal implementation
+                                    NavigationLink(destination: SupportGroupsView()) {
+                                        ResourceCardView(
+                                            title: "Support Groups",
+                                            description: "Connect with others facing similar challenges",
+                                            iconName: "person.3.fill"
+                                        )
+                                    }
                                     
-                                    ResourceCardView(
-                                        title: "Self-Help Tools",
-                                        description: "Practices and exercises for daily mental health",
-                                        iconName: "book.fill"
-                                    )
+                                    // Self-Help Tools - Now using the internal implementation
+                                    NavigationLink(destination: SelfHelpToolsView()) {
+                                        ResourceCardView(
+                                            title: "Self-Help Tools",
+                                            description: "Practices and exercises for daily mental health",
+                                            iconName: "book.fill"
+                                        )
+                                    }
                                 }
                                 .padding(20)
                                 .background(Color.white)

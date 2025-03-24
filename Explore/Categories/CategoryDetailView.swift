@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CategoryDetailView: View {
     // MARK: - Properties
-    let categoryId: String
+    let categoryId: Int
     let categoryTitle: String
     @StateObject private var viewModel = ExploreViewModel()
     
@@ -107,7 +107,7 @@ struct CategoryDetailView: View {
 struct CategoryDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            CategoryDetailView(categoryId: "1", categoryTitle: "Programming")
+            CategoryDetailView(categoryId: 1, categoryTitle: "Programming")
         }
     }
 } 
