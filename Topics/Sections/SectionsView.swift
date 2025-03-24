@@ -99,6 +99,9 @@ struct SectionsView: View {
                                 }
                                 .padding(.bottom, 30)
                             }
+                            .background(Color.white)
+                            .padding(.top, -1) // Solapar ligeramente para eliminar línea
+                            .clipShape(Rectangle())
                         }
                     }
                     
@@ -172,76 +175,83 @@ struct SectionsView: View {
     // Header con imagen - extendido hasta arriba
     var headerView: some View {
         ZStack(alignment: .bottomLeading) {
-            // Imagen de fondo con gradiente
-            Rectangle()
-                .foregroundColor(.clear)
-                .frame(height: 180)
-                .edgesIgnoringSafeArea(.all)
-                .overlay(
-                    Group {
-                        if !thumbnail_url.isEmpty {
-                            let processedURL = APIClient.getFullImageURL(thumbnail_url)
-                            
-                            if let url = URL(string: processedURL) {
-                                headerImageView(url: url)
-                            } else if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-                                      let url = URL(string: escapedURL) {
-                                headerImageView(url: url)
-                                    .onAppear {
-                                        print("SectionsView header using escaped URL: \(escapedURL)")
-                                    }
-                            } else {
-                                Color.clear
-                                    .overlay(
-                                        Image(systemName: "photo")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 40, height: 40)
-                                            .foregroundColor(.gray)
-                                    )
-                                    .onAppear {
-                                        print("Invalid URL in SectionsView header: \(processedURL)")
-                                    }
-                            }
-                        } else {
-                            Color.clear
-                                .overlay(
-                                    Image(systemName: "photo")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(.gray)
-                                )
+            // Imagen de fondo, se asegura de ocupar todo el espacio disponible sin margen
+            if !thumbnail_url.isEmpty {
+                let processedURL = APIClient.getFullImageURL(thumbnail_url)
+                
+                if let url = URL(string: processedURL) {
+                    headerImageView(url: url)
+                } else if let escapedURL = processedURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                          let url = URL(string: escapedURL) {
+                    headerImageView(url: url)
+                        .onAppear {
+                            print("SectionsView header using escaped URL: \(escapedURL)")
                         }
-                    }
-                )
-                .overlay(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.7)]),
-                        startPoint: .top,
-                        endPoint: .bottom
+                } else {
+                    // Solo si no hay URL válida, mostrar un placeholder
+                    Color.clear
+                        .frame(height: 300)
+                        .edgesIgnoringSafeArea(.all)
+                        .overlay(
+                            Image(systemName: "photo")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(.gray)
+                        )
+                        .onAppear {
+                            print("Invalid URL in SectionsView header: \(processedURL)")
+                        }
+                }
+            } else {
+                // Fondo transparente si no hay imagen
+                Color.clear
+                    .frame(height: 300)
+                    .edgesIgnoringSafeArea(.all)
+                    .overlay(
+                        Image(systemName: "photo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40, height: 40)
+                            .foregroundColor(.gray)
                     )
-                )
+            }
             
-            // Títulos superpuestos
+            // Gradiente superpuesto solo para oscurecer la parte inferior y mejorar la legibilidad del texto
+            LinearGradient(
+                gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.5)]), // Reducir la opacidad del gradiente
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea(.all)
+            
+            // Títulos superpuestos, moviéndolos hacia abajo
             VStack(alignment: .leading, spacing: 6) {
-                // Título del curso principal
+                Spacer().frame(height: 200) // Mover los títulos más abajo
+
+                // Título del curso principal con sombra para mejor contraste
                 Text(mainContentTitle)
                     .font(.title3)
                     .fontWeight(.semibold)
-                    .foregroundColor(.white.opacity(0.9))
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.7), radius: 3, x: 0, y: 1)
                 
-                // Título de la sección actual
+                // Título de la sección actual con sombra para mejor contraste
                 Text(topicTitle)
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.7), radius: 3, x: 0, y: 1)
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 20)
+            .zIndex(2) // Asegurar que el texto esté por encima de todas las capas
         }
-        .frame(height: 180)
+        .frame(height: 200)  // Asegúrate de que el frame sea adecuado
+        .edgesIgnoringSafeArea(.all)
+        .background(Color.clear) // Cambié de Color.black a Color.clear para eliminar el fondo negro
     }
+
     
     // Helper to create header image view
     @ViewBuilder
@@ -252,12 +262,11 @@ struct SectionsView: View {
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: geo.size.width, height: 180)
+                        .frame(width: geo.size.width, height: 300)
                         .clipped()
-                        .edgesIgnoringSafeArea(.all)
                 } else if phase.error != nil {
-                    // Si hay error al cargar, mostrar placeholder
-                    Color.clear
+                    // En caso de error, usar un fondo negro en lugar de transparente o gris
+                    Color.black
                         .overlay(
                             Image(systemName: "photo")
                                 .resizable()
@@ -270,18 +279,18 @@ struct SectionsView: View {
                             print("Error details: \(String(describing: phase.error))")
                         }
                 } else {
-                    // Mientras carga
-                    Color.clear
-                        .overlay(
-                            ProgressView()
-                        )
+                    // Mientras carga, mostrar fondo negro
+                    Color.black
+                        .overlay(ProgressView().foregroundColor(.white))
                 }
             }
             .onAppear {
                 print("Attempting to load SectionsView header image from URL: \(url)")
             }
         }
+        .frame(height: 300)
         .edgesIgnoringSafeArea(.all)
+        .clipShape(Rectangle())
     }
 }
 
@@ -298,9 +307,10 @@ struct SectionContentView: View {
                 if text.contains("Key Takeaways:") {
                     let parts = text.components(separatedBy: "Key Takeaways:")
                     
-                    // Texto principal
+                    // Texto principal con mejor estilo para contraste
                     Text(parts[0].trimmingCharacters(in: .whitespacesAndNewlines))
                         .font(.body)
+                        .fontWeight(.medium) // Aumentado de regular a medium para mejor contraste
                         .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal, 20)
@@ -322,10 +332,15 @@ struct SectionContentView: View {
                     .cornerRadius(16)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
+                    .padding(.bottom, 20) // Añadido padding adicional abajo
+                    
+                    // Espacio adicional después de Key Takeaways
+                    Spacer().frame(height: 10)
                 } else {
-                    // Contenido de texto normal
+                    // Contenido de texto normal con mejor estilo para contraste
                     Text(text)
                         .font(.body)
+                        .fontWeight(.medium) // Aumentado de regular a medium para mejor contraste
                         .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
                         .padding(.horizontal, 20)
@@ -333,31 +348,52 @@ struct SectionContentView: View {
                 }
             }
             
-            // Imagen si existe
-            if !image.isEmpty {
-                AsyncImage(url: URL(string: image)) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .cornerRadius(12)
-                    } else if phase.error != nil {
-                        Text("Error loading image")
-                            .foregroundColor(.red)
-                    } else {
-                        ProgressView()
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 20)
-            }
-            
             // Video si existe
             if !video.isEmpty {
+                // Añadimos un espacio adicional antes del video cuando hay key takeaways
+                if text.contains("Key Takeaways:") {
+                    Spacer()
+                        .frame(height: 20)
+                }
+                
                 Video(url: video, autoplay: 1)
                     .frame(height: 220)
                     .cornerRadius(12)
                     .padding(.horizontal, 20)
+            }
+            
+            // Espacio entre el video y la imagen si ambos existen
+            if !video.isEmpty && !image.isEmpty {
+                Spacer()
+                    .frame(height: 30)
+            }
+            
+            // Imagen si existe
+            if !image.isEmpty {
+                VStack(spacing: 8) {
+                    // Si hay texto antes de la imagen, asegurarse de que tenga buen contraste
+                    if !text.isEmpty && video.isEmpty {
+                        Divider()
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 8)
+                    }
+                    
+                    AsyncImage(url: URL(string: image)) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .cornerRadius(12)
+                        } else if phase.error != nil {
+                            Text("Error loading image")
+                                .foregroundColor(.red)
+                        } else {
+                            ProgressView()
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 20)
+                }
             }
         }
     }
@@ -408,83 +444,36 @@ struct FormatKeyTakeaways: View {
     func parseKeyTakeaways(from text: String) -> [KeyTakeawayItem] {
         var items: [KeyTakeawayItem] = []
         
-        // Dividir el texto en secciones basado en los prefijos especiales
-        let textToProcess = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Primero limpiamos el texto para trabajar con él
+        let cleanText = text.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // Extraer items específicos usando patrones específicos
-        let pattern1 = "\\n\\n\\*" // Patrón para el punto 1: "\n\n*"
-        let pattern2 = "\\n\\*\\*" // Patrón para el punto 2: "\n**"
-        let pattern3 = "\\n@"     // Patrón para el punto 3: "\n@"
+        // Dividir el texto en líneas usando el formato \\n
+        let lines = cleanText.components(separatedBy: "\\n")
         
-        // Buscar todos los patrones en el texto
-        let scanner = Scanner(string: textToProcess)
-        var remainingText = textToProcess
-        
-        // Buscar el patrón 1 (punto 1) - "\n\n*"
-        if let range = remainingText.range(of: pattern1) {
-            let startIndex = range.upperBound
+        for line in lines {
+            let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
             
-            // Buscar el final de esta sección (el inicio de otro patrón o final del texto)
-            var endIndex: String.Index
-            if let range2 = remainingText.range(of: pattern2, range: startIndex..<remainingText.endIndex) {
-                endIndex = range2.lowerBound
-            } else if let range3 = remainingText.range(of: pattern3, range: startIndex..<remainingText.endIndex) {
-                endIndex = range3.lowerBound
-            } else {
-                endIndex = remainingText.endIndex
+            // Ignorar líneas vacías y el título "Key Takeaways:"
+            if trimmedLine.isEmpty || trimmedLine == "Key Takeaways:" {
+                continue
             }
             
-            let content = String(remainingText[startIndex..<endIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
-            if !content.isEmpty {
+            // Identificar el tipo de punto según los prefijos (* para 1, ** para 2, @ para 3)
+            if trimmedLine.hasPrefix("*") && !trimmedLine.hasPrefix("**") {
+                // Primer punto (*)
+                let content = trimmedLine.dropFirst().trimmingCharacters(in: .whitespacesAndNewlines)
                 items.append(KeyTakeawayItem(number: 1, text: content))
-            }
-        }
-        
-        // Buscar el patrón 2 (punto 2) - "\n**"
-        if let range = remainingText.range(of: pattern2) {
-            let startIndex = range.upperBound
-            
-            // Buscar el final de esta sección
-            var endIndex: String.Index
-            if let range3 = remainingText.range(of: pattern3, range: startIndex..<remainingText.endIndex) {
-                endIndex = range3.lowerBound
-            } else {
-                endIndex = remainingText.endIndex
-            }
-            
-            let content = String(remainingText[startIndex..<endIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
-            if !content.isEmpty {
+            } else if trimmedLine.hasPrefix("**") {
+                // Segundo punto (**)
+                let content = trimmedLine.dropFirst(2).trimmingCharacters(in: .whitespacesAndNewlines)
                 items.append(KeyTakeawayItem(number: 2, text: content))
-            }
-        }
-        
-        // Buscar el patrón 3 (punto 3) - "\n@"
-        if let range = remainingText.range(of: pattern3) {
-            let startIndex = range.upperBound
-            let content = String(remainingText[startIndex..<remainingText.endIndex]).trimmingCharacters(in: .whitespacesAndNewlines)
-            if !content.isEmpty {
+            } else if trimmedLine.hasPrefix("@") {
+                // Tercer punto (@)
+                let content = trimmedLine.dropFirst().trimmingCharacters(in: .whitespacesAndNewlines)
                 items.append(KeyTakeawayItem(number: 3, text: content))
-            }
-        }
-        
-        // Si no encontramos puntos con los patrones específicos, intentamos el enfoque clásico
-        if items.isEmpty {
-            // Dividir por saltos de línea
-            let lines = textToProcess.split(separator: "\n").map { String($0).trimmingCharacters(in: .whitespaces) }
-            
-            for line in lines {
-                if line.isEmpty || line.hasPrefix("Key Takeaways") { continue }
-                
-                if line.hasPrefix("*") && !line.hasPrefix("**") {
-                    let cleanLine = line.dropFirst().trimmingCharacters(in: .whitespaces)
-                    items.append(KeyTakeawayItem(number: 1, text: cleanLine))
-                } else if line.hasPrefix("**") {
-                    let cleanLine = line.dropFirst(2).trimmingCharacters(in: .whitespaces)
-                    items.append(KeyTakeawayItem(number: 2, text: cleanLine))
-                } else if line.hasPrefix("@") {
-                    let cleanLine = line.dropFirst().trimmingCharacters(in: .whitespaces)
-                    items.append(KeyTakeawayItem(number: 3, text: cleanLine))
-                }
+            } else if !trimmedLine.isEmpty {
+                // Texto normal (sin número)
+                items.append(KeyTakeawayItem(number: nil, text: trimmedLine))
             }
         }
         

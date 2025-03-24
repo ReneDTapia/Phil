@@ -12,6 +12,7 @@ struct CategoryDetailView: View {
     let categoryId: String
     let categoryTitle: String
     @StateObject private var viewModel = ExploreViewModel()
+    @State private var hasAppeared = false
     
     // MARK: - Body
     var body: some View {
@@ -23,7 +24,11 @@ struct CategoryDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            viewModel.fetchCoursesByCategory(categoryId: categoryId)
+            if !hasAppeared {
+                print("🔍 CategoryDetailView appeared for category: \(categoryId) - \(categoryTitle)")
+                viewModel.fetchCoursesByCategory(categoryId: categoryId)
+                hasAppeared = true
+            }
         }
     }
     
@@ -40,6 +45,10 @@ struct CategoryDetailView: View {
     private var contentView: some View {
         if viewModel.isLoading {
             loadingView
+        } else if let errorMessage = viewModel.errorMessage {
+            errorView(message: errorMessage)
+        } else if viewModel.trendingCourses.isEmpty && viewModel.recommendedCourses.isEmpty {
+            emptyStateView
         } else {
             courseListView
         }
@@ -47,19 +56,66 @@ struct CategoryDetailView: View {
     
     // MARK: - Loading View
     private var loadingView: some View {
-        ProgressView("Loading courses...")
+        ProgressView("Cargando cursos...")
             .frame(maxWidth: .infinity, alignment: .center)
             .padding()
     }
     
+    // MARK: - Error View
+    private func errorView(message: String) -> some View {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.largeTitle)
+                .foregroundColor(.orange)
+            
+            Text("Error al cargar cursos")
+                .font(.headline)
+            
+            Text(message)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding()
+    }
+    
+    // MARK: - Empty State View
+    private var emptyStateView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "tray")
+                .font(.largeTitle)
+                .foregroundColor(.gray)
+            
+            Text("No se encontraron cursos")
+                .font(.headline)
+            
+            Text("No hay cursos disponibles en esta categoría todavía. ¡Vuelve más tarde!")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding()
+    }
+    
     // MARK: - Course List View
     private var courseListView: some View {
-        ForEach(viewModel.trendingCourses + viewModel.recommendedCourses) { course in
-            NavigationLink(destination: CourseDetailView(course: course)) {
-                courseCard(for: course)
+        VStack(alignment: .leading, spacing: 16) {
+            let allCourses = viewModel.trendingCourses + viewModel.recommendedCourses
+            
+            Text("\(allCourses.count) cursos encontrados")
+                .font(.headline)
+                .foregroundColor(.secondary)
+                .padding(.horizontal)
+            
+            ForEach(allCourses) { course in
+                NavigationLink(destination: CourseDetailView(course: course)) {
+                    courseCard(for: course)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding(.horizontal)
             }
-            .buttonStyle(PlainButtonStyle())
-            .padding(.horizontal)
         }
     }
     

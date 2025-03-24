@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Doctor: Identifiable {
-    var id = UUID()
+struct Doctor: Identifiable, Decodable {
+    var id: Int
+    
     var name: String
     var specialties: String
     var rating: Double
@@ -22,26 +23,29 @@ struct Doctor: Identifiable {
     static var sampleDoctors: [Doctor] {
         [
             Doctor(
+                id: 1000,
                 name: "Dr. Sarah Johnson",
                 specialties: "Anxiety & Depression",
                 rating: 4.9,
                 reviewCount: 124,
-                availability: .today,
+                availability: .specificDay("Friday"),
                 modes: [.online, .inPerson],
                 price: 120,
                 imageURL: nil
             ),
             Doctor(
+                id: 1001,
                 name: "Dr. Michael Chen",
                 specialties: "Trauma & PTSD",
                 rating: 4.7,
                 reviewCount: 98,
-                availability: .tomorrow,
+                availability: .specificDay("Friday"),
                 modes: [.online],
                 price: 150,
                 imageURL: nil
             ),
             Doctor(
+                id: 1003,
                 name: "Dr. Emily Rodriguez",
                 specialties: "Relationship Issues",
                 rating: 4.8,
@@ -56,27 +60,41 @@ struct Doctor: Identifiable {
 }
 
 // Estado de disponibilidad del doctor
-enum AvailabilityStatus {
-    case today
-    case tomorrow
-    case specificDay(String) // Ej: "Friday", "Next week", etc.
-    
+enum AvailabilityStatus: Codable {
+    case specificDay(String)
+
     var displayText: String {
         switch self {
-        case .today:
-            return "Available today"
-        case .tomorrow:
-            return "Next available: Tomorrow"
         case .specificDay(let day):
             return "Next available: \(day)"
         }
     }
+
+    private enum CodingKeys: String, CodingKey {
+        case specificDay
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let day = try container.decode(String.self, forKey: .specificDay)
+        self = .specificDay(day)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .specificDay(let day):
+            try container.encode(day, forKey: .specificDay)
+        }
+    }
 }
 
+
+
 // Modalidades de consulta
-enum ConsultationMode: String, CaseIterable, Identifiable {
-    case online = "Online"
-    case inPerson = "In-person"
+enum ConsultationMode: String, CaseIterable, Identifiable, Decodable {
+    case online = "En Linea"
+    case inPerson = "Presencial"
     
     var id: String { self.rawValue }
 }

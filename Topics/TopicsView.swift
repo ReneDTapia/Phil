@@ -606,4 +606,3 @@ struct Topics_Previews: PreviewProvider {
         )
     }
 }
-

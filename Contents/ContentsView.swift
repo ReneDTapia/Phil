@@ -12,7 +12,7 @@ struct ContentsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            NavigationStack { 
+            NavigationStack {
                 ZStack(alignment: .leading) {
                     Color.white.edgesIgnoringSafeArea(.all)
                     
@@ -22,7 +22,7 @@ struct ContentsView: View {
                                 .font(.largeTitle)
                                 .bold()
                                 .foregroundColor(.black)
-                            Spacer() 
+                            Spacer()
                             ZStack {
                                 Circle()
                                     .fill(Color.gray.opacity(0.2))
@@ -51,7 +51,7 @@ struct ContentsView: View {
                         }
                         else{
                             // Content view when loaded
-                            VStack(alignment: .leading, spacing: 8){ 
+                            VStack(alignment: .leading, spacing: 8){
                                 Text("Continue Learning")
                                     .font(.title2)
                                     .bold()
@@ -128,7 +128,7 @@ struct ProgressBar: View {
     }
 }
 
-struct Contents: View{  
+struct Contents: View{
     
     let title : String
     let description: String

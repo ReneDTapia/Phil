@@ -35,7 +35,17 @@ struct ExploreView: View {
             .background(Color(.systemBackground))
             .navigationBarHidden(true)
             .onAppear {
+                print("📱 ExploreView appeared - Fetching data")
+                // Fetch courses
                 viewModel.fetchCourses()
+                
+                // Solo obtenemos categorías si no hay ninguna cargada
+                if viewModel.categories.isEmpty {
+                    print("📱 No hay categorías - obteniendo del API")
+                    viewModel.fetchCategories()
+                } else {
+                    print("📱 Ya hay \(viewModel.categories.count) categorías cargadas, no es necesario obtener de nuevo")
+                }
             }
         }
     }
@@ -43,7 +53,7 @@ struct ExploreView: View {
     // MARK: - Header View
     private var headerView: some View {
         HStack {
-            Text("Explore")
+            Text("Explorar")
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
@@ -66,7 +76,7 @@ struct ExploreView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(.gray)
             
-            TextField("Search for topics...", text: $searchText, onEditingChanged: { _ in
+            TextField("Buscar temas...", text: $searchText, onEditingChanged: { _ in
                 // Not needed for this functionality
             }, onCommit: {
                 if !searchText.isEmpty {
@@ -99,11 +109,11 @@ struct ExploreView: View {
     private var searchResultsSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             if viewModel.isLoading {
-                loadingView(message: "Searching...")
+                loadingView(message: "Buscando...")
             } else if viewModel.searchResults.isEmpty {
-                emptyStateView(message: "No results found for '\(searchText)'")
+                emptyStateView(message: "No se encontraron resultados para '\(searchText)'")
             } else {
-                Text("Search Results")
+                Text("Resultados de búsqueda")
                     .font(.title2)
                     .fontWeight(.bold)
                     .padding(.horizontal)
@@ -118,24 +128,32 @@ struct ExploreView: View {
     // MARK: - Categories Section
     private var categoriesSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Categories")
+            Text("Categorías")
                 .font(.title2)
                 .fontWeight(.bold)
                 .padding(.horizontal)
             
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                ForEach(viewModel.categories) { category in
-                    NavigationLink(destination: CategoryDetailView(categoryId: category.id, categoryTitle: category.title)) {
-                        CategoryCard(
-                            title: category.title,
-                            emoji: category.emoji,
-                            backgroundColor: category.color
-                        )
+            if viewModel.isLoading && viewModel.categories.isEmpty {
+                ProgressView("Cargando categorías...")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+            } else if viewModel.categories.isEmpty {
+                emptyStateView(message: "No hay categorías disponibles")
+            } else {
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                    ForEach(viewModel.categories) { category in
+                        NavigationLink(destination: CategoryDetailView(categoryId: category.id, categoryTitle: category.title)) {
+                            CategoryCard(
+                                title: category.title,
+                                emoji: category.emoji,
+                                backgroundColor: category.color
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .buttonStyle(PlainButtonStyle())
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
         }
     }
     
@@ -144,13 +162,13 @@ struct ExploreView: View {
         VStack(alignment: .leading, spacing: 16) {
             // Header
             HStack {
-                Text("Trending Now")
+                Text("Tendencias")
                     .font(.title)
                     .fontWeight(.bold)
                 
                 Spacer()
                 
-                NavigationLink(destination: AllCoursesView(title: "Trending Courses", courses: viewModel.trendingCourses)) {
+                NavigationLink(destination: AllCoursesView(title: "Cursos Populares", courses: viewModel.trendingCourses)) {
                     Image(systemName: "arrow.up.right")
                         .font(.title3)
                         .foregroundColor(.indigo)
@@ -160,9 +178,9 @@ struct ExploreView: View {
             
             // Content
             if viewModel.isLoading {
-                loadingView(message: "Loading courses...")
+                loadingView(message: "Cargando cursos...")
             } else if viewModel.trendingCourses.isEmpty {
-                emptyStateView(message: "No trending courses available")
+                emptyStateView(message: "No hay cursos populares disponibles")
             } else {
                 // Course List
                 VStack(spacing: 16) {
