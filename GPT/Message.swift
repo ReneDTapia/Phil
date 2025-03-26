@@ -15,14 +15,16 @@ struct Message: Identifiable, Encodable, Decodable {
     let sentByUser: Bool
     let conversationId: Int
     let sendAt: String
+    let threadId: String? // ADD: Thread ID for OpenAI
 
     enum CodingKeys: String, CodingKey {
         case id
-        case userId = "user" //
+        case userId = "user"
         case text
         case sentByUser
         case conversationId
         case sendAt
+        case threadId // ADD: Coding key for threadId
     }
 }
 

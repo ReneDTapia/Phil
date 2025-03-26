@@ -23,17 +23,31 @@ struct ReceivedMessageView: View {
 struct ReceivedMessageView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            ReceivedMessageView(message: Message(id: 2, userId: 1, text: "Mensajwe largo para probar el envoltorio de texto en la vista de mensajes recibidos.", sentByUser: false, conversationId: 1, sendAt: "2023-10-18"))
+            ReceivedMessageView(message: Message(
+                id: 2,
+                userId: 1,
+                text: "Mensajwe largo para probar el envoltorio de texto en la vista de mensajes recibidos.",
+                sentByUser: false,
+                conversationId: 1,
+                sendAt: "2023-10-18",
+                threadId: "thread_abc123"  // Added threadId
+            ))
                 .preferredColorScheme(.dark)
                 .previewLayout(.sizeThatFits)
                 .previewDisplayName("Modo Oscuro")
 
-            ReceivedMessageView(message: Message(id: 2, userId: 1, text: "Mensajefewfew largo para probar el envoltorio de texto fen la vista de mensajes recibidos.", sentByUser: false, conversationId: 1, sendAt: "2023-10-18"))
+            ReceivedMessageView(message: Message(
+                id: 2,
+                userId: 1,
+                text: "Mensajefewfew largo para probar el envoltorio de texto fen la vista de mensajes recibidos.",
+                sentByUser: false,
+                conversationId: 1,
+                sendAt: "2023-10-18",
+                threadId: "thread_abc123"  // Added threadId
+            ))
                 .preferredColorScheme(.light)
                 .previewLayout(.sizeThatFits)
                 .previewDisplayName("Modo Claro")
         }
     }
 }
-
-

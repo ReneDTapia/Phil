@@ -1,5 +1,5 @@
 import SwiftUI
-//componente sin uso 
+
 struct SentMessageView: View {
     let message: Message
 
@@ -11,7 +11,7 @@ struct SentMessageView: View {
                 .background(Color(UIColor.systemIndigo))
                 .foregroundColor(.white)
                 .cornerRadius(8)
-                .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: 0.6 * UIScreen.main.bounds.width)
         }
         .padding(.trailing, 16)
@@ -20,9 +20,16 @@ struct SentMessageView: View {
 
 struct SentMessageView_Previews: PreviewProvider {
     static var previews: some View {
-        SentMessageView(message: Message(id: 1, userId: 1, text: "Hola, ¿cómo estás te gustsa la pizza? Esto es un mensaje largo para probar cómo se ve en la pantalla y asegurarnos de eque no se extienda demasiado.", sentByUser: true, conversationId: 1, sendAt: "2023-10-18"))
+        SentMessageView(message: Message(
+            id: 1, 
+            userId: 1, 
+            text: "Hola, ¿cómo estás te gustsa la pizza? Esto es un mensaje largo para probar cómo se ve en la pantalla y asegurarnos de eque no se extienda demasiado.", 
+            sentByUser: true, 
+            conversationId: 1, 
+            sendAt: "2023-10-18",
+            threadId: "thread_abc123" 
+        ))
             .previewLayout(.sizeThatFits)
             .preferredColorScheme(.dark)
     }
 }
-
