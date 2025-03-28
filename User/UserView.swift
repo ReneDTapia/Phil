@@ -37,13 +37,13 @@ struct UserView: View {
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                             }
-                            .padding(.leading, -10) // Mueve la imagen más a la izquierda
+                            .padding(.leading, -30) // Mueve la imagen más a la izquierda
                             
                             Spacer()
-                                .frame(width: 5)
+                                .frame(width: 30)
                             
                             // Estadísticas en horizontal
-                            HStack(spacing: 25) {
+                            HStack(spacing: 40) {
                                 // Sessions
                                 VStack(spacing: 4) {
                                     Text("\(viewModel.sessionsCount)")
