@@ -72,12 +72,6 @@ struct AllCoursesView: View {
                 .foregroundColor(.gray)
             
             Spacer()
-            
-            Image(systemName: "clock")
-                .foregroundColor(.gray)
-            Text(course.duration)
-                .font(.caption)
-                .foregroundColor(.gray)
         }
     }
 }
@@ -94,7 +88,6 @@ struct AllCoursesView_Previews: PreviewProvider {
                         title: "SwiftUI Essentials",
                         description: "Learn the fundamentals of SwiftUI and build beautiful iOS apps.",
                         lessons: 12,
-                        duration: "4 hours",
                         imageUrl: nil,
                         categoryId: "1"
                     ),
@@ -103,7 +96,6 @@ struct AllCoursesView_Previews: PreviewProvider {
                         title: "Advanced Swift",
                         description: "Take your Swift skills to the next level with advanced techniques.",
                         lessons: 15,
-                        duration: "6 hours",
                         imageUrl: nil,
                         categoryId: "1"
                     )

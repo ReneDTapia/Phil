@@ -11,7 +11,6 @@ struct CourseCard: View {
     // MARK: - Properties
     var title: String
     var lessons: Int
-    var duration: String
     var imageUrl: String?
     
     // MARK: - Body
@@ -95,14 +94,6 @@ struct CourseCard: View {
             }
             
             Spacer()
-            
-            // Duration
-            HStack(spacing: 4) {
-                Image(systemName: "clock")
-                    .font(.subheadline)
-                Text(duration)
-                    .font(.subheadline)
-            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -117,7 +108,6 @@ struct CourseCard_Previews: PreviewProvider {
         CourseCard(
             title: "Overcoming Social Anxiety",
             lessons: 8,
-            duration: "3 weeks",
             imageUrl: nil
         )
         .frame(width: 300)

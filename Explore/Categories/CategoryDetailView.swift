@@ -149,12 +149,6 @@ struct CategoryDetailView: View {
                 .foregroundColor(.gray)
             
             Spacer()
-            
-            Image(systemName: "clock")
-                .foregroundColor(.gray)
-            Text(course.duration)
-                .font(.caption)
-                .foregroundColor(.gray)
         }
     }
 }

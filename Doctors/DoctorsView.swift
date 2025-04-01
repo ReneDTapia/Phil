@@ -79,14 +79,23 @@ struct DoctorsView: View {
                             VStack(spacing: 24) {
                                 // Lista de doctores
                                 VStack(spacing: 16) {
-                                    ForEach(viewModel.filteredDoctors.isEmpty ? viewModel.doctors : viewModel.filteredDoctors) { doctor in
-                                        NavigationLink {
-                                            DoctorsDetailView(doctor: doctor)
-                                        } label: {
-                                            DoctorCardView(doctor: doctor)
-                                                .contentShape(Rectangle()) // Asegurar que toda el área sea tocable
+                                    let doctorsToShow = viewModel.filteredDoctors.isEmpty && viewModel.selectedModes.isEmpty && viewModel.selectedCategories.isEmpty ? viewModel.doctors : viewModel.filteredDoctors
+                                    
+                                    if doctorsToShow.isEmpty {
+                                        Text("No doctors match your filters")
+                                            .font(.headline)
+                                            .foregroundColor(.gray)
+                                            .padding(.top, 40)
+                                    } else {
+                                        ForEach(doctorsToShow) { doctor in
+                                            NavigationLink {
+                                                DoctorsDetailView(doctor: doctor)
+                                            } label: {
+                                                DoctorCardView(doctor: doctor)
+                                                    .contentShape(Rectangle()) // Asegurar que toda el área sea tocable
+                                            }
+                                            .buttonStyle(PlainButtonStyle())
                                         }
-                                        .buttonStyle(PlainButtonStyle())
                                     }
                                 }
                                 .padding(.horizontal, 16)
@@ -308,8 +317,8 @@ struct FiltersView: View {
     @ObservedObject var viewModel: DoctorsViewModel
     @Environment(\.presentationMode) var presentationMode
     
-    // Opciones de especialidad disponibles
-    let specialties = ["Anxiety", "Depression", "Trauma", "PTSD", "Relationship Issues", "Stress", "Family Conflict", "Grief"]
+    // Opciones de categorías disponibles
+    let categories = ["Ansiedad", "Autoestima", "Depresión", "Estrés", "Relaciones", "Sueño"]
     
     var body: some View {
         NavigationView {
@@ -336,19 +345,19 @@ struct FiltersView: View {
                         }
                     }
                     
-                    // Sección de especialidades
-                    Section(header: Text("Specialties").font(.headline)) {
-                        ForEach(specialties, id: \.self) { specialty in
+                    // Sección de categorías
+                    Section(header: Text("Categories").font(.headline)) {
+                        ForEach(categories, id: \.self) { category in
                             Button(action: {
-                                viewModel.toggleSpecialtyFilter(specialty)
+                                viewModel.toggleCategoryFilter(category)
                             }) {
                                 HStack {
-                                    Text(specialty)
+                                    Text(category)
                                         .foregroundColor(.primary)
                                     
                                     Spacer()
                                     
-                                    if viewModel.selectedSpecialties.contains(specialty) {
+                                    if viewModel.selectedCategories.contains(category) {
                                         Image(systemName: "checkmark")
                                             .foregroundColor(.blue)
                                     }
@@ -377,6 +386,7 @@ struct FiltersView: View {
                     }
                     
                     Button(action: {
+                        viewModel.filterDoctors() // Asegurarse de que se apliquen los filtros
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Apply")

@@ -19,7 +19,7 @@ struct UserView: View {
                         // Sección Superior - Perfil estilo Instagram
                         HStack(alignment: .center, spacing: 15) {
                             // Avatar con iniciales
-                            ZStack {
+                    ZStack {
                                 Circle()
                                     .fill(LinearGradient(
                                         gradient: Gradient(colors: [Color.pink, Color.orange]),
@@ -325,7 +325,7 @@ struct TimeframeSelector: View {
                     .cornerRadius(20)
             }
             
-            Button(action: { 
+                    Button(action: {
                 selectedTimeframe = .month
                 viewModel.updateTimeframe(.month)
             }) {
@@ -423,7 +423,7 @@ struct LoadingView: View {
 struct ErrorView: View {
     let message: String
     let retryAction: () -> Void
-    
+
     var body: some View {
         ZStack {
             Color.black.opacity(0.2)
@@ -469,4 +469,4 @@ struct UserView_Previews: PreviewProvider {
     static var previews: some View {
         UserView(userId: 37)
     }
-} 
+}

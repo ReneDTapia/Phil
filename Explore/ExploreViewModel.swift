@@ -16,7 +16,6 @@ struct Course: Identifiable {
     let title: String
     let description: String
     let lessons: Int
-    let duration: String
     let imageUrl: String?
     let categoryId: String
 }
@@ -70,6 +69,29 @@ struct CategoryResponse: Codable, Identifiable {
     let color: String
 }
 
+// Modelo para la respuesta de API de cursos
+struct CourseResponse: Codable, Identifiable {
+    let id: Int
+    let title: String
+    let thumbnail_url: String?
+    let description: String
+    let tendencia: Int
+    let topicCount: Int
+    let categoryName: String
+    
+    // Convertir a nuestro modelo Course
+    func toCourse() -> Course {
+        return Course(
+            id: String(id),
+            title: title,
+            description: description,
+            lessons: topicCount,
+            imageUrl: thumbnail_url,
+            categoryId: categoryName
+        )
+    }
+}
+
 // MARK: - ViewModel
 
 class ExploreViewModel: ObservableObject {
@@ -100,11 +122,44 @@ class ExploreViewModel: ObservableObject {
     func fetchCourses() {
         isLoading = true
         
-        // Simulate network delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self = self else { return }
-            self.loadMockCourses()
-            self.isLoading = false
+        Task {
+            do {
+                print("📚 Iniciando obtención de cursos del API...")
+                let courseResponses: [CourseResponse] = try await APIClient.get(path: "topTrending")
+                
+                print("📚 Se obtuvieron \(courseResponses.count) cursos del API")
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    // Convertir respuestas API a nuestro modelo Course
+                    let courses = courseResponses.map { $0.toCourse() }
+                    
+                    // Asignar a trendingCourses
+                    self.trendingCourses = courses
+                    
+                    // Por ahora, también asignamos los mismos cursos a recommendedCourses
+                    // En el futuro, se podría implementar otro endpoint para cursos recomendados
+                    self.recommendedCourses = courses
+                    
+                    self.isLoading = false
+                    print("📚 Cursos cargados correctamente desde la API")
+                }
+            } catch {
+                print("❌ Error al obtener cursos: \(error)")
+                print("❌ Detalles del error: \(error.localizedDescription)")
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.errorMessage = "Error al obtener cursos: \(error.localizedDescription)"
+                    
+                    // Cargar datos mock solo si hay error
+                    print("📚 Cargando datos mock como respaldo")
+                    self.loadMockCourses()
+                    
+                    self.isLoading = false
+                }
+            }
         }
     }
     
@@ -176,31 +231,96 @@ class ExploreViewModel: ObservableObject {
         isLoading = true
         print("🔍 Fetching courses for category ID: \(categoryId)")
         
-        // Simulate network delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            guard let self = self else { return }
-            
-            // Load all mock data first
-            self.loadMockData()
-            
-            // Filter courses by category
-            if categoryId != "all" {
-                // Handle both string IDs and numeric IDs from API
-                self.trendingCourses = self.trendingCourses.filter { course in
-                    // Check if the course.categoryId matches either the categoryId or a name-based ID
-                    return course.categoryId == categoryId || 
-                           self.categories.first(where: { String($0.id) == categoryId })?.title.lowercased() == course.categoryId
+        // Si no hay cursos cargados, primero los obtenemos
+        if trendingCourses.isEmpty {
+            Task {
+                do {
+                    print("📚 Cargando cursos antes de filtrar por categoría...")
+                    let courseResponses: [CourseResponse] = try await APIClient.get(path: "topTrending")
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        // Convertir respuestas API a nuestro modelo Course
+                        let allCourses = courseResponses.map { $0.toCourse() }
+                        
+                        // Si la categoría es "all", mostrar todos los cursos
+                        if categoryId == "all" {
+                            self.trendingCourses = allCourses
+                            self.recommendedCourses = allCourses
+                        } else {
+                            // Filtrar por categoría
+                            self.trendingCourses = allCourses.filter { course in
+                                // Comparamos la categoría directamente o el nombre en minúsculas
+                                return course.categoryId.lowercased() == categoryId.lowercased() ||
+                                       self.categories.first(where: { String($0.id) == categoryId })?.title.lowercased() == course.categoryId.lowercased()
+                            }
+                            
+                            self.recommendedCourses = self.trendingCourses
+                        }
+                        
+                        self.isLoading = false
+                        print("🔍 Filtered to \(self.trendingCourses.count) courses for category \(categoryId)")
+                    }
+                } catch {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.errorMessage = "Error al obtener cursos: \(error.localizedDescription)"
+                        
+                        // Cargar y filtrar datos mock en caso de error
+                        self.loadMockData()
+                        
+                        if categoryId != "all" {
+                            self.trendingCourses = self.trendingCourses.filter { course in
+                                return course.categoryId.lowercased() == categoryId.lowercased() || 
+                                       self.categories.first(where: { String($0.id) == categoryId })?.title.lowercased() == course.categoryId.lowercased()
+                            }
+                            
+                            self.recommendedCourses = self.trendingCourses
+                        }
+                        
+                        self.isLoading = false
+                    }
                 }
-                
-                self.recommendedCourses = self.recommendedCourses.filter { course in
-                    return course.categoryId == categoryId || 
-                           self.categories.first(where: { String($0.id) == categoryId })?.title.lowercased() == course.categoryId
-                }
-                
-                print("🔍 Filtered to \(self.trendingCourses.count) trending and \(self.recommendedCourses.count) recommended courses")
             }
-            
-            self.isLoading = false
+        } else {
+            // Si ya tenemos cursos, simplemente filtramos los existentes
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                
+                let allCourses = self.trendingCourses + self.recommendedCourses
+                
+                if categoryId != "all" {
+                    self.trendingCourses = allCourses.filter { course in
+                        return course.categoryId.lowercased() == categoryId.lowercased() || 
+                               self.categories.first(where: { String($0.id) == categoryId })?.title.lowercased() == course.categoryId.lowercased()
+                    }
+                    
+                    self.recommendedCourses = []
+                } else {
+                    // Recargar todos los cursos desde la API
+                    Task {
+                        do {
+                            let courseResponses: [CourseResponse] = try await APIClient.get(path: "topTrending")
+                            
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
+                                
+                                let allCourses = courseResponses.map { $0.toCourse() }
+                                self.trendingCourses = allCourses
+                                self.recommendedCourses = []
+                                self.isLoading = false
+                            }
+                        } catch {
+                            self.loadMockCourses()
+                            self.isLoading = false
+                        }
+                    }
+                }
+                
+                self.isLoading = false
+                print("🔍 Filtered to \(self.trendingCourses.count) courses for category \(categoryId)")
+            }
         }
     }
     
@@ -209,18 +329,54 @@ class ExploreViewModel: ObservableObject {
     func searchCourses(query: String) {
         isLoading = true
         
-        // Simulate network delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
-            guard let self = self else { return }
-            
-            // Filter courses by search query
-            let lowercasedQuery = query.lowercased()
-            self.searchResults = self.trendingCourses.filter { course in
-                course.title.lowercased().contains(lowercasedQuery) ||
-                course.description.lowercased().contains(lowercasedQuery)
+        Task {
+            do {
+                // Intentamos obtener los cursos de la API si aún no tenemos
+                if self.trendingCourses.isEmpty {
+                    let courseResponses: [CourseResponse] = try await APIClient.get(path: "topTrending")
+                    
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        
+                        // Convertir respuestas API a nuestro modelo Course
+                        let allCourses = courseResponses.map { $0.toCourse() }
+                        
+                        // Guardamos todos los cursos
+                        self.trendingCourses = allCourses
+                        
+                        // Filtramos para la búsqueda
+                        self.filterCoursesForSearch(query: query)
+                    }
+                } else {
+                    // Si ya tenemos cursos, simplemente filtramos
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.filterCoursesForSearch(query: query)
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    // Si hay error, cargamos datos mock
+                    if self.trendingCourses.isEmpty {
+                        self.loadMockCourses()
+                    }
+                    
+                    // Y luego filtramos
+                    self.filterCoursesForSearch(query: query)
+                }
             }
-            self.isLoading = false
         }
+    }
+    
+    private func filterCoursesForSearch(query: String) {
+        let lowercasedQuery = query.lowercased()
+        self.searchResults = self.trendingCourses.filter { course in
+            course.title.lowercased().contains(lowercasedQuery) ||
+            course.description.lowercased().contains(lowercasedQuery)
+        }
+        self.isLoading = false
     }
     
     // MARK: - Private Methods
@@ -235,18 +391,18 @@ class ExploreViewModel: ObservableObject {
     private func loadMockCourses() {
         // Mock trending courses
         trendingCourses = [
-            Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, duration: "3 weeks", imageUrl: nil, categoryId: "anxiety"),
-            Course(id: "2", title: "Mindfulness for Beginners", description: "Start your mindfulness journey with simple daily practices for stress reduction.", lessons: 12, duration: "4 weeks", imageUrl: nil, categoryId: "stress"),
-            Course(id: "3", title: "Building Healthy Habits", description: "Develop sustainable habits that improve your mental and physical wellbeing.", lessons: 10, duration: "6 weeks", imageUrl: nil, categoryId: "self-esteem"),
-            Course(id: "4", title: "Effective Communication", description: "Enhance your communication skills to build better relationships.", lessons: 6, duration: "2 weeks", imageUrl: nil, categoryId: "relationships")
+            Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, imageUrl: nil, categoryId: "anxiety"),
+            Course(id: "2", title: "Mindfulness for Beginners", description: "Start your mindfulness journey with simple daily practices for stress reduction.", lessons: 12, imageUrl: nil, categoryId: "stress"),
+            Course(id: "3", title: "Building Healthy Habits", description: "Develop sustainable habits that improve your mental and physical wellbeing.", lessons: 10, imageUrl: nil, categoryId: "self-esteem"),
+            Course(id: "4", title: "Effective Communication", description: "Enhance your communication skills to build better relationships.", lessons: 6, imageUrl: nil, categoryId: "relationships")
         ]
         
         // Mock recommended courses
         recommendedCourses = [
-            Course(id: "5", title: "Stress Management", description: "Practical techniques to manage stress in your daily life.", lessons: 9, duration: "3 weeks", imageUrl: nil, categoryId: "stress"),
-            Course(id: "6", title: "Emotional Intelligence", description: "Develop your emotional awareness and regulation skills.", lessons: 7, duration: "2 weeks", imageUrl: nil, categoryId: "self-esteem"),
-            Course(id: "7", title: "Sleep Improvement", description: "Strategies to improve your sleep quality and duration.", lessons: 5, duration: "2 weeks", imageUrl: nil, categoryId: "sleep"),
-            Course(id: "8", title: "Managing Depression", description: "Evidence-based approaches to cope with depression symptoms.", lessons: 10, duration: "4 weeks", imageUrl: nil, categoryId: "depression")
+            Course(id: "5", title: "Stress Management", description: "Practical techniques to manage stress in your daily life.", lessons: 9, imageUrl: nil, categoryId: "stress"),
+            Course(id: "6", title: "Emotional Intelligence", description: "Develop your emotional awareness and regulation skills.", lessons: 7, imageUrl: nil, categoryId: "self-esteem"),
+            Course(id: "7", title: "Sleep Improvement", description: "Strategies to improve your sleep quality and duration.", lessons: 5, imageUrl: nil, categoryId: "sleep"),
+            Course(id: "8", title: "Managing Depression", description: "Evidence-based approaches to cope with depression symptoms.", lessons: 10, imageUrl: nil, categoryId: "depression")
         ]
     }
     

@@ -146,10 +146,10 @@ struct DoctorsDetailView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            Text("Dr. Sarah specializes in Anxiety & Depression and has helped hundreds of patients overcome their challenges. With a patient-centered approach, they create a safe and supportive environment for healing and growth.")
-                                .font(.body)
-                                .foregroundColor(.secondary)
-                                .lineSpacing(4)
+                            Text(doctor.description ?? "No description available.")
+                                    .font(.body)
+                                    .foregroundColor(.secondary)
+                                    .lineSpacing(4)
                         }
                         .padding(20)
                         .frame(maxWidth: .infinity, alignment: .leading)

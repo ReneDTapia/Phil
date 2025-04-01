@@ -102,11 +102,6 @@ struct CourseDetailView: View {
                 .foregroundColor(.indigo)
             
             Spacer()
-            
-            Image(systemName: "clock")
-                .foregroundColor(.indigo)
-            Text(course.duration)
-                .foregroundColor(.indigo)
         }
     }
     
@@ -136,7 +131,6 @@ struct CourseDetailView_Previews: PreviewProvider {
                     title: "SwiftUI Essentials",
                     description: "Learn the fundamentals of SwiftUI and build beautiful iOS apps.",
                     lessons: 12,
-                    duration: "4 hours",
                     imageUrl: nil,
                     categoryId: "1"
                 )

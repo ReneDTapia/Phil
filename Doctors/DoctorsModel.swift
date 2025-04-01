@@ -9,8 +9,8 @@ import Foundation
 
 struct Doctor: Identifiable, Decodable {
     var id: Int
-    
     var name: String
+    var categories: [String]
     var specialties: String
     var rating: Double
     var reviewCount: Int
@@ -18,6 +18,7 @@ struct Doctor: Identifiable, Decodable {
     var modes: [ConsultationMode]
     var price: Int
     var imageURL: String?
+    var description: String?
     
     // Si necesitamos obtener doctores de forma simulada para pruebas o desarrollo
     static var sampleDoctors: [Doctor] {
@@ -25,17 +26,21 @@ struct Doctor: Identifiable, Decodable {
             Doctor(
                 id: 1000,
                 name: "Dr. Sarah Johnson",
+                categories: ["x"],
                 specialties: "Anxiety & Depression",
                 rating: 4.9,
                 reviewCount: 124,
                 availability: .specificDay("Friday"),
                 modes: [.online, .inPerson],
                 price: 120,
-                imageURL: nil
+                imageURL: nil,
+                description: "Xd"
+                
             ),
             Doctor(
                 id: 1001,
                 name: "Dr. Michael Chen",
+                categories: ["x"],
                 specialties: "Trauma & PTSD",
                 rating: 4.7,
                 reviewCount: 98,
@@ -47,6 +52,7 @@ struct Doctor: Identifiable, Decodable {
             Doctor(
                 id: 1003,
                 name: "Dr. Emily Rodriguez",
+                categories: ["x"],
                 specialties: "Relationship Issues",
                 rating: 4.8,
                 reviewCount: 156,

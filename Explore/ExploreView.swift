@@ -189,7 +189,6 @@ struct ExploreView: View {
                             CourseCard(
                                 title: course.title,
                                 lessons: course.lessons,
-                                duration: course.duration,
                                 imageUrl: course.imageUrl
                             )
                         }
@@ -240,9 +239,7 @@ struct ExploreView: View {
                     
                     Image(systemName: "clock")
                         .foregroundColor(.gray)
-                    Text(course.duration)
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                    
                 }
             }
             .padding()

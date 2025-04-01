@@ -50,12 +50,6 @@ struct SearchResultsView: View {
                                     .foregroundColor(.gray)
                                 
                                 Spacer()
-                                
-                                Image(systemName: "clock")
-                                    .foregroundColor(.gray)
-                                Text(course.duration)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
                             }
                         }
                         .padding()
@@ -76,7 +70,7 @@ struct SearchResultsView_Previews: PreviewProvider {
         SearchResultsView(
             searchText: "anxiety",
             results: [
-                Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, duration: "3 weeks", imageUrl: nil, categoryId: "anxiety")
+                Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, imageUrl: nil, categoryId: "anxiety")
             ],
             isLoading: false
         )
