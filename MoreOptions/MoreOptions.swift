@@ -46,11 +46,11 @@ struct MoreOptions: View {
                                 SettingsRow(icon: "person.fill", title: "Información de la Cuenta", color: .blue)
                             }
                             
-                            NavigationLink(destination: Text("Notificaciones")) {
+                            NavigationLink(destination: NotificationsView()) {
                                 SettingsRow(icon: "bell.fill", title: "Notificaciones", color: .purple)
                             }
                             
-                            NavigationLink(destination: Text("Privacidad")) {
+                            NavigationLink(destination: PrivacyView()) {
                                 SettingsRow(icon: "lock.fill", title: "Privacidad", color: .green)
                             }
                             

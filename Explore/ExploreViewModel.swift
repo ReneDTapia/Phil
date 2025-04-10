@@ -47,6 +47,10 @@ struct Category: Identifiable {
             self.color = Color.red.opacity(0.3)
         case "purple":
             self.color = Color.purple.opacity(0.3)
+        case "green":
+            self.color = Color.green.opacity(0.3)
+        case "light blue":
+            self.color = Color(red: 0.5, green: 0.8, blue: 1.0).opacity(0.3)
         default:
             self.color = Color.gray.opacity(0.3)
         }
@@ -92,6 +96,48 @@ struct CourseResponse: Codable, Identifiable {
     }
 }
 
+// Modelo para la respuesta de API de contenidos
+struct ContentResponse: Codable, Identifiable {
+    let id: Int
+    let title: String
+    let description: String
+    let video_url: String?
+    let thumbnail_url: String?
+    let is_premium: Bool
+    let author_id: Int
+    let category_id: Int
+    let created_at: String
+    let updated_at: String
+    let tendencia: Int
+    
+    // Convertir a nuestro modelo Content
+    func toContent() -> Content {
+        return Content(
+            id: String(id),
+            title: title,
+            description: description,
+            videoUrl: video_url,
+            thumbnailUrl: thumbnail_url,
+            isPremium: is_premium,
+            authorId: String(author_id),
+            categoryId: String(category_id),
+            tendencia: tendencia
+        )
+    }
+}
+
+struct Content: Identifiable {
+    let id: String
+    let title: String
+    let description: String
+    let videoUrl: String?
+    let thumbnailUrl: String?
+    let isPremium: Bool
+    let authorId: String
+    let categoryId: String
+    let tendencia: Int
+}
+
 // MARK: - ViewModel
 
 class ExploreViewModel: ObservableObject {
@@ -99,6 +145,7 @@ class ExploreViewModel: ObservableObject {
     @Published var trendingCourses: [Course] = []
     @Published var recommendedCourses: [Course] = []
     @Published var categories: [Category] = []
+    @Published var categoryContents: [Content] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var searchResults: [Course] = []
@@ -109,11 +156,10 @@ class ExploreViewModel: ObservableObject {
     // MARK: - Initialization
     init() {
         // Solo cargamos datos mock si es necesario para cursos
-        // Pero ahora no cargaremos categorías mock al inicializar
         loadMockCourses()
         
-        // Intentamos obtener categorías del API inmediatamente
-        fetchCategories()
+        // No cargar automáticamente las categorías al inicio
+        // fetchCategories() - Esto se llamará desde la vista cuando aparezca
     }
     
     // MARK: - Public Methods
@@ -170,6 +216,7 @@ class ExploreViewModel: ObservableObject {
         
         Task {
             do {
+                // Usar la ruta correcta para obtener categorías
                 print("📊 Llamando al endpoint: \(APIClient.baseURL)getCategories")
                 let categoryResponses: [CategoryResponse] = try await APIClient.get(path: "getCategories")
                 
@@ -379,6 +426,59 @@ class ExploreViewModel: ObservableObject {
         self.isLoading = false
     }
     
+    /// Fetches contents for a specific category
+    /// - Parameter categoryId: The ID of the category to fetch contents for
+    func fetchContentsByCategory(categoryId: String) {
+        isLoading = true
+        print("📚 Iniciando obtención de contenidos para la categoría ID: \(categoryId)")
+        
+        Task {
+            do {
+                // Usar la ruta correcta para obtener contenidos por categoría
+                let path = "getContentsByCategory/\(categoryId)"
+                print("📚 Llamando al endpoint: \(APIClient.baseURL)\(path)")
+                
+                let contentResponses: [ContentResponse] = try await APIClient.get(path: path)
+                
+                print("📚 Se obtuvieron \(contentResponses.count) contenidos del API para la categoría \(categoryId)")
+                
+                // Convertir respuestas API a nuestro modelo Content
+                let contents = contentResponses.map { $0.toContent() }
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.categoryContents = contents
+                    self.isLoading = false
+                    print("📚 Contenidos de categoría cargados correctamente desde la API")
+                }
+            } catch {
+                print("❌ Error al obtener contenidos: \(error)")
+                print("❌ Detalles del error: \(error.localizedDescription)")
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    
+                    // Verificar si el error está relacionado con "No contents found for this category"
+                    let errorString = error.localizedDescription
+                    if errorString.contains("No contents found") || 
+                       errorString.contains("No contents found for this category") ||
+                       errorString.contains("404") {
+                        // Tratar como caso vacío (no como error)
+                        print("ℹ️ No hay contenidos para esta categoría, mostrando vista vacía")
+                        self.categoryContents = []
+                        self.errorMessage = nil
+                    } else {
+                        // Para otros errores, mantener el mensaje de error
+                        self.errorMessage = "Error al obtener contenidos: \(error.localizedDescription)"
+                        self.categoryContents = []
+                    }
+                    
+                    self.isLoading = false
+                }
+            }
+        }
+    }
+    
     // MARK: - Private Methods
     
     /// Loads mock data for testing
@@ -391,18 +491,18 @@ class ExploreViewModel: ObservableObject {
     private func loadMockCourses() {
         // Mock trending courses
         trendingCourses = [
-            Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, imageUrl: nil, categoryId: "anxiety"),
-            Course(id: "2", title: "Mindfulness for Beginners", description: "Start your mindfulness journey with simple daily practices for stress reduction.", lessons: 12, imageUrl: nil, categoryId: "stress"),
-            Course(id: "3", title: "Building Healthy Habits", description: "Develop sustainable habits that improve your mental and physical wellbeing.", lessons: 10, imageUrl: nil, categoryId: "self-esteem"),
-            Course(id: "4", title: "Effective Communication", description: "Enhance your communication skills to build better relationships.", lessons: 6, imageUrl: nil, categoryId: "relationships")
+            Course(id: "1", title: "Superar la Ansiedad Social", description: "Aprende técnicas para manejar la ansiedad social y ganar confianza en situaciones sociales.", lessons: 8, imageUrl: nil, categoryId: "anxiety"),
+            Course(id: "2", title: "Mindfulness para Principiantes", description: "Comienza tu viaje de mindfulness con prácticas diarias simples para reducir el estrés.", lessons: 12, imageUrl: nil, categoryId: "stress"),
+            Course(id: "3", title: "Construyendo Hábitos Saludables", description: "Desarrolla hábitos sostenibles que mejoren tu bienestar mental y físico.", lessons: 10, imageUrl: nil, categoryId: "self-esteem"),
+            Course(id: "4", title: "Comunicación Efectiva", description: "Mejora tus habilidades de comunicación para construir mejores relaciones.", lessons: 6, imageUrl: nil, categoryId: "relationships")
         ]
         
         // Mock recommended courses
         recommendedCourses = [
-            Course(id: "5", title: "Stress Management", description: "Practical techniques to manage stress in your daily life.", lessons: 9, imageUrl: nil, categoryId: "stress"),
-            Course(id: "6", title: "Emotional Intelligence", description: "Develop your emotional awareness and regulation skills.", lessons: 7, imageUrl: nil, categoryId: "self-esteem"),
-            Course(id: "7", title: "Sleep Improvement", description: "Strategies to improve your sleep quality and duration.", lessons: 5, imageUrl: nil, categoryId: "sleep"),
-            Course(id: "8", title: "Managing Depression", description: "Evidence-based approaches to cope with depression symptoms.", lessons: 10, imageUrl: nil, categoryId: "depression")
+            Course(id: "5", title: "Manejo del Estrés", description: "Técnicas prácticas para manejar el estrés en tu vida diaria.", lessons: 9, imageUrl: nil, categoryId: "stress"),
+            Course(id: "6", title: "Inteligencia Emocional", description: "Desarrolla tus habilidades de conciencia y regulación emocional.", lessons: 7, imageUrl: nil, categoryId: "self-esteem"),
+            Course(id: "7", title: "Mejora del Sueño", description: "Estrategias para mejorar la calidad y duración de tu sueño.", lessons: 5, imageUrl: nil, categoryId: "sleep"),
+            Course(id: "8", title: "Manejando la Depresión", description: "Enfoques basados en evidencia para lidiar con síntomas de depresión.", lessons: 10, imageUrl: nil, categoryId: "depression")
         ]
     }
     
@@ -416,12 +516,12 @@ class ExploreViewModel: ObservableObject {
         
         print("📊 Cargando categorías mock")
         categories = [
-            Category(id: "anxiety", title: "Anxiety", emoji: "🧠", color: Color.pink.opacity(0.3)),
-            Category(id: "depression", title: "Depression", emoji: "💙", color: Color.blue.opacity(0.3)),
-            Category(id: "stress", title: "Stress", emoji: "😓", color: Color.orange.opacity(0.3)),
-            Category(id: "sleep", title: "Sleep", emoji: "😴", color: Color.cyan.opacity(0.3)),
-            Category(id: "relationships", title: "Relationships", emoji: "❤️", color: Color.red.opacity(0.3)),
-            Category(id: "self-esteem", title: "Self-Esteem", emoji: "🌟", color: Color.purple.opacity(0.3))
+            Category(id: "anxiety", title: "Ansiedad", emoji: "🧠", color: Color.pink.opacity(0.3)),
+            Category(id: "depression", title: "Depresión", emoji: "💙", color: Color.blue.opacity(0.3)),
+            Category(id: "stress", title: "Estrés", emoji: "😓", color: Color.orange.opacity(0.3)),
+            Category(id: "sleep", title: "Sueño", emoji: "😴", color: Color.cyan.opacity(0.3)),
+            Category(id: "relationships", title: "Relaciones", emoji: "❤️", color: Color.red.opacity(0.3)),
+            Category(id: "self-esteem", title: "Autoestima", emoji: "🌟", color: Color.purple.opacity(0.3))
         ]
     }
 }

@@ -77,7 +77,7 @@ struct CourseDetailView: View {
                 .padding(.vertical, 8)
             
             // Description
-            Text("About this course")
+            Text("Acerca de este curso")
                 .font(.headline)
                 .padding(.top, 8)
             
@@ -98,7 +98,7 @@ struct CourseDetailView: View {
         HStack {
             Image(systemName: "book.closed")
                 .foregroundColor(.indigo)
-            Text("\(course.lessons) lessons")
+            Text("\(course.lessons) \(course.lessons == 1 ? "lección" : "lecciones")")
                 .foregroundColor(.indigo)
             
             Spacer()
@@ -110,7 +110,7 @@ struct CourseDetailView: View {
         Button(action: {
             // Enroll action
         }) {
-            Text("Enroll Now")
+            Text("Inscribirse Ahora")
                 .fontWeight(.bold)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -128,8 +128,8 @@ struct CourseDetailView_Previews: PreviewProvider {
             CourseDetailView(
                 course: Course(
                     id: "1",
-                    title: "SwiftUI Essentials",
-                    description: "Learn the fundamentals of SwiftUI and build beautiful iOS apps.",
+                    title: "Fundamentos de SwiftUI",
+                    description: "Aprende los fundamentos de SwiftUI y crea hermosas aplicaciones iOS.",
                     lessons: 12,
                     imageUrl: nil,
                     categoryId: "1"

@@ -8,6 +8,7 @@ struct TopicsView: View {
     @State var contentDescription: String = "Aprende y estudia a tu ritmo"
     let user: Int
     let contentImageURL: String
+    @Binding var shouldRefresh: Bool
     @State private var showMenu = false
     @StateObject var TopicsVM: TopicsViewModel
     @Environment(\.presentationMode) var presentationMode
@@ -20,11 +21,12 @@ struct TopicsView: View {
     @State private var showingWebView = false
     
     // Inicializador que permite pasar un TopicsViewModel preconfigurado
-    init(contentID: Int, contentTitle: String, user: Int, contentImageURL: String, TopicsVM: TopicsViewModel = TopicsViewModel()) {
+    init(contentID: Int, contentTitle: String, user: Int, contentImageURL: String, shouldRefresh: Binding<Bool>, TopicsVM: TopicsViewModel = TopicsViewModel()) {
         self.contentID = contentID
         self.contentTitle = contentTitle
         self.user = user
         self.contentImageURL = contentImageURL
+        self._shouldRefresh = shouldRefresh
         
         // Detectar si estamos en preview
         let isPreview = ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
@@ -36,6 +38,16 @@ struct TopicsView: View {
             // En preview, usar el ViewModel proporcionado
             self._TopicsVM = StateObject(wrappedValue: TopicsVM)
         }
+    }
+    
+    // Inicializador para vista previa (sin Binding)
+    init(previewContentID: Int, previewContentTitle: String, previewUser: Int, previewContentImageURL: String) {
+        self.contentID = previewContentID
+        self.contentTitle = previewContentTitle
+        self.user = previewUser
+        self.contentImageURL = previewContentImageURL
+        self._shouldRefresh = .constant(false)
+        self._TopicsVM = StateObject(wrappedValue: TopicsViewModel())
     }
     
     var body: some View {
@@ -255,7 +267,7 @@ struct TopicsView: View {
     private var progressSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Overall Progress")
+                Text("Progreso General")
                     .font(.headline)
                     .foregroundColor(.secondary)
                 
@@ -278,7 +290,7 @@ struct TopicsView: View {
     // Sección de lecciones
     private func lessonsSection(geometry: GeometryProxy) -> some View {
         VStack(alignment: .leading, spacing: 15) {
-            Text("Lessons")
+            Text("Lecciones")
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.black)
@@ -322,7 +334,8 @@ struct TopicsView: View {
                     user: user,
                     isChecked: topic.done ?? false,
                     thumbnail_url: topic.thumbnail_url,
-                    contentTitle: contentTitle
+                    contentTitle: contentTitle,
+                    shouldRefresh: $shouldRefresh
                 )) {
                     LessonRow(
                         number: topic.topic,
@@ -602,6 +615,7 @@ struct Topics_Previews: PreviewProvider {
             contentTitle: "Introducción",
             user: 1,
             contentImageURL: "https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+            shouldRefresh: .constant(false),
             TopicsVM: previewVM
         )
     }

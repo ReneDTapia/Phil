@@ -67,7 +67,7 @@ struct AllCoursesView: View {
         HStack {
             Image(systemName: "book.closed")
                 .foregroundColor(.gray)
-            Text("\(course.lessons) lessons")
+            Text("\(course.lessons) \(course.lessons == 1 ? "lección" : "lecciones")")
                 .font(.caption)
                 .foregroundColor(.gray)
             
@@ -81,20 +81,20 @@ struct AllCoursesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             AllCoursesView(
-                title: "All Courses",
+                title: "Todos los Cursos",
                 courses: [
                     Course(
                         id: "1",
-                        title: "SwiftUI Essentials",
-                        description: "Learn the fundamentals of SwiftUI and build beautiful iOS apps.",
+                        title: "Fundamentos de SwiftUI",
+                        description: "Aprende los fundamentos de SwiftUI y crea hermosas aplicaciones iOS.",
                         lessons: 12,
                         imageUrl: nil,
                         categoryId: "1"
                     ),
                     Course(
                         id: "2",
-                        title: "Advanced Swift",
-                        description: "Take your Swift skills to the next level with advanced techniques.",
+                        title: "Swift Avanzado",
+                        description: "Lleva tus habilidades de Swift al siguiente nivel con técnicas avanzadas.",
                         lessons: 15,
                         imageUrl: nil,
                         categoryId: "1"

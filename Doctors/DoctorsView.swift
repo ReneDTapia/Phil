@@ -23,7 +23,7 @@ struct DoctorsView: View {
                 VStack(spacing: 0) {
                     // Encabezado con título y buscador
                     VStack(alignment: .leading, spacing: 16) {
-                        Text("Find Help")
+                        Text("Encuentra Ayuda")
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .padding(.top, 16)
@@ -33,7 +33,7 @@ struct DoctorsView: View {
                             HStack {
                                 Image(systemName: "magnifyingglass")
                                     .foregroundColor(.gray)
-                                TextField("Search specialists...", text: $viewModel.searchText)
+                                TextField("Busca Especialistas...", text: $viewModel.searchText)
                                     .font(.body)
                                 
                                 if !viewModel.searchText.isEmpty {
@@ -71,7 +71,7 @@ struct DoctorsView: View {
                     // Contenido principal
                     if viewModel.isLoading {
                         Spacer()
-                        ProgressView("Loading specialists...")
+                        ProgressView("Cargando especialistas...")
                             .progressViewStyle(CircularProgressViewStyle())
                         Spacer()
                     } else {
@@ -82,7 +82,7 @@ struct DoctorsView: View {
                                     let doctorsToShow = viewModel.filteredDoctors.isEmpty && viewModel.selectedModes.isEmpty && viewModel.selectedCategories.isEmpty ? viewModel.doctors : viewModel.filteredDoctors
                                     
                                     if doctorsToShow.isEmpty {
-                                        Text("No doctors match your filters")
+                                        Text("Ningun doctor cumple tus requisitos")
                                             .font(.headline)
                                             .foregroundColor(.gray)
                                             .padding(.top, 40)
@@ -103,26 +103,26 @@ struct DoctorsView: View {
                                 
                                 // Sección de recursos adicionales
                                 VStack(alignment: .leading, spacing: 15) {
-                                    Text("Additional Resources")
+                                    Text("Recursos Adicionales")
                                         .font(.title2)
                                         .fontWeight(.bold)
                                     
                                     // Lista de recursos
                                     ResourceCardView(
-                                        title: "Crisis Helpline",
-                                        description: "Immediate support during emotional crisis",
+                                        title: "Línea de Ayuda de Crisis",
+                                        description: "Apoyo inmediato durante crisis emocionales",
                                         iconName: "phone.fill"
                                     )
                                     
                                     ResourceCardView(
-                                        title: "Support Groups",
-                                        description: "Connect with others facing similar challenges",
+                                        title: "Grupos de Apoyo",
+                                        description: "Conéctate con otros que enfrentan desafíos similares",
                                         iconName: "person.3.fill"
                                     )
                                     
                                     ResourceCardView(
-                                        title: "Self-Help Tools",
-                                        description: "Practices and exercises for daily mental health",
+                                        title: "Herramientas de Autoayuda",
+                                        description: "Prácticas y ejercicios para la salud mental diaria",
                                         iconName: "book.fill"
                                     )
                                 }
@@ -325,7 +325,7 @@ struct FiltersView: View {
             VStack(alignment: .leading, spacing: 0) {
                 List {
                     // Sección de modos de consulta
-                    Section(header: Text("Consultation type").font(.headline)) {
+                    Section(header: Text("Consulta").font(.headline)) {
                         ForEach(ConsultationMode.allCases) { mode in
                             Button(action: {
                                 viewModel.toggleModeFilter(mode)
@@ -346,7 +346,7 @@ struct FiltersView: View {
                     }
                     
                     // Sección de categorías
-                    Section(header: Text("Categories").font(.headline)) {
+                    Section(header: Text("Categorias").font(.headline)) {
                         ForEach(categories, id: \.self) { category in
                             Button(action: {
                                 viewModel.toggleCategoryFilter(category)
@@ -372,7 +372,7 @@ struct FiltersView: View {
                     Button(action: {
                         viewModel.clearAllFilters()
                     }) {
-                        Text("Reset All")
+                        Text("Reiniciar")
                             .fontWeight(.medium)
                             .foregroundColor(.blue)
                             .padding(.vertical, 16)
@@ -389,7 +389,7 @@ struct FiltersView: View {
                         viewModel.filterDoctors() // Asegurarse de que se apliquen los filtros
                         presentationMode.wrappedValue.dismiss()
                     }) {
-                        Text("Apply")
+                        Text("Aplicar")
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                             .padding(.vertical, 16)
@@ -400,7 +400,7 @@ struct FiltersView: View {
                 }
                 .padding(16)
             }
-            .navigationTitle("Filters")
+            .navigationTitle("Filtros")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

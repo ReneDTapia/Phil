@@ -38,21 +38,21 @@ struct TabBarView: View {
                     // Home tab view
                     ContentsView(user:TokenHelper.getUserID() ?? 0)
                         .tabItem {
-                            Label("Home", systemImage: "house")
+                            Label("Inicio", systemImage: "house")
                         }
                         .tag(0)
                     
                     // Explore tab view
                     ExploreView()
                         .tabItem {
-                            Label("Explore", systemImage: "magnifyingglass")
+                            Label("Explorar", systemImage: "magnifyingglass")
                         }
                         .tag(1)
                     
                     // Doctors tab view
                     DoctorsMainView()
                         .tabItem {
-                            Label("Specialists", systemImage: "heart.text.square")
+                            Label("Especialistas", systemImage: "heart.text.square")
                         }
                         .tag(2)
                     
@@ -66,7 +66,7 @@ struct TabBarView: View {
                     // Settings tab view
                     Config()
                         .tabItem {
-                            Label("Settings", systemImage: "gearshape")
+                            Label("Configuracion", systemImage: "gearshape")
                         }
                         .tag(4)
                 }

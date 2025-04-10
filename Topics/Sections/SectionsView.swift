@@ -9,6 +9,7 @@ struct SectionsView: View {
     let isChecked: Bool
     let thumbnail_url: String
     let contentTitle: String?
+    @Binding var shouldRefresh: Bool
     @State private var progress: Float = 0.6
     @State private var showMenu = false
     @StateObject var SectionsVM = SectionsViewModel()
@@ -20,13 +21,14 @@ struct SectionsView: View {
     @State private var exist = false
     @State private var mainContentTitle: String = "Understanding Anxiety" // Default value
     
-    init(topicID: Int, topicTitle: String, user: Int, isChecked: Bool, thumbnail_url: String, contentTitle: String? = nil) {
+    init(topicID: Int, topicTitle: String, user: Int, isChecked: Bool, thumbnail_url: String, contentTitle: String? = nil, shouldRefresh: Binding<Bool>) {
         self.topicID = topicID
         self.topicTitle = topicTitle
         self.user = user
         self.isChecked = isChecked
         self.thumbnail_url = thumbnail_url
         self.contentTitle = contentTitle
+        self._shouldRefresh = shouldRefresh
         
         if let title = contentTitle {
             self._mainContentTitle = State(initialValue: title)
@@ -84,6 +86,9 @@ struct SectionsView: View {
                                             checkButton.toggle()
                                             TopicsVM.postTopic(user: user, topic: topicID)
                                         }
+                                        // Marcar que se debe actualizar la vista de contenido
+                                        shouldRefresh = true
+                                        print("🔄 Tema marcado como \(checkButton ? "completado" : "pendiente"), solicitando actualización")
                                         }) {
                                                 Text(checkButton ? "Deshacer" : "Hecho")
                                                     .padding()
@@ -153,6 +158,12 @@ struct SectionsView: View {
                         } catch {
                             print("Error obteniendo estado del tema")
                         }
+                    }
+                }
+                .onDisappear {
+                    // Asegurarse de que al desaparecer se dispare la actualización
+                    if shouldRefresh {
+                        print("🔄 SectionsView desapareciendo, shouldRefresh=\(shouldRefresh)")
                     }
                 }
                 .navigationBarBackButtonHidden(true)
@@ -582,7 +593,7 @@ func extractYouTubeVideoID(from url: String) -> String? {
 
 struct Sections_Previews: PreviewProvider {
  static var previews: some View {
- SectionsView(topicID: 1, topicTitle: "Titulo del topico", user: 1, isChecked: false, thumbnail_url: "", contentTitle: nil)
+ SectionsView(topicID: 1, topicTitle: "Titulo del topico", user: 1, isChecked: false, thumbnail_url: "", contentTitle: nil, shouldRefresh: .constant(false))
  }
  }
  

@@ -15,17 +15,17 @@ struct SearchResultsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             if isLoading {
-                ProgressView("Searching...")
+                ProgressView("Buscando...")
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding()
             } else if results.isEmpty {
-                Text("No results found for '\(searchText)'")
+                Text("No se encontraron resultados para '\(searchText)'")
                     .font(.headline)
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding()
             } else {
-                Text("Search Results")
+                Text("Resultados de búsqueda")
                     .font(.title2)
                     .fontWeight(.bold)
                     .padding(.horizontal)
@@ -45,7 +45,7 @@ struct SearchResultsView: View {
                             HStack {
                                 Image(systemName: "book.closed")
                                     .foregroundColor(.gray)
-                                Text("\(course.lessons) lessons")
+                                Text("\(course.lessons) \(course.lessons == 1 ? "lección" : "lecciones")")
                                     .font(.caption)
                                     .foregroundColor(.gray)
                                 
@@ -68,9 +68,9 @@ struct SearchResultsView: View {
 struct SearchResultsView_Previews: PreviewProvider {
     static var previews: some View {
         SearchResultsView(
-            searchText: "anxiety",
+            searchText: "ansiedad",
             results: [
-                Course(id: "1", title: "Overcoming Social Anxiety", description: "Learn techniques to manage social anxiety and build confidence in social situations.", lessons: 8, imageUrl: nil, categoryId: "anxiety")
+                Course(id: "1", title: "Superar la Ansiedad Social", description: "Aprende técnicas para manejar la ansiedad social y ganar confianza en situaciones sociales.", lessons: 8, imageUrl: nil, categoryId: "anxiety")
             ],
             isLoading: false
         )

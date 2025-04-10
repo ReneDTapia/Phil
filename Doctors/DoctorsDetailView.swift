@@ -10,13 +10,9 @@ import SwiftUI
 struct DoctorsDetailView: View {
     let doctor: Doctor
     @Environment(\.presentationMode) var presentationMode
-    @State private var selectedDay: String = "Today"
-    @State private var selectedTime: String?
-    
-    let availableDays = ["Today", "Tomorrow", "Wed", "Thu", "Fri"]
-    let availableTimes = ["9:00 AM", "10:30 AM", "1:00 PM", "2:30 PM", "4:00 PM", "5:30 PM"]
     
     var body: some View {
+        
         ZStack {
             // Fondo principal
             Color(.systemGray6)
@@ -45,12 +41,30 @@ struct DoctorsDetailView: View {
                                     .fill(Color.white)
                                     .frame(width: 120, height: 120)
                                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-                                
-                                Image(systemName: "person.fill")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 60, height: 60)
-                                    .foregroundColor(.gray)
+                                if let imageURL = doctor.imageURL, let url = URL(string: imageURL) {
+                                    AsyncImage(url: url) { phase in
+                                        if let image = phase.image {
+                                            image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 120, height: 120)
+                                                .clipShape(Circle())
+                                        } else {
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 60, height: 60)
+                                                .foregroundColor(.gray)
+                                        }
+                                    }
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 60, height: 60)
+                                        .foregroundColor(.gray)
+                                }
+                             
                             }
                             .offset(y: 100)
                         )
@@ -85,7 +99,9 @@ struct DoctorsDetailView: View {
                 }
                 .padding(.bottom, 10)
                 
-                ScrollView {
+                // Modificar el ScrollView para evitar que se regrese hacia arriba
+                ScrollView(.vertical, showsIndicators: true) {
+                    // Añadir un VStack principal con coordinateSpace para controlar mejor el scroll
                     VStack(spacing: 24) {
                         // Sección de información del doctor
                         VStack(spacing: 16) {
@@ -95,7 +111,7 @@ struct DoctorsDetailView: View {
                                     .foregroundColor(.gray)
                                     .font(.title3)
                                 
-                                Text("New York, NY")
+                                Text(doctor.ubicacion ?? "No hay ubicacionf")
                                     .font(.body)
                                 
                                 Spacer()
@@ -142,14 +158,14 @@ struct DoctorsDetailView: View {
                         
                         // Sección Acerca de
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("About")
+                            Text("Descripcion")
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            Text(doctor.description ?? "No description available.")
-                                    .font(.body)
-                                    .foregroundColor(.secondary)
-                                    .lineSpacing(4)
+                            Text(doctor.description ?? "No hay descripcion para este doctor")
+                                .font(.body)
+                                .foregroundColor(.secondary)
+                                .lineSpacing(4)
                         }
                         .padding(20)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -158,101 +174,61 @@ struct DoctorsDetailView: View {
                         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
                         .padding(.horizontal, 16)
                         
-                        // Sección Citas disponibles
+                        // Sección Agendar Cita
                         VStack(alignment: .leading, spacing: 16) {
-                            Text("Available Appointments")
+                            Text("Agendar Cita")
                                 .font(.title2)
                                 .fontWeight(.bold)
                                 .padding(.bottom, 4)
                             
-                            // Selector de días
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 10) {
-                                    ForEach(availableDays, id: \.self) { day in
-                                        Text(day)
-                                            .fontWeight(selectedDay == day ? .bold : .regular)
-                                            .padding(.vertical, 10)
-                                            .padding(.horizontal, 20)
-                                            .background(selectedDay == day ? Color.indigo : Color.gray.opacity(0.1))
-                                            .foregroundColor(selectedDay == day ? .white : .primary)
-                                            .cornerRadius(30)
-                                            .onTapGesture {
-                                                selectedDay = day
-                                                selectedTime = nil
-                                            }
-                                    }
-                                }
-                                .padding(.vertical, 5)
-                            }
-                            
-                            Divider()
-                                .padding(.vertical, 8)
-                            
-                            // Selector de horas
-                            LazyVGrid(columns: [
-                                GridItem(.flexible()),
-                                GridItem(.flexible()),
-                                GridItem(.flexible())
-                            ], spacing: 16) {
-                                ForEach(availableTimes, id: \.self) { time in
-                                    Text(time)
-                                        .font(.body)
-                                        .fontWeight(selectedTime == time ? .semibold : .regular)
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 15)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .stroke(selectedTime == time ? Color.indigo : Color.gray.opacity(0.3), lineWidth: 1)
-                                                .background(selectedTime == time ? Color.indigo.opacity(0.05) : Color.white)
-                                        )
-                                        .cornerRadius(12)
-                                        .onTapGesture {
-                                            selectedTime = time
-                                        }
-                                }
-                            }
-                            
                             // Botones de mensaje y reserva
                             HStack(spacing: 15) {
-                                // Botón de mensaje
-                                Button(action: {
-                                    // Acción para enviar mensaje
-                                }) {
-                                    HStack {
-                                        Image(systemName: "message.fill")
-                                            .font(.title3)
-                                        Text("Message")
-                                            .font(.headline)
+                                // Botón de mensaje (solo si telefono no es nil)
+                                if let telefono = doctor.telefono {
+                                    Button(action: {
+                                        // Abrir WhatsApp con el número de teléfono
+                                        let whatsappURL = URL(string: "https://wa.me/\(telefono.replacingOccurrences(of: "+", with: "").replacingOccurrences(of: " ", with: ""))")!
+                                        UIApplication.shared.open(whatsappURL)
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "message.fill")
+                                                .font(.title3)
+                                            Text("Mensaje")
+                                                .font(.headline)
+                                        }
+                                        .padding(.vertical, 16)
+                                        .frame(maxWidth: .infinity)
+                                        .foregroundColor(.indigo)
+                                        .background(Color.white)
+                                        .cornerRadius(30)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 30)
+                                                .stroke(Color.indigo, lineWidth: 1)
+                                        )
                                     }
-                                    .padding(.vertical, 16)
-                                    .frame(maxWidth: .infinity)
-                                    .foregroundColor(.indigo)
-                                    .background(Color.white)
-                                    .cornerRadius(30)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 30)
-                                            .stroke(Color.indigo, lineWidth: 1)
-                                    )
                                 }
                                 
-                                // Botón de reserva
-                                Button(action: {
-                                    // Acción para reservar
-                                }) {
-                                    HStack {
-                                        Image(systemName: "calendar.badge.plus")
-                                            .font(.title3)
-                                        Text("Book")
-                                            .font(.headline)
+                                // Botón de agenda (solo si agenda no es nil)
+                                if let agendaURL = doctor.agenda {
+                                    Button(action: {
+                                        // Abrir el enlace de la agenda
+                                        let url = URL(string: agendaURL)!
+                                        UIApplication.shared.open(url)
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "calendar.badge.plus")
+                                                .font(.title3)
+                                            Text("Agendar")
+                                                .font(.headline)
+                                        }
+                                        .padding(.vertical, 16)
+                                        .frame(maxWidth: .infinity)
+                                        .foregroundColor(.white)
+                                        .background(Color.indigo)
+                                        .cornerRadius(30)
                                     }
-                                    .padding(.vertical, 16)
-                                    .frame(maxWidth: .infinity)
-                                    .foregroundColor(.white)
-                                    .background(Color.indigo)
-                                    .cornerRadius(30)
                                 }
                             }
-                            .padding(.top, 24)
                         }
                         .padding(20)
                         .background(Color.white)
@@ -261,7 +237,9 @@ struct DoctorsDetailView: View {
                         .padding(.horizontal, 16)
                         .padding(.bottom, 16)
                     }
+                    .padding(.bottom, 100) // Añadir padding al final para permitir scroll completo
                 }
+                .coordinateSpace(name: "scrollView") // Identificador para el ScrollView
             }
             
             // Botón de regreso como overlay independiente
@@ -287,6 +265,9 @@ struct DoctorsDetailView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        // Eliminar gestos que puedan estar interfiriendo con el scroll
+        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 }
 
@@ -294,4 +275,4 @@ struct DoctorsDetailView_Previews: PreviewProvider {
     static var previews: some View {
         DoctorsDetailView(doctor: Doctor.sampleDoctors[0])
     }
-} 
+}

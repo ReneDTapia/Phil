@@ -15,6 +15,7 @@ class ContentsViewModel: ObservableObject {
                 for content in contents {
                     print("Content: \(content.title)")
                     print("Thumbnail URL: \(content.thumbnail_url)")
+                    print("Topic Count: \(content.topicCount ?? "Not available")")
                     
                     let processedURL = APIClient.getFullImageURL(content.thumbnail_url)
                     print("Processed URL: \(processedURL)")

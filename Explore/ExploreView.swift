@@ -13,6 +13,7 @@ struct ExploreView: View {
     @StateObject private var viewModel = ExploreViewModel()
     @State private var searchText = ""
     @State private var isSearching = false
+    @State private var searchTask: Task<Void, Never>?
     
     // MARK: - Body
     var body: some View {
@@ -81,11 +82,11 @@ struct ExploreView: View {
             }, onCommit: {
                 if !searchText.isEmpty {
                     isSearching = true
-                    viewModel.searchCourses(query: searchText)
+                    performSearch()
                 }
             })
             .font(.body)
-            .onReceive(Just(searchText)) { newValue in
+            .onChange(of: searchText) { newValue in
                 handleSearchTextChange(newValue)
             }
             
@@ -93,6 +94,7 @@ struct ExploreView: View {
                 Button(action: {
                     searchText = ""
                     isSearching = false
+                    searchTask?.cancel()
                 }) {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(.gray)
@@ -231,7 +233,7 @@ struct ExploreView: View {
                 HStack {
                     Image(systemName: "book.closed")
                         .foregroundColor(.gray)
-                    Text("\(course.lessons) lessons")
+                    Text("\(course.lessons) \(course.lessons == 1 ? "lección" : "lecciones")")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
@@ -255,9 +257,22 @@ struct ExploreView: View {
     private func handleSearchTextChange(_ newValue: String) {
         if newValue.isEmpty {
             isSearching = false
+            searchTask?.cancel()
         } else {
             isSearching = true
-            viewModel.searchCourses(query: newValue)
+            searchTask?.cancel()
+            searchTask = Task {
+                try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 segundos de debounce
+                if !Task.isCancelled {
+                    performSearch()
+                }
+            }
+        }
+    }
+    
+    private func performSearch() {
+        Task {
+            await viewModel.searchCourses(query: searchText)
         }
     }
 }

@@ -26,7 +26,7 @@ struct CategoryDetailView: View {
         .onAppear {
             if !hasAppeared {
                 print("🔍 CategoryDetailView appeared for category: \(categoryId) - \(categoryTitle)")
-                viewModel.fetchCoursesByCategory(categoryId: categoryId)
+                viewModel.fetchContentsByCategory(categoryId: categoryId)
                 hasAppeared = true
             }
         }
@@ -47,16 +47,16 @@ struct CategoryDetailView: View {
             loadingView
         } else if let errorMessage = viewModel.errorMessage {
             errorView(message: errorMessage)
-        } else if viewModel.trendingCourses.isEmpty && viewModel.recommendedCourses.isEmpty {
+        } else if viewModel.categoryContents.isEmpty {
             emptyStateView
         } else {
-            courseListView
+            contentsListView
         }
     }
     
     // MARK: - Loading View
     private var loadingView: some View {
-        ProgressView("Cargando cursos...")
+        ProgressView("Cargando contenidos...")
             .frame(maxWidth: .infinity, alignment: .center)
             .padding()
     }
@@ -68,7 +68,7 @@ struct CategoryDetailView: View {
                 .font(.largeTitle)
                 .foregroundColor(.orange)
             
-            Text("Error al cargar cursos")
+            Text("Error al cargar contenidos")
                 .font(.headline)
             
             Text(message)
@@ -87,10 +87,10 @@ struct CategoryDetailView: View {
                 .font(.largeTitle)
                 .foregroundColor(.gray)
             
-            Text("No se encontraron cursos")
+            Text("No se encontraron contenidos")
                 .font(.headline)
             
-            Text("No hay cursos disponibles en esta categoría todavía. ¡Vuelve más tarde!")
+            Text("No hay contenidos disponibles en esta categoría todavía. ¡Vuelve más tarde!")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -99,19 +99,17 @@ struct CategoryDetailView: View {
         .padding()
     }
     
-    // MARK: - Course List View
-    private var courseListView: some View {
+    // MARK: - Contents List View
+    private var contentsListView: some View {
         VStack(alignment: .leading, spacing: 16) {
-            let allCourses = viewModel.trendingCourses + viewModel.recommendedCourses
-            
-            Text("\(allCourses.count) cursos encontrados")
+            Text("\(viewModel.categoryContents.count) contenidos encontrados")
                 .font(.headline)
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
             
-            ForEach(allCourses) { course in
-                NavigationLink(destination: CourseDetailView(course: course)) {
-                    courseCard(for: course)
+            ForEach(viewModel.categoryContents) { content in
+                NavigationLink(destination: ContentDetailView(content: content)) {
+                    contentCard(for: content)
                 }
                 .buttonStyle(PlainButtonStyle())
                 .padding(.horizontal)
@@ -119,19 +117,51 @@ struct CategoryDetailView: View {
         }
     }
     
-    // MARK: - Course Card
-    private func courseCard(for course: Course) -> some View {
+    // MARK: - Content Card
+    private func contentCard(for content: Content) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(course.title)
+            if let thumbnailUrl = content.thumbnailUrl, !thumbnailUrl.isEmpty {
+                AsyncImage(url: URL(string: thumbnailUrl)) { phase in
+                    switch phase {
+                    case .empty:
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .aspectRatio(16/9, contentMode: .fill)
+                            .overlay(
+                                ProgressView()
+                            )
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 120)
+                            .clipped()
+                    case .failure:
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .aspectRatio(16/9, contentMode: .fill)
+                            .overlay(
+                                Image(systemName: "photo")
+                                    .foregroundColor(.white)
+                            )
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+                .frame(height: 120)
+                .cornerRadius(8)
+            }
+            
+            Text(content.title)
                 .font(.headline)
                 .foregroundColor(.primary)
             
-            Text(course.description)
+            Text(content.description)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .lineLimit(2)
             
-            courseMetadata(for: course)
+            contentMetadata(for: content)
         }
         .padding()
         .background(Color(.systemBackground))
@@ -139,17 +169,123 @@ struct CategoryDetailView: View {
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
     
-    // MARK: - Course Metadata
-    private func courseMetadata(for course: Course) -> some View {
+    // MARK: - Content Metadata
+    private func contentMetadata(for content: Content) -> some View {
         HStack {
-            Image(systemName: "book.closed")
-                .foregroundColor(.gray)
-            Text("\(course.lessons) lessons")
-                .font(.caption)
-                .foregroundColor(.gray)
+            if content.isPremium {
+                Image(systemName: "star.fill")
+                    .foregroundColor(.yellow)
+                Text("Premium")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
+            if content.videoUrl != nil {
+                Image(systemName: "play.circle")
+                    .foregroundColor(.indigo)
+                Text("Video")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
             
             Spacer()
+            
+            if content.tendencia > 0 {
+                Image(systemName: "chart.line.uptrend.xyaxis")
+                    .foregroundColor(.green)
+                Text("Tendencia")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
         }
+    }
+}
+
+// MARK: - ContentDetailView
+struct ContentDetailView: View {
+    let content: Content
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Thumbnail o imagen de portada
+                if let thumbnailUrl = content.thumbnailUrl, !thumbnailUrl.isEmpty {
+                    AsyncImage(url: URL(string: thumbnailUrl)) { phase in
+                        switch phase {
+                        case .empty:
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.3))
+                                .aspectRatio(16/9, contentMode: .fill)
+                                .overlay(
+                                    ProgressView()
+                                )
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(maxWidth: .infinity)
+                                .clipped()
+                        case .failure:
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.3))
+                                .aspectRatio(16/9, contentMode: .fill)
+                                .overlay(
+                                    Image(systemName: "photo")
+                                        .foregroundColor(.white)
+                                )
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                    .frame(height: 200)
+                }
+                
+                // Título y descripción
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(content.title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    if content.isPremium {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.yellow)
+                            Text("Contenido Premium")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+                    Divider()
+                    
+                    Text(content.description)
+                        .font(.body)
+                        .padding(.vertical, 8)
+                    
+                    if let videoUrl = content.videoUrl, !videoUrl.isEmpty {
+                        Button(action: {
+                            if let url = URL(string: videoUrl) {
+                                UIApplication.shared.open(url)
+                            }
+                        }) {
+                            HStack {
+                                Image(systemName: "play.fill")
+                                Text("Ver video")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.indigo)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                        .padding(.top, 16)
+                    }
+                }
+                .padding()
+            }
+        }
+        .navigationTitle(content.title)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -157,7 +293,7 @@ struct CategoryDetailView: View {
 struct CategoryDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            CategoryDetailView(categoryId: "1", categoryTitle: "Programming")
+            CategoryDetailView(categoryId: "1", categoryTitle: "Ansiedad")
         }
     }
 } 

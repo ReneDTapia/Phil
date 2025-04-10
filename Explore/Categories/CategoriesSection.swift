@@ -12,7 +12,7 @@ struct CategoriesSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Categories")
+            Text("Categorías")
                 .font(.title2)
                 .fontWeight(.bold)
                 .padding(.horizontal)
@@ -39,9 +39,9 @@ struct CategoriesSection_Previews: PreviewProvider {
     static var previews: some View {
         CategoriesSection(
             categories: [
-                Category(id: "anxiety", title: "Anxiety", emoji: "🧠", color: Color.pink.opacity(0.3)),
-                Category(id: "depression", title: "Depression", emoji: "💙", color: Color.blue.opacity(0.3)),
-                Category(id: "sleep", title: "Sleep", emoji: "😴", color: Color.cyan.opacity(0.3))
+                Category(id: "anxiety", title: "Ansiedad", emoji: "🧠", color: Color.pink.opacity(0.3)),
+                Category(id: "depression", title: "Depresión", emoji: "💙", color: Color.blue.opacity(0.3)),
+                Category(id: "sleep", title: "Sueño", emoji: "😴", color: Color.cyan.opacity(0.3))
             ]
         )
         .previewLayout(.sizeThatFits)

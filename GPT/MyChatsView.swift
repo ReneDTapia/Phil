@@ -162,7 +162,7 @@ struct MyChatsView: View {
     }
 
     private func conversationLink(for conversation: Conversation) -> some View {
-        NavigationLink(destination: GPTView(conversationId: conversation.id, userId: userId)) {
+        NavigationLink(destination: GPTView(conversationId: conversation.id, userId: userId, threadId: conversation.threadId)) {
             VStack(alignment: .leading) {
                 conversationNameView(conversation)
                 Text("Último mensaje: \(conversation.lastMessageAt ?? "No hay mensajes")")

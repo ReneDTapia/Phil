@@ -9,7 +9,8 @@ struct ContentsView: View {
     @StateObject var ContentVM = ContentsViewModel()
     @State private var isLoading = true
     @State private var messageLoad = "Cargando..."
-    
+    @State private var shouldRefresh = false
+
     var body: some View {
         GeometryReader { geometry in
             NavigationStack {
@@ -52,7 +53,7 @@ struct ContentsView: View {
                         else{
                             // Content view when loaded
                             VStack(alignment: .leading, spacing: 8){
-                                Text("Continue Learning")
+                                Text("Continuar Aprendiendo")
                                     .font(.title2)
                                     .bold()
                                     .padding(.horizontal, 16)
@@ -66,13 +67,15 @@ struct ContentsView: View {
                                                 contentID: content.id,
                                                 contentTitle: content.title,
                                                 user: user,
-                                                contentImageURL: content.thumbnail_url
+                                                contentImageURL: content.thumbnail_url,
+                                                shouldRefresh: $shouldRefresh
                                             )) {
                                                 Contents(
                                                     title: content.title,
                                                     description: content.description,
                                                     progress: content.proporcion ?? 0,
-                                                    thumbnail_url: content.thumbnail_url
+                                                    thumbnail_url: content.thumbnail_url,
+                                                    topicCount: content.topicCount
                                                 )
                                             }
                                             .buttonStyle(PlainButtonStyle())
@@ -89,22 +92,33 @@ struct ContentsView: View {
                 .background(Color.white)
             }
             .onAppear{
-                Task{
-                    do{
-                        try await ContentVM.getContents(userIDVM: user)
-                        if ContentVM.resultContents.isEmpty {
-                            messageLoad = "No hay datos"
-                        }
-                        isLoading = ContentVM.resultContents.isEmpty
-                    }
-                    catch{
-                        print("Error: \(error)")
-                    }
+                fetchData()
+            }
+            .onChange(of: shouldRefresh) { newValue in
+                if newValue {
+                    print("🔄 Actualizando datos en ContentsView debido a cambios en TopicsView")
+                    fetchData()
+                    shouldRefresh = false
                 }
             }
             .background(Color.white)
         }
         .background(Color.white.edgesIgnoringSafeArea(.all))
+    }
+    
+    private func fetchData() {
+        Task {
+            do {
+                try await ContentVM.getContents(userIDVM: user)
+                if ContentVM.resultContents.isEmpty {
+                    messageLoad = "No hay datos"
+                }
+                isLoading = ContentVM.resultContents.isEmpty
+            }
+            catch {
+                print("Error: \(error)")
+            }
+        }
     }
 }
 
@@ -134,6 +148,7 @@ struct Contents: View{
     let description: String
     let progress: Double
     let thumbnail_url: String
+    let topicCount: String?
     
     var body: some View{
         VStack(alignment: .leading, spacing: 0) {
@@ -173,7 +188,7 @@ struct Contents: View{
                 
                 // Progress section
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Progress")
+                    Text("Progreso")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                     
@@ -189,14 +204,20 @@ struct Contents: View{
                 
                 // Bottom row
                 HStack {
-                    Text("3 lessons")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                    if let topicCountStr = topicCount, let topics = Int(topicCountStr) {
+                        Text("\(topics) \(topics == 1 ? "lección" : "lecciones")")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("0 lecciones")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                     
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Text("Continue")
+                        Text("Continuar")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(Color.indigo)

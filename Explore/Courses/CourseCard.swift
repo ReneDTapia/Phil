@@ -89,7 +89,7 @@ struct CourseCard: View {
             HStack(spacing: 4) {
                 Image(systemName: "book")
                     .font(.subheadline)
-                Text("\(lessons) lessons")
+                Text("\(lessons) \(lessons == 1 ? "lección" : "lecciones")")
                     .font(.subheadline)
             }
             
@@ -106,7 +106,7 @@ struct CourseCard: View {
 struct CourseCard_Previews: PreviewProvider {
     static var previews: some View {
         CourseCard(
-            title: "Overcoming Social Anxiety",
+            title: "Superando la Ansiedad Social",
             lessons: 8,
             imageUrl: nil
         )

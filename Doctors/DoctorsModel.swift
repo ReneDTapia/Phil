@@ -19,6 +19,9 @@ struct Doctor: Identifiable, Decodable {
     var price: Int
     var imageURL: String?
     var description: String?
+    var telefono: String?
+    var agenda: String?
+    var ubicacion: String?
     
     // Si necesitamos obtener doctores de forma simulada para pruebas o desarrollo
     static var sampleDoctors: [Doctor] {
@@ -34,7 +37,10 @@ struct Doctor: Identifiable, Decodable {
                 modes: [.online, .inPerson],
                 price: 120,
                 imageURL: nil,
-                description: "Xd"
+                description: "Xd",
+                telefono: "+52 5512345678",
+                agenda: "https://www.doctoralia.com.mx/",
+                ubicacion: "Donde sea"
                 
             ),
             Doctor(
@@ -47,7 +53,10 @@ struct Doctor: Identifiable, Decodable {
                 availability: .specificDay("Friday"),
                 modes: [.online],
                 price: 150,
-                imageURL: nil
+                imageURL: nil,
+                telefono: "+52 5512345678",
+                agenda: "https://www.doctoralia.com.mx/",
+                ubicacion: "Donde sea"
             ),
             Doctor(
                 id: 1003,
@@ -59,7 +68,10 @@ struct Doctor: Identifiable, Decodable {
                 availability: .specificDay("Friday"),
                 modes: [.online, .inPerson],
                 price: 135,
-                imageURL: nil
+                imageURL: nil,
+                telefono: "+52 5512345678",
+                agenda: "https://www.doctoralia.com.mx/",
+                ubicacion: "Donde sea"
             )
         ]
     }
@@ -72,7 +84,7 @@ enum AvailabilityStatus: Codable {
     var displayText: String {
         switch self {
         case .specificDay(let day):
-            return "Next available: \(day)"
+            return "Horario: \(day)"
         }
     }
 
