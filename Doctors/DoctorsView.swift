@@ -101,30 +101,41 @@ struct DoctorsView: View {
                                 .padding(.horizontal, 16)
                                 .padding(.top, 8)
                                 
-                                // Sección de recursos adicionales
                                 VStack(alignment: .leading, spacing: 15) {
                                     Text("Recursos Adicionales")
                                         .font(.title2)
                                         .fontWeight(.bold)
+                                        .padding(.bottom, 5)
                                     
-                                    // Lista de recursos
-                                    ResourceCardView(
-                                        title: "Línea de Ayuda de Crisis",
-                                        description: "Apoyo inmediato durante crisis emocionales",
-                                        iconName: "phone.fill"
-                                    )
+                                    // Crisis Helpline
+                                    NavigationLink(destination: CrisisHelplineView()) {
+                                        ResourceCardView(
+                                            title: "Línea de Ayuda en Crisis",
+                                            description: "Apoyo inmediato durante crisis emocionales",
+                                            iconName: "phone.fill"
+                                        )
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
                                     
-                                    ResourceCardView(
-                                        title: "Grupos de Apoyo",
-                                        description: "Conéctate con otros que enfrentan desafíos similares",
-                                        iconName: "person.3.fill"
-                                    )
+                                    // Support Groups - Now using the internal implementation
+                                    NavigationLink(destination: SupportGroupsView()) {
+                                        ResourceCardView(
+                                            title: "Grupos de Apoyo",
+                                            description: "Conéctate con personas que enfrentan desafíos similares",
+                                            iconName: "person.3.fill"
+                                        )
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
                                     
-                                    ResourceCardView(
-                                        title: "Herramientas de Autoayuda",
-                                        description: "Prácticas y ejercicios para la salud mental diaria",
-                                        iconName: "book.fill"
-                                    )
+                                    // Self-Help Tools - Now using the internal implementation
+                                    NavigationLink(destination: SelfHelpToolsView()) {
+                                        ResourceCardView(
+                                            title: "Herramientas de Autoayuda",
+                                            description: "Prácticas y ejercicios para la salud mental diaria",
+                                            iconName: "book.fill"
+                                        )
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
                                 }
                                 .padding(20)
                                 .background(Color.white)
@@ -288,8 +299,9 @@ struct ResourceCardView: View {
                     .font(.title3)
                     .foregroundColor(.indigo)
             }
+            .frame(width: 50, height: 50)
             
-            // Texto
+            // Textos
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)

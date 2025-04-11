@@ -126,4 +126,33 @@ class TopicsViewModel: ObservableObject {
             }
         }
     }
+    
+    // Método para incrementar la tendencia de un contenido
+    func increaseTendencia(contentID: Int) {
+        let url = "https://phill-api.diloensenas.org/api/auth/increaseTendencia/\(contentID)"
+        
+        var headers: HTTPHeaders = []
+        if let token = getToken() {
+            headers.add(name: "Authorization", value: "Bearer \(token)")
+        }
+        
+        AF.request(url,
+                  method: .put,
+                  parameters: nil,
+                  encoding: JSONEncoding.default,
+                  headers: headers)
+        .validate()
+        .responseData { response in
+            switch response.result {
+            case .success(let data):
+                if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let message = json["message"] as? String,
+                   let tendencia = json["tendencia"] as? Int {
+                    print("Tendencia incrementada exitosamente: \(message), nuevo valor: \(tendencia)")
+                }
+            case .failure(let error):
+                print("Error al incrementar tendencia: \(error.localizedDescription)")
+            }
+        }
+    }
 }

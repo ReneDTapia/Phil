@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import KeychainSwift
 
 struct CategoryDetailView: View {
     // MARK: - Properties
@@ -13,6 +14,7 @@ struct CategoryDetailView: View {
     let categoryTitle: String
     @StateObject private var viewModel = ExploreViewModel()
     @State private var hasAppeared = false
+    @Environment(\.presentationMode) var presentationMode
     
     // MARK: - Body
     var body: some View {
@@ -23,6 +25,21 @@ struct CategoryDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text("Regresar")
+                            .font(.body)
+                    }
+                    .foregroundColor(.indigo)
+                }
+            }
+        }
         .onAppear {
             if !hasAppeared {
                 print("🔍 CategoryDetailView appeared for category: \(categoryId) - \(categoryTitle)")
@@ -204,6 +221,7 @@ struct CategoryDetailView: View {
 // MARK: - ContentDetailView
 struct ContentDetailView: View {
     let content: Content
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         ScrollView {
@@ -238,6 +256,7 @@ struct ContentDetailView: View {
                         }
                     }
                     .frame(height: 200)
+                    .padding(.top, 60)
                 }
                 
                 // Título y descripción
@@ -263,20 +282,24 @@ struct ContentDetailView: View {
                         .padding(.vertical, 8)
                     
                     if let videoUrl = content.videoUrl, !videoUrl.isEmpty {
-                        Button(action: {
-                            if let url = URL(string: videoUrl) {
-                                UIApplication.shared.open(url)
-                            }
-                        }) {
-                            HStack {
-                                Image(systemName: "play.fill")
-                                Text("Ver video")
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.indigo)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
+                        NavigationLink {
+                            TopicsView(
+                                contentID: Int(content.id) ?? 0,
+                                contentTitle: content.title,
+                                user: getUserId(),
+                                contentImageURL: content.thumbnailUrl ?? "",
+                                shouldRefresh: .constant(false)
+                            )
+                            .navigationBarBackButtonHidden(true)
+                            .navigationBarHidden(true)
+                        } label: {
+                            Text("Acceder al Curso")
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.indigo)
+                                .cornerRadius(12)
                         }
                         .padding(.top, 16)
                     }
@@ -286,7 +309,31 @@ struct ContentDetailView: View {
         }
         .navigationTitle(content.title)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text("Regresar")
+                            .font(.body)
+                    }
+                    .foregroundColor(.indigo)
+                }
+            }
+        }
     }
+}
+
+// Helper para obtener el ID del usuario actual
+private func getUserId() -> Int {
+    let keychain = KeychainSwift()
+    if let userIdString = keychain.get("userID"), let userId = Int(userIdString) {
+        return userId
+    }
+    return 0 // Valor por defecto si no se puede obtener
 }
 
 // MARK: - Preview

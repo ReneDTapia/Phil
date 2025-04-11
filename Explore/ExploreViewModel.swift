@@ -149,12 +149,18 @@ class ExploreViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var searchResults: [Course] = []
+    @Published var username: String = ""
     
     // MARK: - Private Properties
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Initialization
     init() {
+        // Get username from UserDefaults or other storage
+        if let savedUsername = UserDefaults.standard.string(forKey: "username") {
+            self.username = savedUsername
+        }
+        
         // Solo cargamos datos mock si es necesario para cursos
         loadMockCourses()
         

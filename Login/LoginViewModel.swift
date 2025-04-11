@@ -25,6 +25,9 @@ class LoginViewModel: ObservableObject {
             case .success(let data):
                 TokenHelper.save(token: data.token, userID: data.userID)
                 
+                // Save username to UserDefaults
+                UserDefaults.standard.set(self.user.username, forKey: "username")
+                
                 if !TokenHelper.isTokenExpired(token: data.token) {
                     self.viewState = .ContentsView
                 } else {
@@ -49,9 +52,11 @@ class LoginViewModel: ObservableObject {
     }
     
     func logout() {
-            AuthService.shared.logout()
-            self.viewState = .username 
-        }
+        AuthService.shared.logout()
+        // Clear username from UserDefaults
+        UserDefaults.standard.removeObject(forKey: "username")
+        self.viewState = .username 
+    }
     
     var isLoggedIn: Bool {
         let keychain = KeychainSwift()

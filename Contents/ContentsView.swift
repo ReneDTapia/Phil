@@ -24,10 +24,26 @@ struct ContentsView: View {
                                 .bold()
                                 .foregroundColor(.black)
                             Spacer()
-                            ZStack {
-                                Circle()
-                                    .fill(Color.gray.opacity(0.2))
-                                    .frame(width: 40, height: 40)
+                            NavigationLink(destination: UserView(userId: user)) {
+                                ZStack {
+                                    Circle()
+                                        .fill(LinearGradient(
+                                            gradient: Gradient(colors: [.purple, .indigo]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ))
+                                        .frame(width: 40, height: 40)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white, lineWidth: 2)
+                                                .shadow(color: .black.opacity(0.2), radius: 2)
+                                        )
+                                    
+                                    Text(ContentVM.username.isEmpty ? "U" : getInitials(from: ContentVM.username))
+                                        .font(.subheadline)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.white)
+                                }
                             }
                         }
                         .padding()
@@ -114,11 +130,29 @@ struct ContentsView: View {
                     messageLoad = "No hay datos"
                 }
                 isLoading = ContentVM.resultContents.isEmpty
+                
+                // Update username if needed
+                if ContentVM.username.isEmpty {
+                    if let savedUsername = UserDefaults.standard.string(forKey: "username") {
+                        ContentVM.username = savedUsername
+                    }
+                }
             }
             catch {
                 print("Error: \(error)")
             }
         }
+    }
+    
+    // Helper function to get initials
+    private func getInitials(from name: String) -> String {
+        let components = name.components(separatedBy: " ")
+        if components.count >= 2 {
+            return String(components[0].prefix(1) + components[1].prefix(1))
+        } else if !components.isEmpty {
+            return String(components[0].prefix(1))
+        }
+        return ""
     }
 }
 

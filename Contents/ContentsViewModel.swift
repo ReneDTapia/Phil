@@ -3,6 +3,14 @@ import Foundation
 
 class ContentsViewModel: ObservableObject {
     @Published var resultContents: [ContentsModel] = []
+    @Published var username: String = ""
+    
+    init() {
+        // Get username from UserDefaults or other storage
+        if let savedUsername = UserDefaults.standard.string(forKey: "username") {
+            self.username = savedUsername
+        }
+    }
     
     func getContents(userIDVM: Int) async {
         do {

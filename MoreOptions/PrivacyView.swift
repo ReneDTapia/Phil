@@ -54,6 +54,7 @@ struct PrivacyView: View {
         .background(Color(UIColor.systemGroupedBackground))
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle("Privacidad")
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {

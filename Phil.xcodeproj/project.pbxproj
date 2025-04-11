@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		213DCCD62DA87CCF00719794 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DCCD52DA87CCF00719794 /* NotificationsView.swift */; };
 		213DCCD72DA87CCF00719794 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DCCD52DA87CCF00719794 /* NotificationsView.swift */; };
 		213DCCD82DA87CCF00719794 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DCCD52DA87CCF00719794 /* NotificationsView.swift */; };
+		213DCD052DA8E2EA00719794 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213DCD042DA8E2EA00719794 /* AccountInfoView.swift */; };
 		5238279B2AF9963800937238 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238279A2AF9963800937238 /* TabBarView.swift */; };
 		52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52711E692AD4DE390049DEE1 /* UserInputValidator.swift */; };
 		52711E6B2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52711E692AD4DE390049DEE1 /* UserInputValidator.swift */; };
@@ -126,6 +127,7 @@
 /* Begin PBXFileReference section */
 		213DCCCD2DA8208E00719794 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		213DCCD52DA87CCF00719794 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		213DCD042DA8E2EA00719794 /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
 		5238279A2AF9963800937238 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		52711E692AD4DE390049DEE1 /* UserInputValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputValidator.swift; sourceTree = "<group>"; };
 		52711E6C2AD4E0850049DEE1 /* UserInputValidatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputValidatorTests.swift; sourceTree = "<group>"; };
@@ -211,6 +213,26 @@
 		FB90C36D2AF1B197006BF87B /* SectionsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionsModel.swift; sourceTree = "<group>"; };
 		FB90C36F2AF1B1F8006BF87B /* SectionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		213DCCEA2DA8DA3400719794 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CrisisHelplineView.swift,
+				ResourceHeaderView.swift,
+				ResourceModelExtensions.swift,
+				ResourceModels.swift,
+				ResourceViewModels.swift,
+				SelfHelpToolsView.swift,
+				SupportGroupsView.swift,
+			);
+			target = 52DB5A732ACD236B004611A7 /* Phil */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		213DCCE02DA8D69100719794 /* Resources */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (213DCCEA2DA8DA3400719794 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Resources; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		52DB5A712ACD236B004611A7 /* Frameworks */ = {
@@ -303,6 +325,7 @@
 		52DB5A6B2ACD236B004611A7 = {
 			isa = PBXGroup;
 			children = (
+				213DCCE02DA8D69100719794 /* Resources */,
 				BEA049082D8A3F610022242A /* Doctors */,
 				BEA048FD2D89170E0022242A /* Explore */,
 				FB6B60DE2BC7A44900A3006F /* MoreOptions */,
@@ -550,6 +573,7 @@
 		FB6B60DE2BC7A44900A3006F /* MoreOptions */ = {
 			isa = PBXGroup;
 			children = (
+				213DCD042DA8E2EA00719794 /* AccountInfoView.swift */,
 				213DCCD52DA87CCF00719794 /* NotificationsView.swift */,
 				213DCCCD2DA8208E00719794 /* PrivacyView.swift */,
 				FB6B60DF2BC7A47100A3006F /* MoreOptions.swift */,
@@ -773,6 +797,7 @@
 				BEA049142D8A44760022242A /* DoctorsDetailView.swift in Sources */,
 				52DB5AB92ACD68A2004611A7 /* LoginViewModel.swift in Sources */,
 				52711E6A2AD4DE390049DEE1 /* UserInputValidator.swift in Sources */,
+				213DCD052DA8E2EA00719794 /* AccountInfoView.swift in Sources */,
 				BEA0490A2D8A3F7F0022242A /* DoctorsView.swift in Sources */,
 				52CC1B9A2ACF47F300AD0029 /* TokenHelper.swift in Sources */,
 				BEA0490E2D8A3FA10022242A /* DoctorsModel.swift in Sources */,

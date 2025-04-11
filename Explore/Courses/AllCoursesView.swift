@@ -11,6 +11,7 @@ struct AllCoursesView: View {
     // MARK: - Properties
     let title: String
     let courses: [Course]
+    @Environment(\.presentationMode) var presentationMode
     
     // MARK: - Body
     var body: some View {
@@ -21,6 +22,21 @@ struct AllCoursesView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text("Regresar")
+                            .font(.body)
+                    }
+                    .foregroundColor(.indigo)
+                }
+            }
+        }
     }
     
     // MARK: - Title View

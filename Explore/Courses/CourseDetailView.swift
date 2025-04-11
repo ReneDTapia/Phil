@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import KeychainSwift
 
 struct CourseDetailView: View {
     // MARK: - Properties
     let course: Course
+    @Environment(\.presentationMode) var presentationMode
+    @State private var shouldRefresh = false
     
     // MARK: - Body
     var body: some View {
@@ -20,6 +23,21 @@ struct CourseDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.left")
+                        Text("Regresar")
+                            .font(.body)
+                    }
+                    .foregroundColor(.indigo)
+                }
+            }
+        }
     }
     
     // MARK: - Course Image View
@@ -107,10 +125,19 @@ struct CourseDetailView: View {
     
     // MARK: - Enroll Button
     private var enrollButton: some View {
-        Button(action: {
-            // Enroll action
-        }) {
-            Text("Inscribirse Ahora")
+        NavigationLink {
+            // Al pulsar el botón, navegamos a la vista de temas del curso
+            TopicsView(
+                contentID: Int(course.id) ?? 0,
+                contentTitle: course.title,
+                user: getUserId(),
+                contentImageURL: course.imageUrl ?? "",
+                shouldRefresh: $shouldRefresh
+            )
+            .navigationBarBackButtonHidden(true) // Ocultar el botón de navegación predeterminado
+            .navigationBarHidden(true) // Ocultar la barra de navegación completamente
+        } label: {
+            Text("Acceder al Curso")
                 .fontWeight(.bold)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -118,6 +145,15 @@ struct CourseDetailView: View {
                 .background(Color.indigo)
                 .cornerRadius(12)
         }
+    }
+    
+    // Helper para obtener el ID del usuario actual
+    private func getUserId() -> Int {
+        let keychain = KeychainSwift()
+        if let userIdString = keychain.get("userID"), let userId = Int(userIdString) {
+            return userId
+        }
+        return 0 // Valor por defecto si no se puede obtener
     }
 }
 

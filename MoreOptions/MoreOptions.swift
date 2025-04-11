@@ -42,7 +42,7 @@ struct MoreOptions: View {
                             .padding(.horizontal)
                         
                         VStack(spacing: 0) {
-                            NavigationLink(destination: Text("Información de la Cuenta")) {
+                            NavigationLink(destination: AccountInfoView()) {
                                 SettingsRow(icon: "person.fill", title: "Información de la Cuenta", color: .blue)
                             }
                             

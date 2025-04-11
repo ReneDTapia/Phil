@@ -24,14 +24,18 @@ struct DoctorsDetailView: View {
                 ZStack(alignment: .top) {
                     // Imagen de fondo con gradiente
                     Rectangle()
-                        .foregroundColor(Color(.systemGray5))
+                        .foregroundColor(Color.indigo.opacity(0.3))
                         .frame(height: 200)
                         .edgesIgnoringSafeArea(.top)
                         .overlay(
                             LinearGradient(
-                                gradient: Gradient(colors: [Color.clear, Color.black.opacity(0.3)]),
-                                startPoint: .center,
-                                endPoint: .bottom
+                                gradient: Gradient(colors: [
+                                    Color.indigo.opacity(0.4),
+                                    Color.purple.opacity(0.6),
+                                    Color.indigo.opacity(0.8)
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
                             )
                         )
                         .overlay(

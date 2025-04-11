@@ -32,6 +32,9 @@ class SignUpViewModel: ObservableObject {
                     // Guardar el token
                     TokenHelper.save(token: data.token, userID: data.userID)
                     
+                    // Save username to UserDefaults
+                    UserDefaults.standard.set(self.user.username, forKey: "username")
+                    
                     self.loginViewModel?.viewState = .ContentsView
 
                     

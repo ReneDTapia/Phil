@@ -124,10 +124,10 @@ struct UserView: View {
                     }) {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
+                                .foregroundColor(.indigo)
                             Text("Regresar")
-                                .foregroundColor(.white)
-                                .font(.caption)
+                                .foregroundColor(.indigo)
+                                .font(.body)
                         }
                     }
                 }
@@ -216,14 +216,22 @@ struct StatCard: View {
 extension Color {
     init(_ colorName: String) {
         switch colorName.lowercased() {
-        case "purple":
-            self = .purple
         case "pink":
-            self = .pink
+            self = Color.pink
         case "blue":
-            self = .blue
+            self = Color.blue
+        case "orange":
+            self = Color.orange
+        case "cyan":
+            self = Color.cyan
+        case "red":
+            self = Color.red
+        case "purple":
+            self = Color.purple
         case "green":
-            self = .green
+            self = Color.green
+        case "light blue":
+            self = Color(red: 0.5, green: 0.8, blue: 1.0)
         default:
             self = .gray
         }

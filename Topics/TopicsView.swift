@@ -366,6 +366,9 @@ struct TopicsView: View {
             }
         }
         
+        // Incrementar la tendencia del contenido
+        TopicsVM.increaseTendencia(contentID: contentID)
+        
         Task {
             do {
                             try await TopicsVM.getTopics(contentIDVM: contentID, userIDVM: user)
